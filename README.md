@@ -11,7 +11,7 @@
 * Engineer is allowed to update maintenance detail of each inventory after finished MA-Operation.
 
 ### The figure below shows  SMartApp System Overview.
-![image](https://github.com/technqvi/SMartApp/assets/38780060/5b8473cc-6ae2-4576-b82e-a64a3338a834)
+![image](https://github.com/technqvi/SMartApp/assets/38780060/9da3fc89-4107-4e86-bf52-ce57f939cb11)
 
 ## Tool and Framework
 - Database: Postqresql 12
