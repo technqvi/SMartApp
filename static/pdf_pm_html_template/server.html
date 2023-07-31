@@ -1,0 +1,289 @@
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Server PM</title>
+    <link rel="stylesheet" type="text/css" href="pdf_pm_item.css" />
+</head>
+
+<body>
+
+    <header>
+        <p>PREVENTIVE MAINTENANCE REPORT &nbsp;</p>
+    </header>
+    <div id="logo">
+        <img src="file:{{ Report_Logo }}" />
+    </div>
+
+    <div class="caption_table">System Information</div>
+    <table>
+        <tr>
+            <td class="item_15pct">Hostname:</td>
+            <td class="item_35pct"> {{ Item.devicename_hostname if Item.devicename_hostname is not none }}</td>
+            <td class="item_15pct">OS/HW/SW Version:</td>
+            <td class="item_35pct"> {{ Item.device_hs_version if Item.device_hs_version is not none }}</td>
+        </tr>
+        <tr>
+            <td class="item_15pct">Rack Location:</td>
+            <td class="item_35pct">{{ Item.rack_position if Item.rack_position is not none }}</td>
+            <td class="item_15pct">Rack Unit:</td>
+            <td class="item_35pct">{{ Item.rack_unit if Item.rack_unit is not none }}</td>
+        </tr>
+        <tr>
+            <td class="item_15pct">Brand: </td>
+            <td class="item_35pct">{{ Item.brand.brand_name }}</td>
+            <td class="item_15pct">Model: </td>
+            <td class="item_35pct">{{ Item.model.model_name }}</td>
+        </tr>
+        <tr>
+            <td class="item_15pct">Serial No.:</td>
+            <td class="item_35pct">{{ Item.serial_number }}</td>
+            <td class="item_15pct">Firmware:</td>
+            <td class="item_35pct">{{ Item.device_hs_version if Item.device_hs_version is not none }}</td>
+        </tr>
+        <tr>
+            <td class="item_15pct">IP Addresst: </td>
+            <td class="item_35pct">{{ Item.ip_address if Item.ip_address is not none }}</td>
+            <td class="item_15pct">IP Management: </td>
+            <td class="item_35pct">{{ Item.ip_address if Item.ip_address is not none }}</td>
+        </tr>
+    </table>
+    <br>
+
+    <div class="caption_table">Additional Information</div>
+    <div>
+
+        <table>
+            {% for key, value in StrParts.items() %}
+            <table>
+                <tr>
+                    <td>{{ key }}:</td>
+                    <td>{{ value }}</td>
+                </tr>
+            </table>
+            {% endfor %}
+        </table>
+        <br>
+
+        {% for key, value in DictParts.items() %}
+        <table>
+            <caption>{{ key }}</caption>
+            {% for sub_key, sub_value in value.items() %}
+            <tr>
+                <td>{{ sub_key }}:</td>
+                <td>{{ sub_value }}</td>
+            </tr>
+            {% endfor %}
+            <br>
+        </table>
+        {% endfor %}
+        <br>
+
+        {% for key, df_html in DataframeParts.items() %}
+        <div>
+            {{ key }}
+            {{ df_html }}
+        </div>
+        {% endfor %}
+        <br>
+
+        <!-- {% for key, df in DataframeParts.items() %}
+        <table>
+            <caption>{{ key }}</caption>
+            <thead>
+                <tr>
+                    {% for col in df.columns %}
+                    <td>{{ col }}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            {% for value in df.values %}
+            <tr>
+                {% for item in value %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+
+        </table><br>
+        {% endfor %} -->
+
+
+    </div>
+
+
+    <div class="caption_table">Service Detail (Action Taken)</div>
+
+    <table>
+        <tr>
+            <td class="td_data_list_items"><b>Hardware Status Check</b>
+            </td>
+            <td class="td_check_list_items"><b>
+                    <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uuml;</span></p>
+                </b>
+
+            </td>
+            <td class="td_data_list_items"><b>Hardware Status Check</b>
+            </td>
+            <td class="td_check_list_items"><b>
+                    <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uuml;</span></p>
+                </b>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="td_data_list_items">
+                Processor
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+                Status LCD
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Memory
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+                Hardware log
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Hard Disk
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+                Log in to web management
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Power Supply
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+                Check external devices
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="td_data_list_items">
+                Fan
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+            </td>
+            <td class="td_check_list_items">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="td_data_list_items">
+                Ethernet port
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+            </td>
+            <td class="td_check_list_items">
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Fiber Channel port
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+            </td>
+            <td class="td_check_list_items">
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Battery
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+            </td>
+            <td class="td_check_list_items">
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td_data_list_items">
+                Temperature
+            </td>
+            <td class="td_check_list_items">
+                <p style='text-align:center'><span style='font-family:Wingdings;color:black'>&uml;</span></p>
+            </td>
+            <td class="td_data_list_items">
+            </td>
+            <td class="td_check_list_items">
+            </td>
+        </tr>
+
+    </table>
+
+
+    <br>
+    <div class="caption_table">Comments</div>
+
+
+    <br>
+
+
+    <table>
+        <tr class="comment_row">
+            <td>
+            </td>
+        </tr>
+        <tr class="comment_row">
+            <td>
+            </td>
+        </tr>
+        <tr class="comment_row">
+            <td>
+            </td>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>PM-Report</title>
+
+    <link rel="stylesheet" type="text/css" href="pdf_pm_overview.css"/>
+</head>
+
+<body>
+
+<header>
+    <p>PREVENTIVE MAINTENANCE REPORT &nbsp;</p>
+</header>
+<div id="logo">
+    <img src="file:{{ Report_Logo }}"/>
+</div>
+
+
+<br>
+
+
+<div class="caption_table">
+    Customer Details
+</div>
+
+<table>
+    <tr>
+        <td rowspan=5>
+            Company Name / Address:
+            {{ PMInfo.customer_company.sub_company_name }} <br>
+            {{ PMInfo.customer_company.sub_company_address }}
+
+        </td>
+        <td>
+            Contact Name: {{ PMInfo.contact_name }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Telephone: {{ PMInfo.contact_telephone }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Site/Branch: {{ PMInfo.site_branch  if PMInfo.site_branch is not none }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Equipment Location: {{ PMInfo.equipment_location  if PMInfo.equipment_location is not none  }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Reference: {{ PMInfo.project.contract_no  if PMInfo.project.contract_no is not none }}
+        </td>
+    </tr>
+
+</table>
+
+<br>
+
+<div class="caption_table">Service Details</div>
+
+<table>
+    <tr>
+        <td>
+            Reference Call No:
+        </td>
+        <td>
+            Reference Service No:
+        </td>
+    </tr>
+    <tr>
+        <td>PM. Period: {{ PMInfo.remark }}</td>
+        <td>
+            Project (ENQ): {{ PMInfo.project.enq_id }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Start Date:
+        </td>
+        <td>
+            Finish Date:
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Start Time:
+        </td>
+        <td>
+            Finish Time:
+        </td>
+    </tr>
+</table>
+
+
+</br>
+<div class="caption_table">Equipment Summary</div>
+
+<table>
+    <thead>
+    <tr>
+
+        <td class="td_no_list_items">
+            <b>No.</b>
+        </td>
+        <td class="td_data_list_items">
+            <b>Equipment</b>
+        </td>
+        <td class="td_data_list_items">
+            <b>Serial No.</b>
+        </td>
+        <td class="td_data_list_items">
+            <b>Remark</b>
+        </td>
+    </tr>
+    </thead>
+
+    {% for index,row in PMItemList.iterrows() %}
+        <tr>
+            <td class="td_no_list_items">{{ row['RowNumber'] }}</td>
+            <td class="td_data_list_items">{{ row['Brand'] }} - {{ row['Model'] }}</td>
+            <td class="td_data_list_items">{{ row['Serial'] }}</td>
+            <td class="td_data_list_items"></td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+
+<br>
+<div class="caption_table">Comment</div>
+<table>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+
+
+</table>
+<br>
+
+<div class="caption_table">Signature</div>
+
+
+<table>
+    <tr>
+        <td>
+            <b>Engineer</b>
+            <p>……………………………………………</p>
+            <p>(___________________________________)</p>
+        </td>
+
+        <td>
+            <b>Customer</b>
+            <p>……………………………………………</p>
+            <p>(___________________________________)</p>
+        </td>
+    </tr>
+</table>
+
+
+</div>
+
+</body>
+</html>

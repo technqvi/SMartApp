@@ -1,0 +1,126 @@
+{% load crispy_forms_tags %}
+{% load auth_extras %}
+{{ form.project }}
+<div class="well">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">{{ form.serial_number|as_crispy_field }} </div>
+            <div class="col-md-2">{{ form.product_type |as_crispy_field }}</div>
+            <div class="col-md-2"> {{ form.brand  |as_crispy_field }}</div>
+            <div class="col-md-2">
+                {{ form.model |as_crispy_field }}
+
+            </div>
+            <div class="col-md-2">{{ form.customer_support |as_crispy_field }}
+            </div>
+
+            <div class="col-md-2"> {{ form.customer_pm_support |as_crispy_field }}</div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">{{ form.quantity | as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.datacenter |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.branch |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.product_support|as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.cm_serviceteam  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.pm_serviceteam |as_crispy_field }}</div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-4"> {{ form.customer_warranty_start  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.customer_warranty_end  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.customer_sla  |as_crispy_field }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"> {{ form.yit_warranty_start  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.yit_warranty_end  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.yit_sla  |as_crispy_field }}</div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4"> {{ form.product_warranty_start  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.product_warranty_end  |as_crispy_field }}</div>
+        <div class="col-md-4"> {{ form.product_sla  |as_crispy_field }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"> {{ form.pm_inventory_template  |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.building  |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.floor  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.room |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.rack_position  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.rack_unit |as_crispy_field }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">{{ form.devicename_hostname |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.device_hs_version  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.firmware_bios_version |as_crispy_field }} </div>
+        <div class="col-md-2">{{ form.firmware_bundle_version |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.hw_management_version |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.sw_management_version |as_crispy_field }}</div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-2">{{ form.asset_code |as_crispy_field }}</div>
+        <div class="col-md-2"> {{ form.function  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.storage_capacity |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.backup_solution |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.install_date  |as_crispy_field }}</div>
+        <div class="col-md-2">{{ form.eos_date |as_crispy_field }}</div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.ip_address  |as_crispy_field }}
+            {{ form.ip_address2  |as_crispy_field }}
+            {{ form.ip_address3  |as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.username |as_crispy_field }}
+            {{ form.username2 |as_crispy_field }}
+            {{ form.username3 |as_crispy_field }}
+
+        </div>
+        <div class="col-md-4">
+            {{ form.password  |as_crispy_field }}
+            {{ form.password2  |as_crispy_field }}
+
+            {{ form.password3  |as_crispy_field }}
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">{{ form.remark |as_crispy_field }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <h4>
+                <a href="{% url 'inventory_template' %}" target="_blank">Sample JSON by Template</a></li>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="https://jsonformatter.org/" target="_blank" >Format and Validate JSON Data</a>
+            </h4>
+            <h6>
+                Click the link above and Copy the whole value in 'Sample JSON Format for Part Detail' textbox and paste it into this field and edit any  value in JSON Data as desired.
+            </h6>
+            {{ form.part_detail |as_crispy_field }}
+        </div>
+    </div>
+
+    <div class='row text-center'>
+        <div class="col-md-12 center-block">
+            {% if xview is None %}
+
+                {% if request.user|has_group:"site-manager" %}
+
+                    <input type="submit" value="Save Inventory" class="btn btn-success"
+                           onclick="return confirm('Do you want to save?')">
+
+                {% endif %}
+
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>

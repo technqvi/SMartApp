@@ -1,0 +1,198 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    {% include "app/layout_error_message.html" %}
+
+    <h3> {{ mode }} Project</h3>
+    <form action="" method="post" autocomplete="off">
+        {% csrf_token %}
+        <div class="well" style="background-color:#c9e2b3">
+            <div class="container-fluid">
+                <div class='row'>
+                    <div class='col-md-3'> {{ form.enq_id | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ form.company  | as_crispy_field }}</div>
+                    <div class='col-md-6'>  {{ form.project_name | as_crispy_field }}</div>
+
+                </div>
+                <div class='row'>
+                    <div class='col-md-3'>  {{ form.project_start | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ form.project_end | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ form.customer_po | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ form.contract_no | as_crispy_field }}</div>
+
+
+                </div>
+                <div class='row text-center'>
+                    <br>
+                    <div class="col-md-12 center-block">
+                        {% if request.user|has_group:"site-manager" %}
+                            <a href="{% url 'manage_project' %}" class="btn btn-success">New Project</a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="submit" value="Save Project" class="btn btn-success"
+                                   onclick="return confirm('Do you want to add/update project ?')">
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    <form method="get">
+
+        <h3 style="margin-top: 0">Search Project</h3>
+        <div class="well">
+            <div class="container-fluid">
+                <div class='row'>
+
+                    <div class='col-md-3'>   {{ projectFilter.form.company | as_crispy_field }}</div>
+                    <div class='col-md-3'>   {{ projectFilter.form.enq_id | as_crispy_field }}</div>
+                    <div class='col-md-4'>   {{ projectFilter.form.project | as_crispy_field }}</div>
+                    <div class='col-md-2'>
+                        <input type="checkbox" id="expired_project" name="expired_project">
+                        <label for="expired_project">Include Expiration</label>
+                    </div>
+
+                </div>
+                <div class='row'>
+                    <div class="col text-center">
+
+                        <button class="btn btn-primary" type="submit">Search</button>
+                        <a href="{% url 'manage_project' %}" class="cancel-link">Clear Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% if request.user|has_group:"site-manager" %}
+        <div style="text-align: right">
+            {% if  projectList  and isNotEmplyQuery %}
+                <a href="{% url 'export_project' %}" class="btn btn-info"  onclick="return confirm('Do you want to export projects as an excel file ?')" >Export Project </a>
+            {% endif %}
+            <a href="{% url 'export_all_project' %}" class="btn btn-info"  onclick="return confirm('Do you want to export all projects  as an excel file ?')" >Export All Projects</a>
+        </div>
+    {% endif %}
+
+    {% if projectList %}
+        <table class="table table-striped table-hover">
+
+            <tr>
+                {#                <th scope="col">Menu</th>#}
+                <th scope="col">ENQ</th>
+                <th scope="col">Company</th>
+                <th scope="col">Name</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Total Inventories</th>
+                <th scope="col"> Delete</th>
+                <th scope="col">Update & View Project</th>
+                <th scope="col">Add & View Inventory</th>
+                <th scope="col">Copy Inventory<br><u style="background-color: #5cb85c">WarrantyDate-EveryItem</u></th>
+                <th scope="col">Copy Inventory<br><u style="background-color:#46b8da">WarrantyDate-FirstItem</u></th>
+                <th scope="col">Total PM</th>
+                <th scope="col">Operate PM</th>
+            </tr>
+
+            <tbody>
+            {% for project in projectList %}
+                <tr>
+                    {#                    <td>#}
+                    {#                        <div class="dropdown">#}
+                    {#                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"#}
+                    {#                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                    {#                                Click Menu#}
+                    {#                            </button>#}
+                    {#                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
+                    {#                                <a class="dropdown-item" href="{% url 'manage_project' project.id %}">a</a>#}
+                    {#                                <a class="dropdown-item" href="{% url 'add_inventory' project.id %}">b</a>#}
+                    {#                                <a class="dropdown-item" href="{% url 'manage_pm' project.id 0 %}">Manage PM</a>#}
+                    {#                                <a class="dropdown-item"#}
+                    {#                                   href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=1" target="_blank">Copy#}
+                    {#                                    Inventory(EveryItem)</a>#}
+                    {#                                <a class="dropdown-item"#}
+                    {#                                   href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=0" target="_blank">Copy#}
+                    {#                                    Inventory(FirstItem)</a>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </td>#}
+                    <td>{{ project.enq_id }}</td>
+                    <td>{{ project.company.company_name }}</td>
+                    <td>{{ project.project_name }}</td>
+                    <td>{{ project.project_start | date:"d M Y" }}</td>
+                    <td>{{ project.project_end | date:"d M Y" }}</td>
+                    <td>{{ project.total_inventories }}</td>
+                    {% if not project.is_dummy %}
+
+                        <td>
+                            {% if request.user|has_group:"site-manager" %}
+                                <a href="{% url 'delete_project' project.id %}" class="alert-danger"
+                                   onclick="return confirm('Do you carefully review project info before deleting?')">Click</a>
+
+                            {% endif %}
+                        </td>
+
+                        <td><a href="{% url 'manage_project' project.id %}" class="btn btn-link">Click</a></td>
+                        <td>
+
+                            <a href="{% url 'add_inventory' project.id %}" class="btn btn-link"
+                               target="_blank">Click</a>
+
+                        </td>
+                        <td>
+                            {% if request.user|has_group:"site-manager" %}
+
+                                <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=0"
+                                   class="btn btn-link" target="_blank">Click</a>
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.user|has_group:"site-manager" %}
+
+                                <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=1"
+                                   class="btn btn-link" target="_blank">Click</a>
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ project.total_pm_plans }}
+                        </td>
+                        <td>
+
+                            <a href="{% url 'manage_pm' project.id 0 %}"
+                               class="btn btn-link">PM</a>
+
+                        </td>
+
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
+
+        <div class="panel-footer" style="background:#b1dfbb">
+<span class="step-links">
+    {% if projectList.has_previous %}
+        <a href="?page=1&{{ qstr }}">&laquo; first</a>
+        <a href="?page={{ projectList.previous_page_number }}&{{ qstr }}">previous</a>
+    {% endif %}
+    <span class="current">
+        Page {{ projectList.number }} of {{ projectList.paginator.num_pages }}.
+    </span>
+    {% if projectList.has_next %}
+        <a href="?page={{ projectList.next_page_number }}&{{ qstr }}">next</a>
+        <a href="?page={{ projectList.paginator.num_pages }}&{{ qstr }}">last &raquo;</a>
+    {% endif %}
+</span>
+        </div>
+
+    {% endif %}
+{% endblock %}

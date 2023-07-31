@@ -1,0 +1,245 @@
+/* --------------------------------------------------------------
+
+   typography.css
+   * Sets up some sensible default typography.
+   http://www.blueprintcss.org/blueprint/src/typography.css
+-------------------------------------------------------------- */
+
+@page {
+    size: letter; /* Change from the default size of A4 */
+    margin: 1.0cm; /* Set defaultmargin on each page 2.0-2.5 */
+}
+
+html {
+    font-size: 100%;
+}
+
+/*body {*/
+/*    font-size: 100%;*/
+/*    color: #2C2C2C;*/
+/*    background: #fff;*/
+/*    !*font-family: Calibri, Arial, Helvetica, sans-serif;*!*/
+/*    !*font-family: "#Tahoma";*!*/
+/*}*/
+table {
+    width: 100%;
+    font-size: 14px;
+    font-weight: normal;
+}
+.my_cost_center_title{
+	/*font-size: 32px;*/
+	/*font-weight: bold;*/
+    font-size: 30px;
+	font-weight: normal;
+}
+.mybilling_info{
+
+	font-size: 14px;
+	font-weight: normal;
+
+}
+.my_invoice_title{
+	font-size: 20px;
+	font-weight: normal;
+}
+.my_invoice_total_label{
+	font-size: 18px;
+	font-weight: normal;
+}
+.my_invoice_total_value{
+	font-size: 18px;
+	font-weight: bold;
+    text-align: right;
+}
+.my_invoice_des{
+    	font-size: 18px;
+	font-weight: normal;
+}
+
+.my_hr_thin{
+    border-top: 2px solid #CCCCCC;
+
+}
+.my_hr_thick{
+   border-top: 5px solid #CCCCCC;
+
+}
+.my_png_logo {
+    height: 46px;
+    width: 300px;
+    background-color: powderblue;
+
+}
+
+/* ------tr------- */
+table.my_table_caption{
+    background-color:#0f74a8;
+    border-collapse:collapse;
+    border-spacing:0;
+	border:1px solid #CCCC99 ;
+    border-bottom: 0px solid #CCCC99;
+    width: 100%;
+}
+
+table.my_table_master{
+
+    border-collapse:collapse;
+    border-spacing:0;
+	border:1px solid #CCCC99 ;
+    width: 100%;
+}
+
+
+.table.my_table_detail {
+    font-size: 10px;
+    border-collapse:collapse;
+    border-spacing:0;
+	border:1px solid #CCCC99 ;
+    width: 100%;
+}
+
+table.my_table_master td,
+table.my_table_master th ,
+table.my_table_detail td,
+table.my_table_detail th
+{
+   border-bottom: 1px solid #CCCC99;
+  }
+
+
+
+.my_th_caption_summary {
+
+    background-color:#5b80b2;
+    font-weight:normal;
+    text-align: left;
+    font-size: 18px;
+
+
+}
+
+.my_th_left_summary {
+
+    /*background-color: #c8e1f5;*/
+    color: #F90;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: left;
+
+}
+
+.my_th_right_summary {
+
+    /*background-color: #c8e1f5;*/
+    color: #F90;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: right;
+
+}
+
+.my_tr_grand_total_summary {
+
+    background-color: #CCCC99;
+    font-weight: normal;
+    font-size: 18px;
+
+}
+
+
+.my_th_caption {
+
+    background-color:#0000cc;
+    font-size: 18px;
+    font-weight: normal;
+
+    text-align: left;
+
+}
+
+.my_tr_cost_center {
+
+    /*background-color: #faebd7;*/
+    font-weight:normal;
+
+}
+
+.my_tr_sub_total {
+
+    /*background-color: #DDFFCC;*/
+    /*font-size: 16px;*/
+    /*#color: #0066cc;*/
+    font-weight: bold;
+    text-align: right;
+
+}
+
+
+.my_tr_grand_total {
+
+    background-color:#CCCC99;
+    font-weight: normal;
+    font-size: 18px;
+
+}
+
+.my_th_left {
+
+    /*background-color: #c8e1f5;*/
+    color: #F90;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: left;
+    border-style: solid;
+
+}
+
+.my_th_right {
+
+    /*background-color: #c8e1f5;*/
+    color: #F90;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: right;
+
+}
+
+.my_td_right {
+
+    text-align: right;
+
+}
+
+
+
+.my_th_caption_detail {
+
+    background-color: #c8e1f5;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: left;
+
+
+}
+
+
+.my_th_left_detail {
+
+    /*background-color: #EAEAEA;*/
+    color: #F90;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+}
+
+.my_th_right_detail {
+
+    /*background-color: #EAEAEA;*/
+    color: #F90;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: right;
+
+}
+
+

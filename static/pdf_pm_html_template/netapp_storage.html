@@ -1,0 +1,347 @@
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>NetApp Storage PM</title>
+    <link rel="stylesheet" type="text/css" href="pdf_pm_item.css"/>
+</head>
+
+<body>
+<header>
+    <p>PREVENTIVE MAINTENANCE REPORT &nbsp;</p>
+</header>
+<div id="logo">
+    <img src="file:{{ Report_Logo }}"/>
+</div>
+
+<div class="caption_table">System Information</div>
+<br>
+
+<table>
+    <tr>
+        <td colspan=2>Hostname: {{ Item.devicename_hostname  if Item.devicename_hostname is not none  }}</td>
+        <td colspan="3">Disk Shelf:</td>
+
+    </tr>
+    <tr>
+        <td colspan=2>Partner:</td>
+        <td class="item_15pct">Shelf ID</td>
+        <td class="item_15pct">Model</td>
+        <td class="item_20pct">Total Hard Disk</td>
+    </tr>
+
+    <tr>
+        <td colspan=2>Cluster Name: :</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+
+
+    <tr>
+        <td colspan=2>Rack Location:{{ Item.rack_position   if Item.rack_position is not none }}</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+
+    <tr>
+        <td colspan=2>Rack Unit: {{ Item.rack_unit   if Item.rack_unit is not none }}</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+
+    </tr>
+    <tr>
+        <td colspan=2>Brand: {{ Item.brand.brand_name }}</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+    <tr>
+        <td colspan=2>Model: {{ Item.model.model_name }}</td>
+
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            Serial No.: {{ Item.serial_number }}
+        </td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+
+    <tr>
+        <td colspan=2>IP Address:
+        </td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+    <tr>
+        <td colspan=2>IP Management:&nbsp;&nbsp;{{ Item.ip_address  if Item.ip_address is not none }}</td>
+        <td colspan=3>
+            Disk Drive Type:
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            OS Version:
+        </td>
+        <td class="item_15pct">P/N</td>
+        <td class="item_15pct">Description</td>
+        <td class="item_25pct">Total</td>
+    </tr>
+    <tr>
+        <td colspan=2> Total Shelf Count (Unit):</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+    <tr>
+        <td colspan=2> Total Disk Count (Unit):</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+
+    <tr>
+        <td colspan=2> Total Usable Capacity (TB):</td>
+        <td class="item_15pct"></td>
+        <td class="item_15pct"></td>
+        <td class="item_20pct"></td>
+    </tr>
+
+
+    <tr>
+        <td colspan=2>Power Supply:
+        </td>
+        <td colspan="3"></td>
+
+    </tr>
+    <tr>
+        <td colspan=2>PS-1:
+        </td>
+        <td colspan="3">
+        </td>
+
+    </tr>
+    <tr>
+        <td colspan=2>PS-2:
+        </td>
+        <td colspan="3">
+        </td>
+
+    </tr>
+</table>
+
+<br>
+
+<div class="caption_table">Service Detail (Action Taken)</div>
+
+<table>
+    <tr>
+        <td class="td_data_list_items"><b>Hardware Status Check</b>
+        </td>
+        <td class="td_check_list_items"><b><p style='text-align:center'><span
+                style='font-family:Wingdings;color:black'>&uuml;</span></p></b>
+
+        </td>
+        <td class="td_data_list_items"><b>Hardware Status Check</b>
+        </td>
+        <td class="td_check_list_items">
+            <b><p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uuml;</span></p></b>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="td_data_list_items">
+            Check status controller
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check status HA
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+    <tr>
+        <td class="td_data_list_items">
+            Check status disk shelf
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check status aggregate
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+    <tr>
+        <td class="td_data_list_items">
+            Check status I/O module
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check status volume
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td_data_list_items">
+            Check status hard disk
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check used space
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="td_data_list_items">
+            Check status power supply
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check hardware log
+        </td>
+         <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td_data_list_items">
+            Check status fan module
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Test auto support
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td_data_list_items">
+            Check status temperature
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check external device
+        </td>
+       <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td_data_list_items">
+            Check status battery
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+        </td>
+        <td class="td_check_list_items">
+        </td>
+    </tr>
+    <tr>
+        <td class="td_data_list_items">
+            Check status ethernet port
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+        </td>
+        <td class="td_check_list_items">
+        </td>
+    </tr>
+    <tr>
+        <td class="td_data_list_items">
+            Check status fc port
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+        </td>
+        <td class="td_check_list_items">
+        </td>
+    </tr>
+</table>
+
+
+<br>
+<div class="caption_table">Comments</div>
+
+
+<br>
+
+
+<table>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+</table>
+
+</body>
+
+</html>

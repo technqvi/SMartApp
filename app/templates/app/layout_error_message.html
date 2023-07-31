@@ -1,0 +1,14 @@
+{% if messages %}
+
+{% for message in messages %}
+<div class="container-fluid p-0">
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h5>{{ message }}&nbsp&nbsp({% now "j N Y H:i" %} )</h5>
+  </div>
+</div>
+{% endfor %}
+
+{% endif %}

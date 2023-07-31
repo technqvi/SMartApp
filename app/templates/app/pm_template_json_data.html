@@ -1,0 +1,26 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    {% include "app/layout_error_message.html" %}
+
+        <form method="POST" action="">
+            {% csrf_token %}
+                <div class="container-fluid">
+                    {{ template_formset.management_form |crispy }}
+                    {% for form in template_formset %}
+                        <div class="row" style="background-color:silver;">
+                            <div class="col-lg-2"> {{ form.template_des |as_crispy_field }}</div>
+                            <div class="col-lg-10"> {{ form.sample_part_detail |as_crispy_field }}</div>
+                        </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                    {% endfor %}
+                </div>
+
+            </div>
+
+        </form>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "app/layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  {% if  message %}
+    {{ message }}
+  {%  endif  %}
+
+   <h3>Search Advanced Report</h3>
+        <form action="" method="post">
+        {% csrf_token %}
+
+        <div class="well well-sm">
+            <div class='row'>
+                <div class='col-md-3'> {{ search_form.cust_comp_list| as_crispy_field }} </div>
+                <div class='col-md-3'>  {{ search_form.start_date| as_crispy_field }} </div>
+                <div class='col-md-3'> {{ search_form.end_date| as_crispy_field }}</div>
+                <div class='col-md-3'>
+                    <button class="btn btn-primary mt-3" type="submit"  >Export Report</button>
+                </div>
+
+            </div>
+
+
+        </div>
+    </form>
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+.ipynb_checkpoints
+__pycache__
+.vs
+.idea
+Debug
+Any CPU
+obj
+incident_docs
+settings.py
+settings_adfs_azure.py
+settings_ldap.py
+YIT-Widecard-2022.pfx
+.env
+*.lnk
+*.url
+*.pdf
+*.excel
+*.pyc
+*.cpython-39.pyc
+*.pyproj
+*.pyproj.user
+*.sln
+o365_token.txt

@@ -1,0 +1,47 @@
+{%  if inventory.is_dummy %}
+
+ <div style="background:#93c6ef"><h4>Inventory : {{  inventory.serial_number }}</h4></div>
+
+{%  else %}
+<table class="table table-striped table-hover table-condensed">
+    <tr>
+        <th scope="col">Serial</th>
+        <th scope="col">QTY</th>
+        <th scope="col">ProductType</th>
+        <th scope="col">Brand</th>
+        <th scope="col">Model</th>
+        <th scope="col">Cust Warranty Start</th>
+        <th scope="col">Cust Warranty End</th>
+        <th scope="col">View detail</th>
+
+    </tr>
+
+    <tr style="background:#93c6ef">
+        <td>{{ inventory.serial_number }}</td>
+        <td>{{ inventory.quantity }}</td>
+        <td>{{ inventory.product_type }}</td>
+        <td>{{ inventory.brand }}</td>
+        <td>{{ inventory.model }}</td>
+
+        <td>{{ inventory.customer_warranty_start | date:"d M Y" }}</td>
+        <td>{{ inventory.customer_warranty_end | date:"d M Y" }}</td>
+
+
+        <td>
+            <button onclick="viewInventory()" class="btn btn-dark">View</button>
+            <script>
+                function viewInventory() {
+                    window.open("{% url 'update_inventory' inventory.id %}?view_only=1", '', "menubar=0,location=0,status=0,titlebar=0,scrollbars=yes,resizable=yes,width=1000,height=500");
+                }
+
+            </script>
+        </td>
+    </tr>
+</table>
+
+{%  endif %}
+
+
+
+
+

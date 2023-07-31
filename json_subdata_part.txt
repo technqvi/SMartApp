@@ -1,0 +1,49 @@
+best version
+{
+  "System ROM": "KOKO",
+  "I/O Card": {
+    "Slot#1": "B1",
+    "Slot#2": "B2",
+    "Slot#3": "B3"
+  },
+  "Power Supply": {
+    "PS-1": "XYZ",
+    "PS-2": "ABC"
+  },
+  "CPU": [
+    {
+      "CPU": "c1",
+      "QTY": 1
+    },
+    {
+      "CPU": "c2",
+      "QTY": 1
+    }
+  ],
+  "Memory Type": [
+    {
+      "Mem": "m1",
+      "QTY": 2
+    },
+    {
+      "Mem": "m2",
+      "QTY": 1
+    },
+    {
+      "Mem": "m3",
+      "QTY": 2
+    }
+  ],
+  "Total Size (GB)": 1000
+}
+
+
+old version
+{
+  "System ROM": "KOKO",
+  "I/O Card": { "Slot#1": "A1","Slot#2": "A2","Slot#3": "A3"},
+  "Power Supply": { "PS-1": "XYZ", "PS-2": "ABC"},
+  "CPU": {   "CPU#1": "c1", "QTY#1": 1 , "CPU#2": "c2", "QTY#2": 1  },
+  "Memory Type": {   "Mem#1": "m1", "QTY#1": 2 , "Mem#2": "m2", "QTY#2": 2  , "Mem#3": "m3", "QTY3#": 1  },
+ "Total Size (GB)": 1000
+}

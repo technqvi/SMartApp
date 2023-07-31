@@ -1,0 +1,162 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    {% include "app/layout_error_message.html" %}
+    <div>
+        <div class="container-fluid" style="text-align:right">
+            <a href="{% url 'manage_incident' %}" class="btn btn-primary">Back to all incidents</a>
+
+        </div>
+    </div>
+    <h4>Project & Inventory Basic Info</h4>
+    {% include "app/incident_infoform.html" %}
+    {% include "app/incident_xform.html" %}
+
+    <form method="post" id="incidentForm" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="well">
+            <div class="container-fluid">
+                <h3>1.Add Master Incident</h3>
+                <div class="row">
+                    <div class="col-md-3">{{ incident_form.incident_datetime| as_crispy_field }}</div>
+                    <div class="col-md-3">{{ incident_form.incident_severity| as_crispy_field }}</div>
+                    <div class="col-md-3">{{ incident_form.incident_problem_start| as_crispy_field }}</div>
+                    <div class="col-md-3">{{ incident_form.incident_problem_end | as_crispy_field }}</div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">{{ incident_form.incident_type| as_crispy_field }}</div>
+                    <div class="col-md-3">{{ incident_form.service_type| as_crispy_field }}</div>
+
+                    <div class="col-md-3">{{ incident_form.incident_status| as_crispy_field }}</div>
+
+                    <div class="col-md-3">{{ incident_form.incident_close_datetime| as_crispy_field }}</div>
+
+
+                </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        {{ incident_form.incident_customer_support| as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ incident_form.incident_reference_customer_caseNo| as_crispy_field }}
+                    </div>
+                         <div class="col-md-3">
+                        {{ incident_form.failure_type| as_crispy_field }}
+                    </div>
+{#                    <div class="col-md-3">#}
+{#                        <label for="incident_upload">{{ file_form.incident_file.label }} </label> (#}
+{#                        limit:{{ FILE_MAX_SIZE_MB }} MB.)#}
+{#                        {{ file_form.incident_ref }} {{ file_form.incident_file }}#}
+{#                    </div>#}
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        {{ incident_form.incident_subject| as_crispy_field }}
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        {{ incident_form.incident_description | as_crispy_field }}
+                    </div>
+
+                </div>
+
+
+                {#                <script>#}
+                {#CKEDITOR.replace('#id_incident_description');#}
+                {#                    CKEDITOR.replace('{{incident_form.incident_description.auto_id}}');#}
+                {##}
+                {#                    function CKupdate() {#}
+                {#                        for (instance in CKEDITOR.instances)#}
+                {#                            for (instance in CKEDITOR.instances)#}
+                {#                                CKEDITOR.instances[instance].updateElement();#}
+                {#                    }#}
+                {#                </script>#}
+
+
+                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                <h3>2.Add Incident Detail</h3>
+                required at least 1 detail.
+                {{ formset.management_form |crispy }}
+                {% for form in formset %}
+                    <div class="row" style="background-color:lightblue">
+                        <div class="col-sm-2">{{ form.service_team |as_crispy_field }}</div>
+                        <div class="col-sm-2">{{ form.employee|as_crispy_field }}</div>
+                        <div class="col-sm-3">{{ form.task_start |as_crispy_field }}</div>
+                        <div class="col-sm-3">{{ form.task_end |as_crispy_field }}</div>
+                        <div class="col-sm-2">{{ form.reference_product_caseNo|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">{{ form.workaround_resolution |as_crispy_field }}</div>
+                    </div>
+                    {#                    <div class="row" style="background-color:lightgoldenrodyellow;">#}
+                    {#                        <b>{{ form.workaround_resolution.label }}*</b>#}
+                    {#                        {{ form.workaround_resolution }}#}
+                    {#                        <script>#}
+                    {#                            CKEDITOR.replace('{{ form.workaround_resolution.auto_id }}');#}
+                    {##}
+                    {#                            function CKupdate() {#}
+                    {#                                for (instance in CKEDITOR.instances)#}
+                    {#                                    for (instance in CKEDITOR.instances)#}
+                    {#                                        CKEDITOR.instances[instance].updateElement();#}
+                    {#                            }#}
+                    {#                        </script>#}
+                    {#                    </div>#}
+                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                {% endfor %}
+                {% if request.user|has_group:"site-manager" %}
+                    <div class="well-sm" style="text-align: center;background:#e4b9c0">
+                        <button type="submit" class="btn btn-primary"
+                                onclick="return confirm('Do you want to add incident and its details?')">Add Incident
+                            and
+                            its
+                            details
+                        </button>
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+        </div>
+    </form>
+
+
+    {#    <form method="post" id="incidentForm" data-subtypes-url="{% url 'ajax_load_incident_subtypes' %}"#}
+    {#          enctype="multipart/form-data" novalidate>#}
+    {#    {% load static %}#}
+    {#    <script src={% static 'app/scripts/jquery-3.3.1.min.js' %}></script>#}
+    {#    <script>#}
+    {#        $("#id_incident_type").change(function () {#}
+    {#            var url = $("#incidentForm").attr("data-subtypes-url");#}
+    {#            var subtypeId = $(this).val();#}
+    {##}
+    {#            $.ajax({#}
+    {#                url: url,#}
+    {#                data: {#}
+    {#                    'incident_type': subtypeId#}
+    {#                },#}
+    {#                success: function (data) {#}
+    {#                    $("#id_incident_subtype").html(data);#}
+    {#                }#}
+    {#            });#}
+    {##}
+    {#        });#}
+    {#    </script>#}
+
+
+{% endblock %}

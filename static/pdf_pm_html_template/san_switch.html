@@ -1,0 +1,163 @@
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Sand Swith PM</title>
+    <link rel="stylesheet" type="text/css" href="pdf_pm_item.css"/>
+</head>
+
+<body>
+
+<header>
+    <p>PREVENTIVE MAINTENANCE REPORT &nbsp;</p>
+</header>
+<div id="logo">
+    <img src="file:{{ Report_Logo }}"/>
+</div>
+
+<div class="caption_table">System Information</div>
+<br>
+
+<table>
+    <tr>
+        <td>Switch Name: {{ Item.devicename_hostname  if Item.devicename_hostname is not none  }} </td>
+        <td>Rack Location:{{ Item.rack_position   if Item.rack_position is not none }}</td>
+    </tr>
+    <tr>
+        <td>Switch Domain:</td>
+        <td>Rack Unit: {{ Item.rack_unit   if Item.rack_unit is not none }}</td>
+    </tr>
+    <tr>
+        <td>World Wide Name:</td>
+        <td>Brand: {{ Item.brand.brand_name }}</td>
+    </tr>
+
+    <tr>
+        <td>Operating System Version :{{ Item.device_hs_version if Item.device_hs_version is not none}} </td>
+        <td>Model: {{ Item.model.model_name }}</td>
+    </tr>
+    <tr>
+        <td>Speed Port:</td>
+
+        <td>
+            Serial No.: {{ Item.serial_number }}
+        </td>
+    </tr>
+    <tr>
+        <td>Total ports:</td>
+
+        <td>
+            IP Address:  {{ Item.ip_address  if Item.ip_address is not none }}
+        </td>
+    </tr>
+
+</table>
+<br>
+<div class="caption_table">Service Detail (Action Taken)</div>
+
+
+<table>
+    <tr>
+        <td class="td_data_list_items"><b>Hardware Status Check</b>
+        </td>
+        <td class="td_check_list_items"><b><p style='text-align:center'><span
+                style='font-family:Wingdings;color:black'>&uuml;</span></p></b>
+
+        </td>
+        <td class="td_data_list_items"><b>Hardware Status Check</b>
+        </td>
+        <td class="td_check_list_items">
+            <b><p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uuml;</span></p></b>
+        </td>
+    </tr>
+
+      <tr>
+        <td class="td_data_list_items">
+            Power Supply
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Hardware Log
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+      <tr>
+        <td class="td_data_list_items">
+            Fan
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+            Check external devices
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+    </tr>
+
+     <tr>
+        <td class="td_data_list_items">
+            Fiber Channel port
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+        </td>
+        <td class="td_check_list_items">
+        </td>
+    </tr>
+
+     <tr>
+        <td class="td_data_list_items">
+            Temperature
+        </td>
+        <td class="td_check_list_items">
+            <p style='text-align:center'><span
+                    style='font-family:Wingdings;color:black'>&uml;</span></p>
+        </td>
+        <td class="td_data_list_items">
+        </td>
+        <td class="td_check_list_items">
+        </td>
+    </tr>
+</table>
+
+
+<br>
+<div class="caption_table">Comments</div>
+
+<table>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+    <tr class="comment_row">
+        <td>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+
+</html>
+

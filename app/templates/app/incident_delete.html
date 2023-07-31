@@ -1,0 +1,98 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% block content %}
+
+    {% include "app/layout_error_message.html" %}
+
+    {% if request.user|has_group:"site-manager" %}
+        <h1>Delete incident and its details</h1>
+        <h3><p>Are you sure to permanently delete "<b><u>{{ incident }}"?</u></b></p></h3>
+        <H4 style="background-color: indianred">If you delete it , the application would be unrecoverable</H4>
+
+        <table class="table table-striped table-hover table-condensed">
+
+        <tr>
+            <td scope="col" class="well"><u>IncidentID:</u></td>
+            <td>{{ incident.id }}</td>
+            <td scope="col" class="well"><u>Incident-No:</u></td>
+            <td>{{ incident.incident_no }}</td>
+        </tr>
+        <tr>
+            <td scope="col" class="well"><u>Status:</u></td>
+            <td>{{ incident.incident_status }}</td>
+            <td scope="col" class="well"><u>Serverity:</u></td>
+            <td>{{ incident.incident_severity }}</td>
+
+        </tr>
+
+        <tr>
+            <td scope="col" class="well"><u>Incident Type:</u></td>
+            <td>{{ incident.incident_type }}</td>
+
+            <td scope="col" class="well"><u>Service Type:</u></td>
+            <td>{{ incident.service_type }}</td>
+        </tr>
+
+        <tr>
+
+            <td scope="col" class="well"><u>Incident Start:</u></td>
+            <td>{{ incident.incident_datetime  | date:"d M Y" }}</td>
+
+            <td scope="col" class="well"><u>Incident Close:</u></td>
+            <td>{{ incident.incident_close_datetime  | date:"d M Y" }}</td>
+
+        </tr>
+        </table>
+
+
+    <h3>List Detail</h3>
+    {% if detailList %}
+
+        <table class="table table-striped table-hover table-condensed">
+            <tr>
+
+
+                <th scope="col">Service Team</th>
+                 <th scope="col">Engineer</th>
+                <th scope="col">Task Start Date</th>
+                <th scope="col">Task End Date</th>
+
+
+
+            </tr>
+            <tbody>
+            {% for item in detailList %}
+                <tr>
+
+                    <td>{{ item.service_team}}</td>
+                    <td>{{ item.employee }}</td>
+                    <td>{{ item.task_start | date:"d M Y" }}</td>
+                    <td>{{ item.task_end| date:"d M Y" }}</td>
+
+                </tr>
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    {% endif %}
+
+     <form action="{% url 'delete_incident' incident.id %}" method="POST">
+
+            {% csrf_token %}
+{#             {% if total_detail == 0 and is_closed_status == 0  %}#}
+            <button type="submit" name="deleteButton" class="btn btn-danger"
+                    onclick="return confirm('Do you want to delete incident ?')">Delete incident and its details
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{#                 {% else %}#}
+{#                <H4 style="background-color: #c1e2b3">Not allow you to delete this incident due to <u>EITHER having some detail#}
+{#                    items OR being closed status </u></H4>#}
+{#               {% endif %}#}
+            <a href="{% url 'manage_incident' %}" class="btn btn-primary">Back to all incidents</a>
+
+     </form>
+
+    {% endif %}
+{% endblock %}

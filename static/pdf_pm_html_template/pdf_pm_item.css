@@ -1,0 +1,94 @@
+/* --------------------------------------------------------------
+
+   typography.css
+   * Sets up some sensible default typography.
+   http://www.blueprintcss.org/blueprint/src/typography.css
+-------------------------------------------------------------- */
+header {
+    position: running(header);
+    border-style: none;
+    width: 100%;
+    font-family: 'Times New Roman';
+    font-size: 14px;
+    font-weight: bold;
+    color: #0f74a8;
+}
+#logo {
+    position: running(logo);
+}
+#logo img {
+    width: 2cm;
+}
+
+@page {
+    size: letter; /* Change from the default size of A4 */
+    margin: 1.0cm; /* Set defaultmargin on each page 2.0-2.5 */
+    @top-left {
+          content: element(header);
+    }
+    @top-right {
+          content: element(logo);
+    }
+
+}
+
+html {
+    font-size: 100%;
+}
+
+body {
+    font-size: 100%;
+    color: black;
+    background: white;
+    font-family: Times New Roman;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+table {
+    width: 100%;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: black;
+    border-spacing: 0px;
+    text-align: left;
+}
+th,td {
+    width: 50%;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: black;
+    border-spacing: 0px;
+    text-align: left;
+}
+
+.caption_table{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.td_data_list_items{
+      width: 40%
+}
+.td_check_list_items{
+      width: 10%
+}
+
+.comment_row{
+    height: 20pt;
+}
+
+.item_15pct{
+    width: 15%
+}
+
+.item_35pct{
+    width: 35%
+}
+.item_20pct{
+    width: 20%
+}
+.item_25pct{
+    width: 25%
+}
+

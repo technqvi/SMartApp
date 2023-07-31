@@ -1,0 +1,38 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+    {% include "app/layout_error_message.html" %}
+    <h3>Update inventory.</h3>
+     <h3>Company: {{ project.company.company_name }} | {{ project.enq_id }} - {{ project.project_name }}. </h3>
+    <form method="post" id="inventoryForm_Update" data-models-url="{% url 'ajax_load_models' %}" novalidate>
+        {% csrf_token %}
+
+       {% include "app/inventory_xform.html" %}
+
+{#        <div align="center"><input type="submit" value="Update Inventory"></div>#}
+    </form>
+
+
+   {% load static %}
+    <script src={% static 'app/scripts/jquery-3.3.1.min.js' %}></script>
+{#    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>#}
+{#    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>#}
+    <script>
+        $("#id_brand").change(function () {
+            var url = $("#inventoryForm_Update").attr("data-models-url");
+            var brandId = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'brand': brandId
+                },
+                success: function (data) {
+                    $("#id_model").html(data);
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}

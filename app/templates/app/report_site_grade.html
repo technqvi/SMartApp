@@ -1,0 +1,53 @@
+{% extends "app/layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <h3>Site Grade Report</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="well">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">{{ search_form.year_list| as_crispy_field }}</div>
+                    <div class="col-md-3">{{ search_form.quarter_list| as_crispy_field }}</div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary mt-3" type="submit" name="view_report">View Report</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary mt-3" type="submit" name="export_report" >Export Report</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <h3>{{ period_report }}</h3>
+    {% if  report_cols %}
+
+        <table class="table table-striped table-hover">
+
+            <tr>
+                {% for col in report_cols %}
+                    <th scope="col">{{ col|safe }}</th>
+                {% endfor %}
+            </tr>
+            {% if report_items %}
+                {% for row in report_items %}
+                    <tr>
+                        {% for key, value in row.items %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+
+            {% endif %}
+        </table>
+
+    {% endif %}
+
+
+
+
+{% endblock %}

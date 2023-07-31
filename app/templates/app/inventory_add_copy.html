@@ -1,0 +1,108 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+    {% include "app/layout_error_message.html" %}
+    <div>
+        <div class="container-fluid" style="text-align:right">
+            <a href="{% url 'manage_project' %}" class="btn btn-primary">Back to all projects</a>
+        </div>
+    </div>
+
+                    <h1>Copy Inventory From {{ project_ref.company.company_name }} | {{ project_ref.enq_id }}</h1>
+
+    {% if inventory_count > 0 %}
+
+        <form method="POST" action="">
+            {% csrf_token %}
+
+
+            <div class="container-fluid" >
+                <h3>Add New Project and Fill in Customer,Yit and Product Warrant Date and SLA</h3>
+               <div style="background-color:#c9e2b3">
+                     <div class='row' >
+                    <div class='col-md-3'> {{ project_form.enq_id | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ project_form.company  | as_crispy_field }}</div>
+                    <div class='col-md-6'>  {{ project_form.project_name | as_crispy_field }}</div>
+                    </div>
+                    <div class='row' >
+                    <div class='col-md-3'> {{ project_form.project_start |as_crispy_field }} </div>
+                    <div class='col-md-3'> {{ project_form.project_end |as_crispy_field }} </div>
+                    <div class='col-md-3'> {{ project_form.customer_po | as_crispy_field }}</div>
+                    <div class='col-md-3'> {{ project_form.contract_no | as_crispy_field }}</div>
+
+                </div>
+                   <br>
+               </div>
+
+
+
+                <div style="text-align: center;color: black;background-color:#9d9d9d">
+                    {% if onetime_warranty_date == 1 %}
+                        <u><h3>Update Only The First Selected Item On ===> Customer ,Yit and Product Warrant Date and SLA </h3></u>
+                    {% else %}
+                        <u><h3>Update Every Item On ==> Customer,Yit and Product Warrant Date and SLA Separately</h3></u>
+                    {% endif %}
+                </div>
+
+                <div class="container-fluid">
+                    {{ inventory_formset.management_form |crispy }}
+                    {% for form in inventory_formset %}
+                        <div class="row" style="background-color:lightcyan;">
+
+                            <div class="col-sm-2"> {{ form.quantity |as_crispy_field }}</div>
+                            <div class="col-sm-2"> {{ form.serial_number |as_crispy_field }}</div>
+                            <div class="col-sm-2">{{ form.product_type |as_crispy_field }}</div>
+                            <div class="col-sm-2">{{ form.brand|as_crispy_field }}</div>
+                            <div class="col-sm-2">  {{ form.model|as_crispy_field }}</div>
+                            <div class="col-sm-2" style="color: red;font-size: 16px;font-weight: bold;"> {{ form.id }}
+
+                                {% if inventory_formset.can_delete %}
+                                    <strong>Exclude item: {{ form.DELETE }}</strong>
+                                {% endif %}  </div>
+
+                        </div>
+                        <div class="row" style="background-color:#b1dfbb;">
+                            <div class="col-sm-12" style="background:whitesmoke"><h5>Change info as below</h5></div>
+                            <div class="col-sm-2"> {{ form.customer_warranty_start  |as_crispy_field }}</div>
+                            <div class="col-sm-2"> {{ form.customer_warranty_end  |as_crispy_field }}</div>
+
+                            <div class="col-sm-2"> {{ form.yit_warranty_start  |as_crispy_field }}</div>
+                            <div class="col-sm-2"> {{ form.yit_warranty_end  |as_crispy_field }}</div>
+
+                            <div class="col-sm-2"> {{ form.product_warranty_start  |as_crispy_field }}</div>
+                            <div class="col-sm-2"> {{ form.product_warranty_end  |as_crispy_field }}</div>
+
+                        </div>
+                        <div class="row" style="background-color:#b1dfbb;">
+                            <div class="col-sm-4"> {{ form.customer_sla  |as_crispy_field }}</div>
+                            <div class="col-sm-4"> {{ form.yit_sla  |as_crispy_field }}</div>
+                            <div class="col-sm-4"> {{ form.product_sla  |as_crispy_field }}</div>
+                        </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+                    {% endfor %}
+                </div>
+
+                {% if request.user|has_group:"site-manager" %}
+                    <button type=" submit
+                " class="btn btn-block btn-primary" onclick="return confirm('Do you want to copy all of them?')">Click
+                        to Copy
+                        Inventory
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+        </form>
+
+    {% else %}
+        <h3>No Inventory to copy</h3>
+        <a href="{% url 'manage_project' %}">Back</a>
+    {% endif %}
+
+
+{% endblock %}

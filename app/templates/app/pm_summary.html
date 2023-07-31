@@ -1,0 +1,29 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h3>Search To Export Project & PM Summary</h3>
+    <form method="get" autocomplete="on">
+        <div class="well well-sm">
+            <div class='row'>
+                <div class='col-md-3'>{{ PMSummaryFilter.form.company | as_crispy_field }}</div>
+                <div class='col-md-3'>   {{ PMSummaryFilter.form.enq_id | as_crispy_field }}</div>
+                       <div class='col-md-3'>
+                        <input type="checkbox" id="expired_project" name="expired_project">
+                        <label for="expired_project">Include Project Expiration</label>
+                    </div>
+                <div class='col-md-3'>
+                    <button class="btn btn-primary" type="submit" onclick="return confirm('Do you want to export project & PM-Plan Summary as an excel file ?')">Export PM</button>
+                    <a href="{% url 'summarize_project_pm' %}" class="btn btn-primary"  >Clear Search</a></div>
+            </div>
+        </div>
+    </form>
+
+<h3>Export All Project &  PM Summary</h3>
+    <h5>Export all your customers and projects excluding expiration that you are responsible.</h5>
+        <div style="text-align: center">
+                <a href="{% url 'summarize_all' %}" class="btn btn-lg btn-primary" onclick="return confirm('Do you want to export all project & PM-Plan Summary as an excel file ?')"  >Export All PM</a><br />
+
+        </div>
+
+{% endblock %}

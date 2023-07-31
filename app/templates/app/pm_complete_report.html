@@ -1,0 +1,23 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if error_message %}
+    <div class="container-fluid p-0">
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>{{ error_message }}</h3>
+  </div>
+</div>
+{% else %}
+
+<h3>The System will generate report zip file and  send  you email in 15 minutes.</h3>
+
+ <a href="#" onclick="window.close();return false;" class="btn btn-primary">Close page</a>
+
+{% endif %}
+{% endblock %}
