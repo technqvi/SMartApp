@@ -52,11 +52,14 @@
 
                     <div class='col-md-3'>   {{ projectFilter.form.company | as_crispy_field }}</div>
                     <div class='col-md-3'>   {{ projectFilter.form.enq_id | as_crispy_field }}</div>
-                    <div class='col-md-4'>   {{ projectFilter.form.project | as_crispy_field }}</div>
-                    <div class='col-md-2'>
-                        <input type="checkbox" id="expired_project" name="expired_project">
+                    <div class='col-md-3'>   {{ projectFilter.form.project | as_crispy_field }}</div>
+                    <div class='col-md-3'>   {{ projectFilter.form.is_dummy | as_crispy_field }}
+                                <input type="checkbox" id="expired_project" name="expired_project">
                         <label for="expired_project">Include Expiration</label>
                     </div>
+{#                    <div class='col-md-2'>#}
+{#            #}
+{#                    </div>#}
 
                 </div>
                 <div class='row'>

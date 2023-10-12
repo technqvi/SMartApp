@@ -46,7 +46,7 @@ def company_for_project_by_role(request):
 
 class ProjectFilter(django_filters.FilterSet):
     company = filters.ModelChoiceFilter(queryset = company_for_project_by_role, field_name='company',
-                                        label='Company', required=True)
+                                        label='Company')
     # company = filters.ModelChoiceFilter(queryset=Company.objects.filter(is_customer=True),field_name='company',label='Company',required=True)
 
     #is_dummy = django_filters.BooleanFilter(field_name='is_dummy', label="Project-Dummy", required=True)
