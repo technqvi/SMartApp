@@ -169,6 +169,8 @@ def report_incident(listIDs):
          , TO_CHAR(incident.incident_problem_end AT TIME ZONE 'Asia/Bangkok' ,'DD Mon YYYY HH24:MI') as "Resolved Date"
          ,TO_CHAR(incident.incident_close_datetime AT TIME ZONE 'Asia/Bangkok','DD Mon YYYY HH24:MI')   as "Incident Closed Date"
          
+         ,  CONCAT(employee.employee_name,'(',employee.employee_nickname,')')   as "Incident Case Owner"
+         
         , '' as "TotalTime To Service",'' as "TotalTime To Service(Minutes)"
        , '' as "TotalTime To SLA",'' as "TotalTime To SLA(Minutes)"
          
@@ -184,12 +186,14 @@ def report_incident(listIDs):
        , datacenter.datacenter_name as "Data Center", branch.branch_name as "Branch"
        ,incident.incident_customer_support as "Customer Support Contact"
        ,incident.incident_description as "Problem Description"
+       
      from  app_incident incident
      left join  app_incident_severity severity on incident.incident_severity_id=severity.id
      left join  app_incident_status status on incident.incident_status_id =status.id
      left join app_incident_type type on  incident.incident_type_id =type.id
      left join app_service_type service on incident.service_type_id =service.id
      left join app_inventory inventory on incident.inventory_id = inventory.id
+     left join app_employee employee on incident.incident_owner_id = employee.id
 	 left join app_project project on inventory.project_id = project.id
 	 left join  app_company comp on project.company_id = comp.id
 	 left join app_product_type product_type  on inventory.product_type_id  = product_type.id

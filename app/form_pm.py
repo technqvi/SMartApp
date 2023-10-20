@@ -28,10 +28,10 @@ class  PM_MasterForm(forms.ModelForm):
             'planned_date': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
         }
 
-    def __init__(self, *args, **kwargs):
-        super(PM_MasterForm, self).__init__(*args, **kwargs)
-        self.fields['team_lead'].queryset =Employee.objects.filter(is_inactive=False).order_by('-is_team_lead','employee_name')
-        self.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
+    # def __init__(self, *args, **kwargs):
+    #     super(PM_MasterForm, self).__init__(*args, **kwargs)
+    #     self.fields['team_lead'].queryset =Employee.objects.filter(is_inactive=False).order_by('-is_team_lead','employee_name')
+    #     self.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
 
 
 class  PM_InventoryForm(forms.ModelForm):
@@ -43,8 +43,8 @@ class  PM_InventoryForm(forms.ModelForm):
         'document_date': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
         'remark': forms.Textarea(attrs={'rows': 5, 'class': 'form-control'}),
         }
-    def __init__(self, *args, **kwargs):
-        super(PM_InventoryForm, self).__init__(*args, **kwargs)
-        self.fields['pm_engineer'].queryset =Employee.objects.filter(is_inactive=False)
-        self.fields['document_engineer'].queryset =Employee.objects.filter(is_inactive=False)
+    # def __init__(self, *args, **kwargs):
+    #     super(PM_InventoryForm, self).__init__(*args, **kwargs)
+    #     self.fields['pm_engineer'].queryset =Employee.objects.filter(is_inactive=False)
+    #     self.fields['document_engineer'].queryset =Employee.objects.filter(is_inactive=False)
 

@@ -10,7 +10,6 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 import datetime
 
-
 class Manager(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,unique=True)
     #user = models.OneToOneField(get_user_model(), null=True, on_delete=models.CASCADE)
@@ -391,6 +390,7 @@ class Incident(models.Model):
     incident_problem_start = models.DateTimeField('Response Date/Time')
     incident_problem_end = models.DateTimeField('Resolved Date/Time', null=True, blank=True)
 
+    incident_owner = models.ForeignKey(Employee,on_delete=models.CASCADE,verbose_name='Engineer Incident Owner' )
 
     incident_reference_customer_caseNo = models.CharField('Customer Reference Case No.', max_length=150, null=True, blank=True)
     incident_customer_support = models.CharField('Customer Reference(Name,Tel)', max_length=300)

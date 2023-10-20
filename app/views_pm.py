@@ -391,9 +391,17 @@ def update_pm_inventory(request,pm_id,id=0):
              form =PM_InventoryForm(initial={'pm_master': pm_obj,'inventory':first_pm_item})
             else:
              form = PM_InventoryForm()
+
+            form.fields['pm_engineer'].queryset = Employee.objects.filter(is_inactive=False)
+            form.fields['document_engineer'].queryset = Employee.objects.filter(is_inactive=False)
+
         else:
             item_obj = get_object_or_404(PM_Inventory, pk=id)
             form = PM_InventoryForm(instance=item_obj)
+
+            form.fields['pm_engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=item_obj.pm_engineer_id))
+            form.fields['document_engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=item_obj.document_engineer_id))
+
     else:# post
         if id == 0:
             if len(pmItemList) > 0:
@@ -465,10 +473,17 @@ def manage_pm(request, project_id, id=0):
         if id == 0:  # new detail
             form = PM_MasterForm()
             form_mode = 'New'
+
+            form.fields['team_lead'].queryset = Employee.objects.filter(is_inactive=False).order_by('-is_team_lead',                                                                                       'employee_name')
+            form.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
         else:
             obj = get_object_or_404(PreventiveMaintenance, pk=id)
             form = PM_MasterForm(instance=obj)
             form_mode = 'Update'
+
+            form.fields['team_lead'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=obj.team_lead_id)).order_by('-is_team_lead','employee_name')
+            form.fields['engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=obj.engineer_id)).order_by('employee_name')
+
         form.fields['customer_company'].queryset=listSubComp
 
 

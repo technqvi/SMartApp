@@ -19,7 +19,7 @@
 
                 <div class='col-md-3'>   {{ incidentFilter.form.brand | as_crispy_field }}</div>
             </div>
-            <div class='row'>
+            <div class='row' >
                    <div class="col-md-3">
                     {{ incidentFilter.form.incident_subject | as_crispy_field }}
                 </div>
@@ -27,14 +27,16 @@
                 <div class="col-md-3">
                     {{ incidentFilter.form.incident_severity | as_crispy_field }}
                 </div>
-                
-
-                 <div class="col-md-6">
-                    <button class="btn btn-primary" type="submit">Search</button>
+                    <div class="col-md-3">
+                    {{ incidentFilter.form.incident_owner | as_crispy_field }}
+                </div>
+                   <div class="col-md-3">
+                       <button class="btn btn-primary" type="submit">Search</button>
                     <a href="{% url 'manage_incident' %}" class="cancel-link">Clear Search</a>
                 </div>
 
             </div>
+
 
 
         </div>
@@ -72,7 +74,7 @@
 
                 <td scope="col">Status</td>
                 <td scope="col">Sevirity</td>
-
+                 <td scope="col">Case Owner</td>
 
                 <td scope="col">ENQ</td>
                 <td scope="col">Company</td>
@@ -94,7 +96,7 @@
 
                 <td>{{ item.incident_status }}</td>
                 <td>{{ item.incident_severity }}</td>
-
+                <td>{{ item.incident_owner.employee_name  }}</td>
 
                 <td>{{ item.inventory.project.enq_id }}</td>
                 <td>{{ item.inventory.project.company.company_name }}</td>

@@ -110,7 +110,10 @@
                     <div class="col-md-3">{{ incident_form.incident_close_datetime | as_crispy_field }}</div>
                 </div>
                <div class="row">
-                    <div class="col-md-6">
+                   <div class="col-md-3">
+                        {{ incident_form.incident_owner| as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
                         {{ incident_form.incident_customer_support| as_crispy_field }}
                     </div>
                     <div class="col-md-3">

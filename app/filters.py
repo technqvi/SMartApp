@@ -20,7 +20,8 @@ class MyEndDateFilter(django_filters.DateFilter):
         return super(MyEndDateFilter, self).filter(qs, value)
 
 
-
+def active_engineer_incident_owner(request):
+    return Employee.objects.filter(is_inactive=False)
 
 def company_for_project_by_role(request):
     if request is None:
@@ -113,11 +114,10 @@ class IncidentFilter(django_filters.FilterSet):
 
     serial_number = django_filters.CharFilter(field_name='inventory__serial_number', label='Serial')
 
-
-
     brand = django_filters.ModelChoiceFilter(queryset=Brand.objects.all(), field_name='inventory__brand', label='Brand')
 
-
+    incident_owner = filters.ModelChoiceFilter(queryset = active_engineer_incident_owner, field_name='incident_owner',
+                                        label='Engineer Owner')
 
     class Meta:
         model = Incident

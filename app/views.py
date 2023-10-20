@@ -815,6 +815,7 @@ def add_incident(request, inventory_id):
 
     if (request.method == "GET"):
         incident_form = IncidentForm(initial={'incident_status': 1})
+        incident_form.fields['incident_owner'].queryset =Employee.objects.filter(is_inactive=False)
 
         file_form = IncidentFileForm()
 
@@ -930,7 +931,9 @@ def update_incident(request, id):
 
         # ==============load  incident form and it detail=================
         incident_form = IncidentForm(instance=incident_obj)
-
+        incident_form.fields['incident_owner'].queryset = Employee.objects.filter(
+            Q(is_inactive=False) | Q(id = incident_obj.incident_owner.id))
+        # is_inactive=False
         file_form = IncidentFileForm(initial={'incident_ref': incident_obj})
 
     else:  # post
