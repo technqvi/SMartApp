@@ -128,7 +128,12 @@ class IncidentFilter(django_filters.FilterSet):
 
 
 
-
+def engineer_for_incident_detail(request):
+    listIDs = request.session.get("listEngineerByIncidentDetail", None)
+    if listIDs is None:
+        return Employee.objects.all()
+    else:
+        return Employee.objects.filter(id__in=listIDs)
 
 class DetailFilter(django_filters.FilterSet):
     task_start__gt = django_filters.DateFilter(field_name='task_start', lookup_expr='gt',
@@ -137,10 +142,10 @@ class DetailFilter(django_filters.FilterSet):
     task_end__lt = MyEndDateFilter(field_name='task_start', lookup_expr='lt',
                                                       widget=MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
                                                       label="To")
+    engineer= django_filters.ModelChoiceFilter(queryset=engineer_for_incident_detail, field_name='employee', label='Engineer')
     class Meta:
         model= Incident_Detail
-        #fields=['service_team','employee']
-        fields = ['service_team']
+        exclude=['service_team']
 
 
 

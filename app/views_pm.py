@@ -300,7 +300,7 @@ def build_weasyprint_pm_doc_pdf(request,id=0):
 @manger_and_viewer_engineer_only
 def filter_pmItem(request, pmItemList):
 
-    listBrandIDByPMItems=list(pmItemList.order_by('inventory__brand_id').values_list('inventory__brand_id',flat=True).distinct())
+    listBrandIDByPMItems=list( pmItemList.order_by('inventory__brand_id').values_list('inventory__brand_id',flat=True).distinct())
     brandByPMItems=Brand.objects.filter(id__in=listBrandIDByPMItems)
     request.session['listBrandIDByPMItems']=listBrandIDByPMItems
 

@@ -650,7 +650,7 @@ def update_inventory(request, id):
                 else:
                     return redirect(next)
 
-                # return redirect("/inventories/")
+
 
         else:
             messages.error(request, form.errors)
@@ -1028,7 +1028,11 @@ def delete_incident(request, id):
 def filter_detail(request, incident_id):
     myuser = request.user
     my_all = Incident_Detail.objects.filter(incident_master_id=incident_id)
-    xFilter = DetailFilter(request.GET, queryset=my_all)
+
+    listEngineerByIncidentDetail=list( my_all.values_list('employee_id',flat=True).distinct())
+    request.session['listEngineerByIncidentDetail']=listEngineerByIncidentDetail
+
+    xFilter = DetailFilter(request.GET, request=request, queryset=my_all)
     xList = xFilter.qs
 
     return xFilter, xList

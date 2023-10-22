@@ -11,19 +11,10 @@ from .pm_doc_manager import pm_doc_builder
 
 urlpatterns = [
 
-
-    # path('api/', views_api.ApiOverview, name='api_overview'),
-    # path('api/company', views_api.list_company_by_sitemanger, name='api_list_company'),
-    # path('api/site_grade', views_api.list_site_grade, name='api_list_site_grade'),
-
     # get req. to retrieve and display all records by manager
     path('projects/', views.manage_project, name='manage_project'),
     path('projects/<int:id>/', views.manage_project, name='manage_project'),
-    path('delete_project/<int:id>/', views.delete_project, name='delete_project'),
-    path('projects/export_project/', views.export_project, name='export_project'),
-    path('projects/export_all_project/', views.export_all_project, name='export_all_project'),
-
-
+    path('projects/delete_project/<int:id>/', views.delete_project, name='delete_project'),
     path('projects/<int:proj_id>/add_inventory/', views.add_inventory, name='add_inventory'),
     path('projects/<int:proj_ref_id>/copy_inventory/', views.copy_inventoryList_by_existingProject,
          name='copy_inventory'),
@@ -32,19 +23,15 @@ urlpatterns = [
     path('inventories/update_inventory/<int:id>/', views.update_inventory, name='update_inventory'),
     path('inventories/<int:inventory_id>/add_incident', views.add_incident, name='add_incident'),
     path('inventories/delete_inventory/<int:id>/', views.delete_inventory, name='delete_inventory'),
-    path('inventories/export', views.export_inventory, name='export_inventory'),
+
 
     path('incidents/', views.manage_incident, name='manage_incident'),
     path('incidents/update_incident/<int:id>/', views.update_incident, name='update_incident'),
     path('incidents/<int:incident_id>/manage_incident_detail/<int:id>/', views.manage_incident_detail, name='manage_incident_detail'),
     path('incidents/<int:id>/change_inventory/<int:inventory_id>/', views.change_inventory_for_incident, name='change_inventory_for_incident'),
     path('incidents/delete_incident/<int:id>/', views.delete_incident, name='delete_incident'),
-    path('incidents/export/', views.export_incident, name='export_incident'),
     path('incidents/delete_incident_detail/<int:id>/', views.delete_incident_detail, name='delete_incident_detail'),
     path('incidents/delete_incident_file/<int:id>/',views.delete_incident_file,name='delete_incident_file'),
-
-    path('ajax/load-models/', views.load_models_by_brand, name='ajax_load_models'),
-    path('ajax/load-customers/', views.load_customers_support_by_company, name='ajax_load_customers'),
 
     path('import_models/', views.import_models, name='import_models'),
     path('import_models/download_template/',views.create_model_template,name='do_modeltemplate'),
@@ -67,27 +54,28 @@ urlpatterns = [
     path('pm/task/', views_pm.run_process_pm_doc_task, name='run_process_pm_doc_task'),
 
     path('pm/pm_report', views_pm.report_pm, name='report_pm'),
-    path('pm/export_plan/', views_pm.export_pm_plan, name='export_pm_plan'),
-    path('pm/export_item/', views_pm.export_pm_item, name='export_pm_item'),
     path('pm/template/',views.list_inventory_template_for_pm,name='inventory_template'),
 
-    path('summarize_project_pm', views_pm.summarize_project_pm, name='summarize_project_pm'),
-    path('summarize_all', views_pm.summarize_all, name='summarize_all'),
+    path('report/site-grade/', views_report.report_site_grade, name="report_site_grade"),
+    path('report/advance-report/', views_report.build_ais_excel_report, name='build_ais_excel_report'),
+
+    path('report/export_project/', views.export_project, name='export_project'),
+    path('report/export_all_project/', views.export_all_project, name='export_all_project'),
+    path('report/export_inventory/', views.export_inventory, name='export_inventory'),
+    path('report/export_incident/', views.export_incident, name='export_incident'),
+    path('report/export_pm_plan/', views_pm.export_pm_plan, name='export_pm_plan'),
+    path('report/export_pm_item/', views_pm.export_pm_item, name='export_pm_item'),
+    path('report/summarize_project_pm', views_pm.summarize_project_pm, name='summarize_project_pm'),
+    path('report/summarize_all', views_pm.summarize_all, name='summarize_all'),
+
+    path('ajax/load-models/', views.load_models_by_brand, name='ajax_load_models'),
+    path('ajax/load-customers/', views.load_customers_support_by_company, name='ajax_load_customers'),
 
 
     path('manage_sm/', views.manage_sm, name='manage_sm'),
 
-    path('xyz/<int:id>/', views.manage_xyz , name='manage_xyz'),
+    path('xyz/<int:id>/', views.manage_xyz, name='manage_xyz'),
     path('xyz/', views.manage_xyz, name='manage_xyz'),
-
-    path('site-grade/', views_report.report_site_grade, name="report_site_grade"),
-    path('advance-report/', views_report.build_ais_excel_report, name='build_ais_excel_report'),
-
-
-
-    #path('test/', views.test_query, name='test_pathquery'),
-
-
 
 ]
 
