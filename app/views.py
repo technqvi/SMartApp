@@ -915,7 +915,7 @@ def update_incident(request, id):
     if (request.method == "GET"):
 
         # ===============load ml prediction====================
-        if incident_obj.incident_status.id==4:
+        if incident_obj.incident_status.id==settings.INCIDENT_CODE_CLOSED:
 
          incidentPredictions =incident_obj.prediction_ml_severity_incident_set.all()
          if len(incidentPredictions)>0:
@@ -937,27 +937,27 @@ def update_incident(request, id):
         file_form = IncidentFileForm(initial={'incident_ref': incident_obj})
 
     else:  # post
-
         incident_form = IncidentForm(request.POST, instance=incident_obj)
         file_form = IncidentFileForm(request.POST, request.FILES)
 
         if (incident_form.is_valid()):
             if (file_form.is_valid()):
 
-                des = incident_form.cleaned_data['incident_description']
-
+                status = incident_form.cleaned_data['incident_status']
+                if status.id==settings.INCIDENT_CODE_CLOSED and incident_obj.incident_detail_set.count()==0:
+                    messages.error(request, "You are not allowed to close an incident because of no incident detail.")
                 # update incident
-                if incident_form.has_changed():
-
-                    incident_form.save()
-                    messages.success(request, f'Incident has been updated successfully.')
                 else:
-                    messages.success(request, f'No any update in this incident.')
+                    if incident_form.has_changed():
+                        incident_form.save()
+                        messages.success(request, f'Incident has been updated successfully.')
+                    else:
+                        messages.success(request, f'No any update in this incident.')
 
-                # upload file
-                files = upload_incident_files(request, incident_obj)
-                if (len(files) > 0):
-                    incident_files = Incident_File.objects.filter(incident_ref_id=id)
+                    # upload file
+                    files = upload_incident_files(request, incident_obj)
+                    if (len(files) > 0):
+                        incident_files = Incident_File.objects.filter(incident_ref_id=id)
             else:
                 messages.success(request, file_form.errors)
 

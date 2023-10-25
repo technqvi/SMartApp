@@ -6,7 +6,7 @@
 
     <h3> {{ mode }} : Datacenter</h3>
 
-    <form method="post" id="datacenterForm" data-models-url="{% url 'ajax_load_customers' %}" novalidate>
+    <form method="post" id="datacenterForm" enctype="multipart/form-data" data-models-url="{% url 'ajax_load_customers' %}" novalidate>
         {% csrf_token %}
         <div class="well">
             <div class="container-fluid">

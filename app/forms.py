@@ -367,7 +367,7 @@ class BranchForm(forms.ModelForm):
         model =Branch
         fields = '__all__'
         widget={
-            'address': forms.Textarea(attrs={"rows": 5, "cols":10,"class": 'form-control'}),
+            'address': forms.Textarea(attrs={"rows": 2, "class": 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -379,8 +379,9 @@ class DataCenterForm(forms.ModelForm):
         model =DataCenter
         fields = '__all__'
         widget={
-            'address': forms.Textarea(attrs={"rows": 5, "cols":10,"class": 'form-control'}),
+            'address': forms.Textarea(attrs={'rows': 2, 'class': 'form-control'}),
         }
+
 
     def __init__(self, *args, **kwargs):
         super(DataCenterForm, self).__init__(*args, **kwargs)
