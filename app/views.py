@@ -1731,3 +1731,10 @@ def list_inventory_template_for_pm(request):
     context = {'template_formset': template_formset }
     return render(request, 'app/pm_template_json_data.html', context)
 
+
+# @login_required(login_url='login')
+# @manger_and_viewer_only
+def search_vertex_ai(request):
+    """Renders the about page."""
+    context = {}
+    return render(request, 'app/incident_search_google.html', context)

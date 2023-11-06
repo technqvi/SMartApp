@@ -26,6 +26,7 @@ class  PM_MasterForm(forms.ModelForm):
         widgets = {
             'remark': forms.TextInput(attrs={'size': 150}),
             'planned_date': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
+            'ended_pm_date' : MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
         }
 
     # def __init__(self, *args, **kwargs):

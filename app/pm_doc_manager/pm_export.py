@@ -15,7 +15,8 @@ def export_pm_summary_by_company_project(listIDs):
             ap.customer_po as "Customer PO",ap.contract_no as "Contract-No Reference",
 
 
-            TO_CHAR(pm.planned_date,'Mon YYYY') as "PM Plan Date",
+            TO_CHAR(pm.planned_date,'Mon YYYY') as "PM Plan Date", 
+            TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "PM Ended Date",
            pm.remark as  "PM Period",
            (select count(*) from app_pm_inventory where pm_master_id=pm.id and is_pm=True ) as "PMItems",
            (select count(*) from app_pm_inventory where pm_master_id=pm.id and is_pm=False ) as "No-PMItems",
@@ -48,6 +49,7 @@ def export_pm_plan(listIDs):
        ap.contract_no as "เลขที่สัญญา",ap.enq_id as "ENQ" ,
        ap.project_name as "ชื่อโครงการ",
        TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",
+       TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
        pm.remark as  "งวดPM",
        ae.employee_name as "หัวหน้าทีม",
        (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Engineer"
@@ -79,7 +81,8 @@ def export_pm_iventory_item(itemIDs):
              (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
               (select  model_name from app_model where id=ai.model_id ) as "Model",
 
-             TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",pm.remark as  "งวดPM",ae.employee_name as "หัวหน้าทีม",
+             TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+             pm.remark as  "งวดPM",ae.employee_name as "หัวหน้าทีม",
              (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
 
            (select employee_name from app_employee eng_pm  where eng_pm.id=pm_item.pm_engineer_id ) as "Operation Engineer",

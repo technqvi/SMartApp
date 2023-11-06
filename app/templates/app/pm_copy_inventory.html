@@ -54,35 +54,38 @@
     <form method="post" id="pmForm">
         {% csrf_token %}
         <div class="well">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3">{{ form.planned_date | as_crispy_field }}</div>
-                    <div class="col-md-3">{{ form.remark | as_crispy_field }}</div>
-                     <div class="col-md-3">{{ form.team_lead | as_crispy_field }}</div>
-                     <div class="col-md-3">{{ form.engineer | as_crispy_field }}</div>
 
-                </div>
-                   <div class="row">
-                       <div class="col-md-3">{{ form.customer_company | as_crispy_field }}</div>
+            <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">{{ form.planned_date | as_crispy_field }}</div>
+                         <div class="col-md-3">{{ form.ended_pm_date | as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.team_lead | as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.engineer | as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">{{ form.remark | as_crispy_field }}</div>
+                        <div class="col-md-3">{{ form.customer_company | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_name | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_telephone | as_crispy_field }}</div>
                          <div class="col-md-3">
-                                  {{ form.site_branch | as_crispy_field }}
-                                  {{ form.equipment_location | as_crispy_field }}
+                                  &nbsp;&nbsp;
+
                        </div>
                     </div>
-                {% if request.user|has_group:"site-manager" %}
-                <div class='row text-center'>
-                    <br>
-                    <div class="col-md-12 center-block">
-                        <input type="submit" value="Save" class="btn btn-success"
-                               onclick="return confirm('Do you want to save?')">
-                        &nbsp;&nbsp
-                    </div>
-                </div>
-                {% endif %}
+                    <div class="row">
+                  <div class="col-md-3">{{ form.site_branch | as_crispy_field }} </div>
+                     <div class="col-md-3">  {{ form.equipment_location | as_crispy_field }}</div>
+                      <div class="col-md-6">
+                          {% if request.user|has_group:"site-manager" %}
+                               <input type="submit" value="Save" class="btn btn-success"
+                                   onclick="return confirm('Do you want to save?')">
+                          {% endif %}
+                      </div>
 
-            </div>
+                 </div>
+
+                </div>
+
         </div>
     </form>
 

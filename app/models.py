@@ -554,6 +554,7 @@ class ReportLevelDefinition(models.Model):
 class PreventiveMaintenance(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Project')
     planned_date = models.DateField(verbose_name='PM Plan(Month)',help_text='The first day of the month e.g. 1/12/2022')
+    ended_pm_date =models.DateField(verbose_name='End PM(Day)',help_text='The last day of the month e.g. 31/12/2022' )
     remark = models.CharField('PM Period', max_length=255,help_text=' e.g. 1/2 ,2/4')
     team_lead = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='team_lead_engineer' ,
                                           verbose_name='Team Lead', null=True, blank=True)
