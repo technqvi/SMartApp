@@ -315,10 +315,11 @@ def filter_pmItem(request, pmItemList):
 @login_required(login_url='login')
 @manger_and_viewer_only
 def copy_pm_inventory(request,pm_id):
-
+    # pm is used to copy the inventory
     pm_obj = get_object_or_404(PreventiveMaintenance, pk=pm_id)
+
+    # new pm
     form = PM_MasterForm()
-    #listItem = pm_obj.pm_inventory_set.filter(is_pm=True)
     listItem = pm_obj.pm_inventory_set.filter()
 
     if request.method == "POST":
@@ -328,7 +329,7 @@ def copy_pm_inventory(request,pm_id):
         new_pm_obj.project_id = pm_obj.project_id
         new_pm_obj.save()
 
-        # way insert bulk
+        # way insert bulk , copy all item from master including  no-pm
         listNewCopiedItems=[ PM_Inventory(pm_master=new_pm_obj,is_pm=item.is_pm,inventory=item.inventory,) for item in listItem ]
 
         if len(listNewCopiedItems)>0:
@@ -342,7 +343,11 @@ def copy_pm_inventory(request,pm_id):
     else:
         listSubComp=SubCompany.objects.filter( head_company_id=pm_obj.project.company.id  )
         form.fields['customer_company'].queryset=listSubComp
-        form.fields['customer_company'].value=pm_obj.customer_company
+        form.fields['customer_company'].value=pm_obj.customer_company.id
+        form.fields['team_lead'].value=pm_obj.team_lead
+        form.fields['engineer'].value = pm_obj.engineer
+        form.fields['contact_name'].value = pm_obj.contact_name
+        form.fields['contact_telephone'].value = pm_obj.contact_telephone
 
 
     context = {'pmInfo':pm_obj,'form': form,'inventoryPMList':listItem}
@@ -364,12 +369,6 @@ def update_pm_inventory(request,pm_id,id=0):
         if is_pm!='unknown':
             searched_item_str = f" {searched_item_str} | Is PM={is_pm}"
 
-    # Test query syntax
-    #pmItemList.filter(is_pm=True).count()
-    #pmItemList.filter(inventory__pm_inventory_template__isnull=False)
-
-    # all pm inventory
-    # noTotalPMInventory = pm_obj.pm_inventory_set.filter(is_pm=True).count()
     noTotalPMInventory = pmItemList.filter(is_pm=True).count()
 
     # defined template
@@ -404,11 +403,11 @@ def update_pm_inventory(request,pm_id,id=0):
 
     else:# post
         if id == 0:
-            if len(pmItemList) > 0:
+            if len(pmItemList) > 0:  # is_pm=True
                 if len(request.GET)>0 : # update only searched items
-                    list_item=pmItemList
+                    list_item=pmItemList.filter(is_pm=True)
                 else: # update all items
-                     list_item=PM_Inventory.objects.filter(pm_master_id=pm_id)
+                     list_item=PM_Inventory.objects.filter(pm_master_id=pm_id,is_pm=True)
                 upatedItems=[]
                 form = PM_InventoryForm(request.POST)
                 if form.is_valid():
