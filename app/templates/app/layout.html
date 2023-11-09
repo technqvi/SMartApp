@@ -67,7 +67,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
 
-                       <li><a href="{% url 'incident_google_search' %}">Incident Search By Google</a></li>
+                       <li><a href="{% url 'search_google' %}">Incident Search By Google</a></li>
                         <li><a href="{% url 'build_ais_excel_report' %}">Advanced Pivot Report</a></li>
                         {% if user.is_staff %}
                             <li><a href="{% url 'report_site_grade' %}">Site Grade Report</a></li>

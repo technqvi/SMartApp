@@ -1220,8 +1220,6 @@ def create_model_template(request):
 
 
 @login_required(login_url='login')
-# @allowed_users(allowed_roles=['site-manager'])
-# @staff_admin_only
 @manger_only
 def upload_models_template(request):
     save_button = False
@@ -1770,9 +1768,3 @@ def list_inventory_template_for_pm(request):
     return render(request, 'app/pm_template_json_data.html', context)
 
 
-# @login_required(login_url='login')
-# @manger_and_viewer_only
-def search_vertex_ai(request):
-    """Renders the about page."""
-    context = {}
-    return render(request, 'app/incident_search_google.html', context)

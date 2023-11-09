@@ -14,8 +14,32 @@ import pandas as pd
 
 from io import BytesIO
 from app.decorators import allowed_users,manger_and_viewer_only,manger_only,staff_admin_only,manger_and_viewer_engineer_only
-from app.models import Company
+from app.models import *
+from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render, redirect, get_object_or_404
+
+@login_required(login_url='login')
+@manger_and_viewer_engineer_only
+def search_result(request,incident_id):
+    incident= get_object_or_404(Incident, pk=incident_id)
+    detailList=incident.incident_detail_set.all()
+    inventory = incident.inventory;
+
+    context = {"incident":incident,"detailList":detailList,"inventory":inventory}
+    return render(request, 'app/search_result.html', context)
+
+
+@login_required(login_url='login')
+@manger_and_viewer_engineer_only
+def search_vertex_ai(request):
+    """Renders the about page."""
+    context = {}
+    return render(request, 'app/search_google.html', context)
+
+
+@login_required(login_url='login')
+@staff_admin_only
 def report_site_grade(request):
 
     start_support_param=''
@@ -77,7 +101,9 @@ def report_site_grade(request):
         }
     return render(request, 'app/report_site_grade.html', context)
 
-@manger_and_viewer_only
+
+@login_required(login_url='login')
+@manger_only
 def build_ais_excel_report(request):
     comp_x=''
     start_x=''

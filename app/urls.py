@@ -11,7 +11,9 @@ from .pm_doc_manager import pm_doc_builder
 
 urlpatterns = [
 
-    # get req. to retrieve and display all records by manager
+    path('search', views_report.search_vertex_ai, name='search_google'),
+    path('search/result/<int:incident_id>/',views_report.search_result,name='search_result'),
+
     path('projects/', views.manage_project, name='manage_project'),
     path('projects/<int:id>/', views.manage_project, name='manage_project'),
     path('projects/delete_project/<int:id>/', views.delete_project, name='delete_project'),
@@ -26,7 +28,7 @@ urlpatterns = [
 
 
     path('incidents/', views.manage_incident, name='manage_incident'),
-    path('incidents/search', views.search_vertex_ai, name='incident_google_search'),
+
     path('incidents/update_incident/<int:id>/', views.update_incident, name='update_incident'),
     path('incidents/<int:incident_id>/manage_incident_detail/<int:id>/', views.manage_incident_detail, name='manage_incident_detail'),
 
