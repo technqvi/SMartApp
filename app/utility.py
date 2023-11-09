@@ -1,5 +1,6 @@
 from datetime import datetime
-from app.models import Company
+
+
 def list_customer_company(current_user):
 
    #list_cust_company= Company.objects.filter( is_customer=True,id__in=[2,1]).values_list('id','company_name','company_full_name')# ais and yip

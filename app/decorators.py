@@ -13,7 +13,7 @@ def manger_and_viewer_engineer_only(view_func):
 	  if   is_in_manager_group or is_in_engineer_group:
 		  return view_func(request, *args, **kwargs)
 	  else:
-		  return HttpResponse('<h2>You are not authorized to access this web application.</h2><b>Contact administrator to add this user to the manager OR engineer table in database</b>')
+		  return HttpResponse(f'<h2>You are not authorized to access this web application.</h2><b>Contact administrator to add this user to the manager OR engineer table in database</b>')
 
 	return wrapper_function
 
@@ -35,7 +35,7 @@ def manger_only(view_func):
 	  if   is_in_manager_group:
 		  return view_func(request, *args, **kwargs)
 	  else:
-		  return HttpResponse('<h2>Viewer are not authorized to access this page.</h2><b>This page is for only site manager</b>')
+		  return HttpResponse('<h2>You are not authorized to access this page.</h2><b>This page is for only site manager</b>')
 
 	return wrapper_function
 

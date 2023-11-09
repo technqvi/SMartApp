@@ -29,6 +29,7 @@ urlpatterns = [
     path('incidents/search', views.search_vertex_ai, name='incident_google_search'),
     path('incidents/update_incident/<int:id>/', views.update_incident, name='update_incident'),
     path('incidents/<int:incident_id>/manage_incident_detail/<int:id>/', views.manage_incident_detail, name='manage_incident_detail'),
+
     path('incidents/<int:id>/change_inventory/<int:inventory_id>/', views.change_inventory_for_incident, name='change_inventory_for_incident'),
     path('incidents/delete_incident/<int:id>/', views.delete_incident, name='delete_incident'),
     path('incidents/delete_incident_detail/<int:id>/', views.delete_incident_detail, name='delete_incident_detail'),

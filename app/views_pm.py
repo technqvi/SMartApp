@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 
-from  app.form_pm import *
+
 from  app.form_pm import *
 from app.decorators import allowed_users,manger_and_viewer_only,manger_only,staff_admin_only,manger_and_viewer_engineer_only
 
@@ -18,8 +18,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q, Sum
 
 from urllib.parse import quote
-
-
+import  app.user_access
 
 from django import template
 from django.contrib.auth.models import Group
@@ -315,6 +314,10 @@ def filter_pmItem(request, pmItemList):
 @login_required(login_url='login')
 @manger_and_viewer_only
 def copy_pm_inventory(request,pm_id):
+
+    msg_check=app.user_access.check_user_to_do(request,pm_id,"CopyPM")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     # pm is used to copy the inventory
     pm_obj = get_object_or_404(PreventiveMaintenance, pk=pm_id)
 
@@ -356,6 +359,10 @@ def copy_pm_inventory(request,pm_id):
 @login_required(login_url='login')
 @manger_and_viewer_engineer_only
 def update_pm_inventory(request,pm_id,id=0):
+
+    msg_check=app.user_access.check_user_to_do(request,pm_id,"UpdatePMItem")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     pm_obj = get_object_or_404(PreventiveMaintenance, pk=pm_id)
     pmItemFilter, pmItemList=filter_pmItem(request,pm_obj.pm_inventory_set)
 
@@ -467,6 +474,10 @@ def update_pm_inventory(request,pm_id,id=0):
 @login_required(login_url='login')
 @manger_and_viewer_only
 def manage_pm(request, project_id, id=0):
+
+    msg_check=app.user_access.check_user_to_do(request,project_id,"AddPM")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     project_obj = get_object_or_404(Project, pk=project_id)
     myuser = request.user
 
@@ -532,6 +543,10 @@ def manage_pm(request, project_id, id=0):
 @login_required(login_url='login')
 @manger_and_viewer_only
 def delete_pm(request, id):
+
+    msg_check=app.user_access.check_user_to_do(request,id,"DeletePM")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     x_obj = PreventiveMaintenance.objects.get(pk=id)
     if request.method == "GET":
         items=x_obj.pm_inventory_set.filter(is_pm=True)

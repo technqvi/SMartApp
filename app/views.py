@@ -17,6 +17,7 @@ from django.db.models import Q, Sum
 
 from urllib.parse import quote
 
+import app.user_access
 from django import template
 from django.contrib.auth.models import Group
 
@@ -528,6 +529,13 @@ def reload_prev_inventory_for_next_one(inventory_obj):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_and_viewer_only
 def add_inventory(request, proj_id):
+
+    isAccesible=app.user_access.check_user_to_do(request,proj_id,"AddInventory")
+    if isAccesible==False:
+        return HttpResponse(f'<h2>{request.user} are not authorized to manage any items of this company.</h2><b>Contact '
+                            f'administrator to add this user to the manager OR engineer table in company</b>')
+
+
     project_obj = get_object_or_404(Project, pk=proj_id)
     list_inventory = Inventory.objects.filter(project_id=proj_id).order_by('-id')
 
@@ -589,9 +597,13 @@ def add_inventory(request, proj_id):
 
 
 @login_required(login_url='login')
-# @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
+
 @manger_and_viewer_only
 def update_inventory(request, id):
+
+    msg_check=app.user_access.check_user_to_do(request,id,"UpdateInventory")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     inventory_obj = get_object_or_404(Inventory, pk=id)
     project_obj = inventory_obj.project
 
@@ -781,6 +793,10 @@ def copy_inventoryList_by_existingProject(request, proj_ref_id):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_only
 def delete_inventory(request, id):
+
+    msg_check=app.user_access.check_user_to_do(request,id,"DeleteInventory")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     inventory_obj = Inventory.objects.get(pk=id)
 
     if request.method == "GET":
@@ -811,6 +827,10 @@ def delete_inventory(request, id):
 @manger_only
 
 def add_incident(request, inventory_id):
+
+    msg_check=app.user_access.check_user_to_do(request,inventory_id,"AddIncident")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     inventory_obj = get_object_or_404(Inventory, pk=inventory_id)
 
     if (request.method == "GET"):
@@ -884,6 +904,9 @@ def add_incident(request, inventory_id):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_and_viewer_only
 def update_incident(request, id):
+
+    msg_check=app.user_access.check_user_to_do(request,id,"UpdateIncident")
+    if msg_check is not None: return HttpResponse(msg_check)
 
     predSeverity = ''
     biPredSeverity=''
@@ -987,6 +1010,10 @@ def update_incident(request, id):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_only
 def change_inventory_for_incident(request, id, inventory_id):
+    msg_check=app.user_access.check_user_to_do(request,inventory_id,"ChangeInventory")
+    if msg_check is not None: return HttpResponse(msg_check)
+
+
     incident_obj = get_object_or_404(Incident, pk=id)
     inventory_obj = get_object_or_404(Inventory, pk=inventory_id)
     try:
@@ -1004,6 +1031,10 @@ def change_inventory_for_incident(request, id, inventory_id):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_only
 def delete_incident(request, id):
+
+    msg_check=app.user_access.check_user_to_do(request,id,"DeleteIncident")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     x_obj = Incident.objects.get(pk=id)
 
     if request.method == "GET":
@@ -1042,6 +1073,10 @@ def filter_detail(request, incident_id):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_and_viewer_only
 def manage_incident_detail(request, incident_id, id=0):
+
+    msg_check=app.user_access.check_user_to_do(request,incident_id,"UpdateDetail")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     detailFilter, incident_detailList = filter_detail(request, incident_id)
     incident_obj = get_object_or_404(Incident, pk=incident_id)
 
@@ -1099,6 +1134,9 @@ def manage_incident_detail(request, incident_id, id=0):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_only
 def delete_incident_detail(request, id):
+    msg_check=app.user_access.check_user_to_do(request,id,"DeleteDetail")
+    if msg_check is not None: return HttpResponse(msg_check)
+
     obj = Incident_Detail.objects.get(pk=id)
     master_id = obj.incident_master_id
     try:
