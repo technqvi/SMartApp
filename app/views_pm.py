@@ -295,22 +295,7 @@ def build_weasyprint_pm_doc_pdf(request,id=0):
     # response['Content-Disposition'] = f'attachment; filename="{overview_file_path}"'
     # return response
 
-@login_required(login_url='login')
-@manger_and_viewer_engineer_only
-def filter_pmItem(request, pmItemList):
 
-    listBrandIDByPMItems=list( pmItemList.order_by('inventory__brand_id').values_list('inventory__brand_id',flat=True).distinct())
-    brandByPMItems=Brand.objects.filter(id__in=listBrandIDByPMItems)
-    request.session['listBrandIDByPMItems']=listBrandIDByPMItems
-
-    pmItemFilter = PMInventoryItemFilter(request.GET, request=request, queryset=pmItemList)
-
-    pmItemList=pmItemFilter.qs
-
-
-    del request.session['listBrandIDByPMItems']
-
-    return pmItemFilter, pmItemList
 @login_required(login_url='login')
 @manger_and_viewer_only
 def copy_pm_inventory(request,pm_id):
@@ -355,6 +340,23 @@ def copy_pm_inventory(request,pm_id):
 
     context = {'pmInfo':pm_obj,'form': form,'inventoryPMList':listItem}
     return render(request, "app/pm_copy_inventory.html", context)
+
+@login_required(login_url='login')
+@manger_and_viewer_engineer_only
+def filter_pmItem(request, pmItemList):
+
+    listBrandIDByPMItems=list( pmItemList.order_by('inventory__brand_id').values_list('inventory__brand_id',flat=True).distinct())
+    brandByPMItems=Brand.objects.filter(id__in=listBrandIDByPMItems)
+    request.session['listBrandIDByPMItems']=listBrandIDByPMItems
+
+    pmItemFilter = PMInventoryItemFilter(request.GET, request=request, queryset=pmItemList)
+
+    pmItemList=pmItemFilter.qs
+
+
+    del request.session['listBrandIDByPMItems']
+
+    return pmItemFilter, pmItemList
 
 @login_required(login_url='login')
 @manger_and_viewer_engineer_only

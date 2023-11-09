@@ -83,11 +83,14 @@
                 {% if request.user|has_group_update_pm_item:"" %}
                     <div class='row text-center'>
                         <br>
+                        {% if noTotalPMInventory > 0 %}
                         <div class="col-md-12 center-block">
+
                             <input type="submit" value="Update" class="btn btn-success"
                                    onclick="return confirm('Do you want to save?')">
                             &nbsp;&nbsp
                         </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
