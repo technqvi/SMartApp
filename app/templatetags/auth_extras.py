@@ -6,13 +6,13 @@ from app.models import *
 from django.http import HttpResponse,HttpResponseRedirect
 
 register = template.Library()
-
+# manager
 @register.filter(name='has_group')
 def has_group(user, group_name):
 
     is_existing=  Manager.objects.filter(user_id__exact=user.id,is_site_manager__exact=True).exists()
     return is_existing
-
+# site manger and engineer
 @register.filter(name='has_group_update_pm_item')
 def has_group_update_pm_item(user, group_name):
         is_existing = Manager.objects.filter(user_id__exact=user.id, is_site_manager__exact=True).exists()

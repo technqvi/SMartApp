@@ -359,26 +359,27 @@ def update_pm_inventory(request,pm_id,id=0):
     pm_obj = get_object_or_404(PreventiveMaintenance, pk=pm_id)
     pmItemFilter, pmItemList=filter_pmItem(request,pm_obj.pm_inventory_set)
 
-    searched_item_str=''
+    searched_item_str='All'
     if len(request.GET)>0:
         brand_id=int(request.GET.get("brand"))
         brand_obj = get_object_or_404(Brand, pk=brand_id)
         brand_name=brand_obj.brand_name
         is_pm = request.GET.get("is_pm")
-        searched_item_str=f"By Search Brand={brand_name}"
+        searched_item_str=f"Brand={brand_name}"
         if is_pm!='unknown':
             searched_item_str = f" {searched_item_str} | Is PM={is_pm}"
 
     noTotalPMInventory = pmItemList.filter(is_pm=True).count()
-
     # defined template
     # inventoryPMList=pm_obj.pm_inventory_set.filter(inventory__pm_inventory_template__isnull=False)
-    inventoryPMList = pmItemList.filter(inventory__pm_inventory_template__isnull=False)
-
+    inventoryPMList = pmItemList.filter(inventory__pm_inventory_template__isnull=False,is_pm=True)
     # undefine template
     # inventory_NoTemplatePMList = pm_obj.pm_inventory_set.filter(inventory__pm_inventory_template__isnull=True)
-    inventory_NoTemplatePMList = pmItemList.filter(inventory__pm_inventory_template__isnull=True)
+    inventory_NoTemplatePMList = pmItemList.filter(inventory__pm_inventory_template__isnull=True,is_pm=True)
     noTemplateFound=len(inventory_NoTemplatePMList)
+
+    inventoryNoPMItemList =pmItemList.filter(is_pm=False)
+    noInventoryNoPMItemList=len(inventoryNoPMItemList )
 
 
     item_obj = None
@@ -456,6 +457,8 @@ def update_pm_inventory(request,pm_id,id=0):
                'inventory_NoTemplatePMList': inventory_NoTemplatePMList,
                'noTemplateFound': noTemplateFound,
                'noTotalPMInventory':noTotalPMInventory,
+               'inventoryNoPMItemList':inventoryNoPMItemList,
+               'noinventoryNoPMItemList':noInventoryNoPMItemList,
                'form':form,
                'pm_item':item_obj,
                }
