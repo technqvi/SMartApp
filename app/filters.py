@@ -194,11 +194,14 @@ class  PMFilter(django_filters.FilterSet):
    planned_date__lt = django_filters.DateFilter(field_name='planned_date', lookup_expr='lte',
                                                      widget=MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
                                                      label="To", required=True , help_text="The last day of the month")
-   # planned_date__lt = MyEndDateFilter(field_name='planned_date', lookup_expr='lte', widget=MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
-   #                                         label="To", required=True,help_text="The last day of the month")
+   # team_lead = django_filters.ModelChoiceFilter(queryset=Employee.objects.filter(is_inactive=False, is_team_lead=True).order_by('-is_team_lead', 'employee_name'), field_name='team_lead',
+   #                                                 label='Team-Lead')
+   team_lead = django_filters.ModelChoiceFilter(queryset=Employee.objects.filter(is_inactive=False).order_by('-is_team_lead', 'employee_name'), field_name='team_lead',
+                                                   label='Team-Lead')
    class Meta:
      model=PreventiveMaintenance
      exclude = ['remark']
+     include= ['team_lead']
 
 class  PMSummaryFilter(django_filters.FilterSet):
 

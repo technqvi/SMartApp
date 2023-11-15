@@ -61,8 +61,8 @@ def report_site_grade(request):
         else:
             title_period = f"Q{period_x}-{year_x}"
 
-        start_support=datetime.strptime(start_support_param, "%Y-%m-%d").strftime("%d %b %Y")
-        end_support= datetime.strptime(end_support_param, "%Y-%m-%d").strftime("%d %b %Y")
+        start_support=datetime.datetime.strptime(start_support_param, "%Y-%m-%d").strftime("%d %b %Y")
+        end_support= datetime.datetime.strptime(end_support_param, "%Y-%m-%d").strftime("%d %b %Y")
 
         if 'view_report' in request.POST:
             data = json.loads(df_company.to_json(orient='records'))
@@ -86,7 +86,7 @@ def report_site_grade(request):
                         ws_wieght.append(r)
                 except openpyxl.utils.exceptions.IllegalCharacterError as e:
                     raise e
-            buildtime = datetime.now().strftime('%d%m%y_%H%M')
+            buildtime = datetime.datetime.now().strftime('%d%m%y_%H%M')
             file_name = f"SiteGrade_{title_period}_{buildtime}.xlsx"
 
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -119,7 +119,7 @@ def build_ais_excel_report(request):
         start_x=request.POST.get('start_date')
         end_x = request.POST.get('end_date')
 
-        end_x_p1_dt=datetime.strptime(end_x,'%Y-%m-%d')+timedelta(days=1)
+        end_x_p1_dt=datetime.datetime.strptime(end_x,'%Y-%m-%d')+timedelta(days=1)
         end_x=end_x_p1_dt.strftime('%Y-%m-%d')
 
         df_all, dfTableReportDict =ais_table.build_table_report(comp_x,start_x,end_x)
@@ -135,9 +135,9 @@ def build_ais_excel_report(request):
 
               comp_obj = Company.objects.get(pk=int(comp_x))
               comp_name = comp_obj.company_name
-              buildtime = datetime.now().strftime('%d%m%y_%H%M')
-              start_str = datetime.strptime(start_x, "%Y-%m-%d").strftime("%d%m%y")
-              end_str = datetime.strptime(end_x, "%Y-%m-%d").strftime("%d%m%y")
+              buildtime =datetime.datetime.now().strftime('%d%m%y_%H%M')
+              start_str =datetime.datetime.strptime(start_x, "%Y-%m-%d").strftime("%d%m%y")
+              end_str =datetime.datetime.strptime(end_x, "%Y-%m-%d").strftime("%d%m%y")
               file_name = f"{comp_name}_{start_str}_{end_str}_{buildtime}_report.xlsx"
 
 

@@ -489,7 +489,7 @@ def manage_pm(request, project_id, id=0):
             form = PM_MasterForm()
             form_mode = 'New'
 
-            form.fields['team_lead'].queryset = Employee.objects.filter(is_inactive=False).order_by('-is_team_lead',                                                                                       'employee_name')
+            form.fields['team_lead'].queryset = Employee.objects.filter(is_inactive=False).order_by('-is_team_lead', 'employee_name')
             form.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
         else:
             obj = get_object_or_404(PreventiveMaintenance, pk=id)
