@@ -102,7 +102,9 @@
             <th scope="col">Is PM</th>
             </tr>
             {% for item in inventoryPMList %}
-                <tr>
+                {% if item.is_pm %}<tr>
+                {% else %}  <tr style="background-color: #ff5500">
+                {%  endif %}
                     <td>{{ item.inventory.serial_number }}</td>
                     <td>{{ item.inventory.product_type }}</td>
                     <td>{{ item.inventory.brand }}</td>

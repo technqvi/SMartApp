@@ -338,7 +338,7 @@ def copy_pm_inventory(request,pm_id):
         form.fields['contact_telephone'].value = pm_obj.contact_telephone
 
 
-    context = {'pmInfo':pm_obj,'form': form,'inventoryPMList':listItem}
+    context = {'pmInfo':pm_obj,'form': form,'inventoryPMList':listItem.order_by('-is_pm')}
     return render(request, "app/pm_copy_inventory.html", context)
 
 @login_required(login_url='login')
@@ -411,37 +411,44 @@ def update_pm_inventory(request,pm_id,id=0):
             form.fields['pm_engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=item_obj.pm_engineer_id))
             form.fields['document_engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=item_obj.document_engineer_id))
 
-    else:# post
+    else:# post to update pm inventory
         if id == 0:
             if len(pmItemList) > 0:  # is_pm=True
                 if len(request.GET)>0 : # update only searched items
-                    list_item=pmItemList.filter(is_pm=True)
+                    updateAllMode = False
+                    list_item_to_update=pmItemList.filter(is_pm=True) # filter from django filter
                 else: # update all items
-                     list_item=PM_Inventory.objects.filter(pm_master_id=pm_id,is_pm=True)
+                     list_item_to_update=PM_Inventory.objects.filter(pm_master_id=pm_id,is_pm=True)
+                     updateAllMode = True
+
                 upatedItems=[]
+
                 form = PM_InventoryForm(request.POST)
                 if form.is_valid():
                     temp_obj = form.save(commit=False)
-                    for item in list_item:
-                        item.actual_date=temp_obj.actual_date
-                        item.document_date=temp_obj.document_date
+                    if updateAllMode == True and temp_obj.is_pm==False:
+                        messages.error(request, f'Not allow to set is_pm=False on Update All Mode.')
+                    else:
+                        for item in list_item_to_update:
+                            item.actual_date=temp_obj.actual_date
+                            item.document_date=temp_obj.document_date
 
-                        item.pm_engineer=temp_obj.pm_engineer
-                        item.document_engineer=temp_obj.document_engineer
+                            item.pm_engineer=temp_obj.pm_engineer
+                            item.document_engineer=temp_obj.document_engineer
 
-                        item.call_number=temp_obj.call_number
-                        item.pm_document_number=temp_obj.pm_document_number
+                            item.call_number=temp_obj.call_number
+                            item.pm_document_number=temp_obj.pm_document_number
 
-                        item.remark=temp_obj.remark
-                        item.is_pm=temp_obj.is_pm
+                            item.remark=temp_obj.remark
+                            item.is_pm=temp_obj.is_pm
 
-                        upatedItems.append(item)
+                            upatedItems.append(item)
 
-                    colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
-                                   ,'call_number','pm_document_number','remark','is_pm']
-                    PM_Inventory.objects.bulk_update(upatedItems,colListToUpdate)
+                        colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
+                                       ,'call_number','pm_document_number','remark','is_pm']
+                        PM_Inventory.objects.bulk_update(upatedItems,colListToUpdate)
             else:
-                messages.info(request, f'No searched item to update for PM Inventory Item .')
+                messages.error(request, f'No searched item to update for PM Inventory Item .')
 
         else:  # save from  edit
             item_obj = get_object_or_404(PM_Inventory, pk=id)
