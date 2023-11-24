@@ -30,21 +30,25 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <li>
+                    <!-- Widget JavaScript bundle -->
+                    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+                    <!-- Search widget element is not visible by default -->
+
+                    <gen-search-widget
+                            configId="7683823e-2828-4755-b44c-16821c9e7cc5"
+                            triggerId="searchWidgetTrigger">
+                    </gen-search-widget>
+
+                    <!-- Element that opens the widget on click. It does not have to be an input -->
+                    <input placeholder="Search Incident" id="searchWidgetTrigger"/>
+                </li>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'manage_project' %}">Project</a></li>
                 <li><a href="{% url 'report_pm' %}">PM-Plan</a></li>
 
                 <li><a href="{% url 'summarize_project_pm' %}">Project&PM</a></li>
-
-                {#                <li class="dropdown">#}
-                {#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">PM-Plan#}
-                {#                        <span class="caret"></span></a>#}
-                {#                    <ul class="dropdown-menu">#}
-                {#                        <li><a href="{% url 'report_pm' %}">PM-Report</a></li>#}
-                {#                         <li><a href="{% url 'summarize_project_pm' %}">Project&PM-Summary</a></li>#}
-                {#                    </ul>#}
-                {#                </li>#}
-
 
                 <li><a href="{% url 'manage_inventory' %}">Inventory</a></li>
                 <li><a href="{% url 'manage_incident' %}?{{ '1'|init_incident_date_querystring }}">Incident</a></li>
@@ -63,11 +67,11 @@
 
 
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Analystic Report
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Report
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
 
-                       <li><a href="{% url 'search_google' %}">Incident Search By Google</a></li>
+
                         <li><a href="{% url 'build_ais_excel_report' %}">Advanced Pivot Report</a></li>
                         {% if user.is_staff %}
                             <li><a href="{% url 'report_site_grade' %}">Site Grade Report</a></li>
@@ -84,11 +88,6 @@
 
                     </ul>
                 </li>
-
-                {#                {% if user.is_superuser %}#}
-                {#                    <li><a href="{% url 'run_process_pm_doc_task' %}">Test Run PM-Doc</a></li>#}
-                {##}
-                {#                {% endif %}#}
 
 
             </ul>

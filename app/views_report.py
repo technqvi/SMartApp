@@ -30,13 +30,6 @@ def search_result(request,incident_id):
     return render(request, 'app/search_result.html', context)
 
 
-@login_required(login_url='login')
-@manger_and_viewer_engineer_only
-def search_vertex_ai(request):
-    """Renders the about page."""
-    context = {}
-    return render(request, 'app/search_google.html', context)
-
 
 @login_required(login_url='login')
 @staff_admin_only

@@ -1,6 +1,4 @@
 from django.urls import path
-
-
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -11,7 +9,6 @@ from .pm_doc_manager import pm_doc_builder
 
 urlpatterns = [
 
-    path('search', views_report.search_vertex_ai, name='search_google'),
     path('search/result/<int:incident_id>/',views_report.search_result,name='search_result'),
 
     path('projects/', views.manage_project, name='manage_project'),
