@@ -30,20 +30,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>
-                    <!-- Widget JavaScript bundle -->
-                    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
 
-                    <!-- Search widget element is not visible by default -->
-
-                    <gen-search-widget
-                            configId="7683823e-2828-4755-b44c-16821c9e7cc5"
-                            triggerId="searchWidgetTrigger">
-                    </gen-search-widget>
-
-                    <!-- Element that opens the widget on click. It does not have to be an input -->
-                    <input placeholder="Search Incident" id="searchWidgetTrigger"/>
-                </li>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'manage_project' %}">Project</a></li>
                 <li><a href="{% url 'report_pm' %}">PM-Plan</a></li>
@@ -87,6 +74,20 @@
                                target="_blank">Predict Daily-Incident Over The Next 5 Days</a></li>
 
                     </ul>
+                </li>
+                <li>
+                    <!-- Widget JavaScript bundle -->
+                    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+                    <!-- Search widget element is not visible by default -->
+
+                    <gen-search-widget
+                            configId="7683823e-2828-4755-b44c-16821c9e7cc5"  border="2"
+                            triggerId="searchWidgetTrigger">
+                    </gen-search-widget>
+
+                    <!-- Element that opens the widget on click. It does not have to be an input -->
+                    <input placeholder="Search Incident" id="searchWidgetTrigger"/>
                 </li>
 
 
