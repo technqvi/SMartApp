@@ -9,6 +9,7 @@ from .pm_doc_manager import pm_doc_builder
 
 urlpatterns = [
 
+    path('search/', views_report.search_entry, name='search_entry'),
     path('search/result/<int:incident_id>/',views_report.search_result,name='search_result'),
 
     path('projects/', views.manage_project, name='manage_project'),

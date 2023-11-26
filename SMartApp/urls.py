@@ -14,8 +14,8 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
 
-    # path('oauth2/', include('django_auth_adfs.urls')),
-
+    # path('oauth2/', include('django_auth_adfs.urls')), # django-auth-adfs
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # django-oauth-toolkit
     path('admin/', admin.site.urls),
 
     path('', include('app.urls')),

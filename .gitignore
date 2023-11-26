@@ -9,12 +9,14 @@ incident_docs
 settings.py
 settings_adfs_azure.py
 settings_ldap.py
+app/genOAuthToken.py
 YIT-Widecard-2022.pfx
 .env
 *.lnk
 *.url
 *.pdf
 *.excel
+*.csv
 *.pyc
 *.cpython-39.pyc
 *.pyproj

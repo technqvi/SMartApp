@@ -19,6 +19,15 @@ from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render, redirect, get_object_or_404
 
+
+@login_required(login_url='login')
+@manger_and_viewer_engineer_only
+def search_entry(request):
+    context = {}
+    return render(request, 'app/search_entry.html', context)
+
+
+
 @login_required(login_url='login')
 @manger_and_viewer_engineer_only
 def search_result(request,incident_id):
