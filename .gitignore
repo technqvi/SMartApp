@@ -9,6 +9,7 @@ incident_docs
 settings.py
 settings_adfs_azure.py
 settings_ldap.py
+settings_oauth2_jwt.py
 /app/genOAuthToken.py
 /app/templates/app/search_entry.html
 YIT-Widecard-2022.pfx
