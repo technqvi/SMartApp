@@ -4,6 +4,7 @@
 # uncomment: For Production running on Python Enviroment
 # uncomment : return and dtNow=datetime.now()
 
+from django.conf import settings
 def send_email_with_excel_file(email_info,file_path,file_name):
     from django.core.mail import BadHeaderError
     from django.core.mail import EmailMessage
@@ -83,24 +84,23 @@ def notify_monthly_pm_to_admin(is_only_admin):
     # In[55]:
 
 
-    dtNow= datetime.strptime(datetime(2023,12,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
-    # dtNow=datetime.now()
+    #dtNow= datetime.strptime(datetime(2023,12,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
+    dtNow = datetime.now()
 
-    dt = datetime.strptime(dtNow.strftime('%Y-%m-%d'),'%Y-%m-%d')
+    dt = datetime.strptime(dtNow.strftime('%Y-%m-%d'), '%Y-%m-%d')
     print(dt)
 
-    first_day_next_month = datetime(dt.year,dt.month,1)
-    first_day_2next_month = dt + relativedelta.relativedelta(months=1, day=1)
-    print(first_day_next_month )
-    print(first_day_2next_month )
-
+    first_day_month = datetime(dt.year, dt.month, 1)
+    first_day_next_month = dt + relativedelta.relativedelta(months=1, day=1)
+    print(first_day_month)
+    print(first_day_next_month)
 
     # # Create File Name and Path to attach to email
 
     # In[56]:
 
 
-    file_name=f"PM_{first_day_next_month.strftime('%b%y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
+    file_name=f"PM_{first_day_month.strftime('%b%y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
     if is_only_admin==False:
        file_name=f"SM-{file_name}"
     else:
@@ -144,7 +144,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
         left join app_project ap on ap.id = pm.project_id
         left join app_company ac on ac.id = ap.company_id
         left join app_employee ae on ae.id =pm.team_lead_id
-        where  pm.planned_date>='{first_day_next_month}' and pm.planned_date<'{first_day_2next_month}'
+        where  pm.planned_date>='{first_day_month}' and pm.planned_date<'{first_day_next_month}'
         and ac.is_managed_by_admin = {is_only_admin}
         order by  ac.company_full_name,ap.enq_id,pm.remark
         """
@@ -192,7 +192,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
     left join app_employee ae on ae.id =pm.team_lead_id
     
     where pm_item.is_pm=True and ac.is_managed_by_admin = {is_only_admin}
-    and  pm.planned_date>='{first_day_next_month}' and pm.planned_date<'{first_day_2next_month}'
+    and  pm.planned_date>='{first_day_month}' and pm.planned_date<'{first_day_next_month}'
     
     order by  ac.company_full_name,ap.enq_id,pm.remark
     
@@ -217,9 +217,11 @@ def notify_monthly_pm_to_admin(is_only_admin):
         print(f"Exported {file_name} file for email successfully.")
 
     # # Email Office 365
-    title = f'SmartPM : Monthly Notification To Admin - {file_name}'
+    title = f'SmartPM: Monthly PM To Admin - {file_name}'
     content = f'Download  PM-Plan excel file'
-    email_info = {'subject': title, 'message': content, 'send_to': ["pongthorn.sa@yipintsoi.com"]}
+    listRecipients =settings.EMAIL_ADMIN_FOR_MONTHLY_NOTIFICATION
+    print(f"It is about to send email to {listRecipients}")
+    email_info = {'subject': title, 'message': content, 'send_to':listRecipients}
     is_sussessful = send_email_with_excel_file(email_info,file_path,file_name)
     print("Sent mail successfully.")
 
