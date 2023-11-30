@@ -135,7 +135,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
         select ac.company_full_name as "ชื่อลูกค้า",
         ap.contract_no as "เลขที่สัญญา",ap.enq_id as "ENQ" ,
         ap.project_name as "ชื่อโครงการ",
-        TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",
+        TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",
         TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
         pm.remark as  "งวดPM",
         ae.employee_name as "หัวหน้าทีม",
@@ -172,7 +172,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
                  (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
                   (select  model_name from app_model where id=ai.model_id ) as "Model",
     
-                 TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
                  pm.remark as  "งวดPM",ae.employee_name as "หัวหน้าทีม",
                  (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
     
@@ -253,8 +253,6 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
 
 
-
-
     # In[64]:
 
 
@@ -263,6 +261,207 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
 # In[ ]:
 
+
+# To run this file correctly, do the following
+# indent : entire code inside to function
+# delete : For Dev psycopg2 and dotnet env
+# uncomment: For Production running on Python Enviroment
+# uncomment : return and dtNow=datetime.now()
+# remove and  ae.id in (22,26)
+
+
+# In[133]:
+
+# To run this file correctly, do the following
+# indent : entire code inside to function
+# delete : For Dev psycopg2 and dotnet env
+# uncomment: For Production running on Python Enviroment
+# uncomment : return and dtNow=datetime.now()
+# remove and  ae.id in (22,26)
+# uncomment email_info for sent mail
+# uncomment delete file
+
+
+# In[144]:
+
+
+def notify_imcomplete_pm_to_team():
+    # In[145]:
+
+    import pandas as pd
+    from dotenv import dotenv_values
+
+    from datetime import datetime, date
+    from dateutil import relativedelta
+    import os
+
+    # # Paramter & Config values
+
+    # In[146]:
+
+    temp_doc = "temp_pm_notifcation"
+    cutOffPMDate = "2024-01-01"
+
+    # # Retrive data from SMartDB Postgresql
+    #
+
+    # In[147]:
+
+    # For Production running on Python Enviroment
+    from django.db import connection
+    def get_postgres_conn():
+        return connection
+
+    def list_data(sql, params, connection):
+        df = None
+        with connection.cursor() as cursor:
+
+            if params is None:
+                cursor.execute(sql)
+            else:
+                cursor.execute(sql, params)
+
+            columns = [col[0] for col in cursor.description]
+            dataList = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            df = pd.DataFrame(data=dataList)
+        return df
+
+        # # Get the next month
+
+    # * Set Window Sheduler to monthly run at the fist dsate of The month
+    # * No matter what day you run this job , the program will  get only all PMs over the current month
+
+    # In[149]:
+
+    # dtNow= datetime.strptime(datetime(2023,12,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
+    dtNow = datetime.now()
+
+    dt = datetime.strptime(dtNow.strftime('%Y-%m-%d'), '%Y-%m-%d')
+    print(dt)
+
+    first_day_month = datetime(dt.year, dt.month, 1)
+    first_day_next_month = dt + relativedelta.relativedelta(months=1, day=1)
+    print(first_day_month)
+    print(first_day_next_month)
+
+    # # Retrive  and Transaform data
+
+    # In[150]:
+
+    def do_something_df(df):
+        df = df.fillna(value='')
+        df = df.dropna(subset=['email_teamlead'])
+        # df = df.reset_index(drop=False)
+        # df.insert(0, "No", df["index"]+1,True)
+        # df=df.drop(columns=["index"])
+        return df
+
+    # In[154]:
+
+    sql_item = f"""
+     select  ac.company_full_name as "ชื่อลูกค้า",
+     ap.contract_no as "เลขที่สัญญา",ap.enq_id as "ENQ" , ap.project_name as "ชื่อโครงการ",
+
+                 ai.serial_number as "Serial",
+                 (select  productype_name from app_product_type where id=ai.product_type_id ) as "ProudctType",
+                 (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
+                  (select  model_name from app_model where id=ai.model_id ) as "Model",
+
+                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 pm.remark as  "งวดPM",
+                 ae.employee_name as "หัวหน้าทีม",
+                 (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
+
+               (select employee_name from app_employee eng_pm  where eng_pm.id=pm_item.pm_engineer_id ) as "Operation Engineer",
+               TO_CHAR(pm_item.actual_date,'DD Mon YYYY') as "ActualDate",
+
+                (select employee_name from app_employee eng_doc  where eng_doc.id=pm_item.document_engineer_id ) as "Doc Engineer",
+               TO_CHAR(pm_item.document_date,'DD Mon YYYY') as "DocumentDate",
+
+               pm_item.call_number as "Call Number",pm_item.pm_document_number as "Doc Number",
+               pm_item.remark as "Remark"
+
+               ,ae.employee_name as "หัวหน้าทีม" 
+               ,ae.employee_email as "email_teamlead"
+
+    from app_pm_inventory as pm_item
+    left join app_inventory ai on ai.id = pm_item.inventory_id
+    -- inner join app_product_type  product_type on ai.product_type_id = product_type.id
+    left join app_preventivemaintenance pm on pm.id = pm_item.pm_master_id
+    left join app_project ap on ap.id = pm.project_id
+    left join app_company ac on ac.id = ap.company_id
+    left join app_employee ae on ae.id =pm.team_lead_id
+
+    where pm_item.is_pm=True 
+    and  
+    (pm.planned_date>='{first_day_month}' and pm.planned_date<'{first_day_next_month}'  )
+
+    and  ( pm_item.actual_date is null or pm_item.document_date is null 
+           or pm_item.pm_engineer_id is null or  pm_item.document_engineer_id is null  )                                                       
+
+    order by  ac.company_full_name,ap.enq_id,pm.remark
+
+        """
+
+    # to cover incomplete inventoru , you need to determine cutoff date to check pm item.
+    # (pm.planned_date>='{cutOffPMDat}' and pm.planned_date<'{first_day_next_month}'  )
+
+    #  pongthorn=trong and chatchawan-seng and
+    # ae.id in (22,26)
+
+    # print(sql_item)
+
+    # In[155]:
+
+    dfItem = list_data(sql_item, None, get_postgres_conn())
+    dfItem = do_something_df(dfItem)
+    dfItem.info()
+    dfItem.head()
+
+    # # Gen excel and send mail for each team lead
+
+    # In[156]:
+
+    emailList = dfItem["email_teamlead"].unique().tolist()
+    for email in emailList:
+        name = email.split("@")[0]
+        name = name.replace(".", "_")
+
+        file_name = f"{name}_IncompletPM_{first_day_month.strftime('%b%y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
+        file_path = f"{temp_doc}/{file_name}"
+
+        dfByTeamLead = dfItem.query("email_teamlead==@email")
+        dfByTeamLead = dfByTeamLead.drop(columns=["email_teamlead"])
+
+        with pd.ExcelWriter(file_path) as writer:
+            dfByTeamLead.to_excel(writer, sheet_name="PM-Item", index=False)
+            print(f"Exported {file_name} file for email successfully.")
+
+        is_sussessful=False
+        # # Email Office 365
+        # title = f'SmartPM: Incomplete-PM To TeamLead - {file_name}'
+        # content = f'<h3>Download  Incomplete-PM  excel file.</h3>'
+        # content = f'{content}<h4>In each row as attached file, some of these columns have not been filled in data.</h4>'
+        # content = f'{content}<h5>Operation Engineer,ActualDate,Doc Engineer,DocumentDate.</h5>'
+        # print(content)
+        #
+        # listRecipients = [email]
+        # print(f"It is about to send email to {listRecipients}")
+
+        # email_info = {'subject': title, 'message': content, 'send_to': listRecipients}
+        # is_sussessful = send_email_with_excel_file(email_info, file_path, file_name)
+        # print(f"Sent mail successfully.")
+        #
+        # os.remove(f"{file_path}")
+        # print(f"Deleted file {file_path} for email attachemnt  succesfully.")
+
+    # In[ ]:
+
+    # In[ ]:
+
+    return is_sussessful
+
+    # In[ ]:
 
 
 
