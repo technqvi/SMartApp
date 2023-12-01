@@ -47,6 +47,9 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
     temp_doc="temp_pm_notifcation"
 
+    #dtNow= datetime.strptime(datetime(2000,1,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
+    dtNow = datetime.now()
+
 
     # # Retrive data from SMartDB Postgresql
     #
@@ -83,10 +86,6 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
     # In[55]:
 
-
-    #dtNow= datetime.strptime(datetime(2023,12,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
-    dtNow = datetime.now()
-
     dt = datetime.strptime(dtNow.strftime('%Y-%m-%d'), '%Y-%m-%d')
     print(dt)
 
@@ -100,7 +99,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
     # In[56]:
 
 
-    file_name=f"PM_{first_day_month.strftime('%b%y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
+    file_name=f"PM_{first_day_month.strftime('%b%Y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
     if is_only_admin==False:
        file_name=f"SM-{file_name}"
     else:
@@ -155,9 +154,13 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
 
     dfPM=list_data(sql_pm,None,get_postgres_conn())
+    if dfPM.empty:
+        print("No PM Plan.")
+        exit()
     dfPM=do_something_df(dfPM)
     dfPM.info()
     dfPM.head()
+
 
 
     # In[60]:
@@ -205,6 +208,10 @@ def notify_monthly_pm_to_admin(is_only_admin):
 
 
     dfItem=list_data(sql_item,None,get_postgres_conn())
+    if dfItem.empty:
+        print("No PM Item.")
+        exit()
+
     dfItem=do_something_df(dfItem)
     dfItem.info()
     dfItem.head()
@@ -262,13 +269,6 @@ def notify_monthly_pm_to_admin(is_only_admin):
 # In[ ]:
 
 
-# To run this file correctly, do the following
-# indent : entire code inside to function
-# delete : For Dev psycopg2 and dotnet env
-# uncomment: For Production running on Python Enviroment
-# uncomment : return and dtNow=datetime.now()
-# remove and  ae.id in (22,26)
-
 
 # In[133]:
 
@@ -300,7 +300,12 @@ def notify_imcomplete_pm_to_team():
     # In[146]:
 
     temp_doc = "temp_pm_notifcation"
-    cutOffPMDate = "2024-01-01"
+    cutOffPMDate = "2023-12-01"
+    print(f"Cutoff all incomplete items since {cutOffPMDate} to track them down.")
+
+    #dtNow= datetime.strptime(datetime(2024,1,1,9,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
+    dtNow = datetime.now()
+
 
     # # Retrive data from SMartDB Postgresql
     #
@@ -332,9 +337,6 @@ def notify_imcomplete_pm_to_team():
     # * No matter what day you run this job , the program will  get only all PMs over the current month
 
     # In[149]:
-
-    # dtNow= datetime.strptime(datetime(2023,12,1,6,0).strftime('%Y-%m-%d'),'%Y-%m-%d')
-    dtNow = datetime.now()
 
     dt = datetime.strptime(dtNow.strftime('%Y-%m-%d'), '%Y-%m-%d')
     print(dt)
@@ -394,29 +396,37 @@ def notify_imcomplete_pm_to_team():
 
     where pm_item.is_pm=True 
     and  
-    (pm.planned_date>='{first_day_month}' and pm.planned_date<'{first_day_next_month}'  )
+    (pm.planned_date>='{cutOffPMDate}' and pm.planned_date<'{first_day_next_month}' )
 
     and  ( pm_item.actual_date is null or pm_item.document_date is null 
-           or pm_item.pm_engineer_id is null or  pm_item.document_engineer_id is null  )                                                       
+           or pm_item.pm_engineer_id is null or  pm_item.document_engineer_id is null  )   
+           
+    and ae.id in (26) 
+                                                    
 
     order by  ac.company_full_name,ap.enq_id,pm.remark
 
         """
 
     # to cover incomplete inventoru , you need to determine cutoff date to check pm item.
-    # (pm.planned_date>='{cutOffPMDat}' and pm.planned_date<'{first_day_next_month}'  )
+    # (pm.planned_date>='{cutOffPMDate}' and pm.planned_date<'{first_day_next_month}'  )
 
     #  pongthorn=trong and chatchawan-seng and
-    # ae.id in (22,26)
+    # and ae.id in (26)
 
     # print(sql_item)
 
     # In[155]:
 
     dfItem = list_data(sql_item, None, get_postgres_conn())
+    if dfItem.empty:
+        print("No PM Incomplete Item.")
+        exit()
     dfItem = do_something_df(dfItem)
+
     dfItem.info()
     dfItem.head()
+
 
     # # Gen excel and send mail for each team lead
 
@@ -427,7 +437,7 @@ def notify_imcomplete_pm_to_team():
         name = email.split("@")[0]
         name = name.replace(".", "_")
 
-        file_name = f"{name}_IncompletPM_{first_day_month.strftime('%b%y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
+        file_name = f"{name}_IncompletPM_{first_day_month.strftime('%b%Y')}_{dtNow.strftime('%d%m%y%H%M')}.xlsx"
         file_path = f"{temp_doc}/{file_name}"
 
         dfByTeamLead = dfItem.query("email_teamlead==@email")
@@ -438,22 +448,22 @@ def notify_imcomplete_pm_to_team():
             print(f"Exported {file_name} file for email successfully.")
 
         is_sussessful=False
-        # # Email Office 365
-        # title = f'SmartPM: Incomplete-PM To TeamLead - {file_name}'
-        # content = f'<h3>Download  Incomplete-PM  excel file.</h3>'
-        # content = f'{content}<h4>In each row as attached file, some of these columns have not been filled in data.</h4>'
-        # content = f'{content}<h5>Operation Engineer,ActualDate,Doc Engineer,DocumentDate.</h5>'
-        # print(content)
-        #
-        # listRecipients = [email]
-        # print(f"It is about to send email to {listRecipients}")
+        # Email Office 365
+        title = f'SmartPM: Incomplete-PM To TeamLead - {file_name}'
+        content = f'<h3>Download  Incomplete-PM  excel file.</h3>'
+        content = f'{content}<h4>In each row as attached file, some of these columns have not been filled in data.</h4>'
+        content = f'{content}<h5>Operation Engineer,ActualDate,Doc Engineer,DocumentDate.</h5>'
+        print(content)
 
-        # email_info = {'subject': title, 'message': content, 'send_to': listRecipients}
-        # is_sussessful = send_email_with_excel_file(email_info, file_path, file_name)
-        # print(f"Sent mail successfully.")
-        #
-        # os.remove(f"{file_path}")
-        # print(f"Deleted file {file_path} for email attachemnt  succesfully.")
+        listRecipients = [email]
+        print(f"It is about to send email to {listRecipients}")
+
+        email_info = {'subject': title, 'message': content, 'send_to': listRecipients}
+        is_sussessful = send_email_with_excel_file(email_info, file_path, file_name)
+        print(f"Sent mail successfully.")
+
+        os.remove(f"{file_path}")
+        print(f"Deleted file {file_path} for email attachemnt  succesfully.")
 
     # In[ ]:
 

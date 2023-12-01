@@ -11,6 +11,16 @@ from django.forms import modelformset_factory
 from django.forms import BaseModelFormSet
 from django.conf import settings
 
+def validate_start_to_date(cleaned_data,startDate_fieldName,endDate_fieldName):
+  start_date=cleaned_data.get(startDate_fieldName)
+  end_date=cleaned_data.get(endDate_fieldName)
+  if (start_date is not None) and (end_date is not None):
+      if start_date >  end_date:
+       # raise ValidationError(_(f' {startDate_fieldName} must be less than {endDate_fieldName}'))
+       return  _(f' {endDate_fieldName} must be more than {startDate_fieldName}')
+  else:
+      return None
+
 class MyDateInput(forms.DateInput):
     input_type = "date"
     def __init__(self, **kwargs):
@@ -28,6 +38,12 @@ class  PM_MasterForm(forms.ModelForm):
             'planned_date': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
             'ended_pm_date' : MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        error_project_date = validate_start_to_date(cleaned_data, "planned_date", "ended_pm_date")
+        if error_project_date is not None:
+            self.add_error("planned_date", ValidationError(error_project_date))
 
     # def __init__(self, *args, **kwargs):
     #     super(PM_MasterForm, self).__init__(*args, **kwargs)

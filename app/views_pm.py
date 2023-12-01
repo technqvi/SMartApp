@@ -312,23 +312,20 @@ def copy_pm_inventory(request,pm_id):
 
     if request.method == "POST":
         form = PM_MasterForm(request.POST)
-        new_pm_obj = form.save(commit=False)
+        if form.is_valid():
+            new_pm_obj = form.save(commit=False)
 
-        new_pm_obj.project_id = pm_obj.project_id
-        new_pm_obj.save()
+            new_pm_obj.project_id = pm_obj.project_id
+            new_pm_obj.save()
 
-        # way insert bulk , copy all item from master including  no-pm
-        listNewCopiedItems=[ PM_Inventory(pm_master=new_pm_obj,is_pm=item.is_pm,inventory=item.inventory,) for item in listItem ]
-
-        if len(listNewCopiedItems)>0:
-                  PM_Inventory.objects.bulk_create( listNewCopiedItems) 
-        # way insert each          
-        # for item in listItem:
-        #     item.id=None
-        #     item.pm_master_id=new_pm_obj.id
-        #     item.save()
-        return redirect('manage_pm', project_id=pm_obj.project.id, id=0)
-    else:
+            # way insert bulk , copy all item from master including  no-pm
+            listNewCopiedItems=[ PM_Inventory(pm_master=new_pm_obj,is_pm=item.is_pm,inventory=item.inventory,) for item in listItem ]
+            if len(listNewCopiedItems)>0:
+                      PM_Inventory.objects.bulk_create( listNewCopiedItems)
+            return redirect('manage_pm', project_id=pm_obj.project.id, id=0)
+        else:
+                messages.error(request, form.errors)
+    else: # Get
         listSubComp=SubCompany.objects.filter( head_company_id=pm_obj.project.company.id  )
 
         form.fields['customer_company'].queryset=listSubComp
@@ -528,6 +525,8 @@ def manage_pm(request, project_id, id=0):
                 if len(list_pm_items)>0:
                   PM_Inventory.objects.bulk_create( list_pm_items) # batch_size=999
                 messages.success(request, f'Create PM Plan and {len(list_inventory)} inventories successfully.')
+
+                return redirect('manage_pm', project_id=project_id, id=0) #success
             else:
                 messages.error(request, form.errors)
         else:  # save from  edit
@@ -540,14 +539,12 @@ def manage_pm(request, project_id, id=0):
                     messages.success(request, f'PM Plan has been updated successfully.')
                 else:
                     messages.info(request, f'No any update for PM Plan.')
+                return redirect('manage_pm', project_id=project_id, id=0) # success
             else:
                 messages.error(request, form.errors)
 
-        return redirect('manage_pm', project_id=project_id, id=0)
 
     pmList=PreventiveMaintenance.objects.filter(project_id=project_id)
-
-
     context = {'projectInfo': project_obj,'form': form,'mode':form_mode,
                'pmList':pmList
                }
