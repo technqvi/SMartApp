@@ -6,16 +6,23 @@
     <form method="get" autocomplete="on">
         <div class="well well-sm">
             <div class='row'>
-                <div class='col-md-3'>{{ PMSummaryFilter.form.company | as_crispy_field }}</div>
-                <div class='col-md-3'>   {{ PMSummaryFilter.form.enq_id | as_crispy_field }}</div>
-                       <div class='col-md-3'>
+                <div class='col-md-4'>{{ PMSummaryFilter.form.company | as_crispy_field }}</div>
+                <div class='col-md-4'>   {{ PMSummaryFilter.form.enq_id | as_crispy_field }}</div>
+                       <div class='col-md-4'>
                         <input type="checkbox" id="expired_project" name="expired_project">
                         <label for="expired_project">Include Project Expiration</label>
                     </div>
-                <div class='col-md-3'>
-                    <button class="btn btn-primary" type="submit" onclick="return confirm('Do you want to export project & PM-Plan Summary as an excel file ?')">Export PM</button>
+             </div>
+            <div class='row text-center'>
+                <div class="col-md-12 center-block">
+                    <button class="btn btn-primary" type="submit" onclick="return confirm('Do you want to export project & PM-Plan Summary as an Excel file ?')">Export PM</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <a  class="btn btn-info disabled"
+                   onclick="return confirm('Do you want all inventories excluded in All PM Plans as an Excel file? ?')">Export ExcludedInventory-PM </a>
+
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{% url 'summarize_project_pm' %}" class="btn btn-primary"  >Clear Search</a></div>
-            </div>
+              </div>
         </div>
     </form>
 

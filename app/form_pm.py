@@ -69,17 +69,17 @@ class  PM_InventoryForm(forms.ModelForm):
        cleaned_data = super().clean()
 
       # Update Individual Item by PmItem ID (It can be used for all update /update by brand)
-       if self.instance.id is not None:
-            pm_item=self.instance
-            planned_date=pm_item.pm_master.planned_date
-            actual_date = self.cleaned_data['actual_date']
-            if actual_date is not None:
-              if  actual_date < planned_date:
-                self.add_error("actual_date", f"actual_date:{actual_date} must be greater than or equal planed date:{planned_date}")
-            document_date = self.cleaned_data['document_date']
-            if document_date is not None:
-              if  document_date < planned_date:
-                self.add_error("document_date", f"document_date:{document_date} must be greater than or equal planed date :{planned_date}")
+      #  if self.instance.id is not None:
+      #       pm_item=self.instance
+      #       planned_date=pm_item.pm_master.planned_date
+      #       actual_date = self.cleaned_data['actual_date']
+      #       if actual_date is not None:
+      #         if  actual_date < planned_date:
+      #           self.add_error("actual_date", f"actual_date:{actual_date} must be greater than or equal planed date:{planned_date}")
+      #       document_date = self.cleaned_data['document_date']
+      #       if document_date is not None:
+      #         if  document_date < planned_date:
+      #           self.add_error("document_date", f"document_date:{document_date} must be greater than or equal planed date :{planned_date}")
 
        error_actual_date = validate_start_to_date(cleaned_data, "actual_date", "document_date")
        if error_actual_date is not None:

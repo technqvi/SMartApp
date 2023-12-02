@@ -428,13 +428,13 @@ def update_pm_inventory(request,pm_id,id=0):
                     # Validate date
                     listDateCustomError=[]
                     #============================================================
-                    pm_planned_date=pm_obj .planned_date
-                    actual_date = form.instance.actual_date
-                    if actual_date is not None and actual_date < pm_planned_date:
-                        listDateCustomError.append(f"actual_date:{actual_date} must be greater than or equal planed date:{pm_planned_date}")
-                    document_date = form.instance.document_date
-                    if document_date is not None and document_date < pm_planned_date:
-                        listDateCustomError.append(f"document_date:{document_date} must be greater than or equal planed date:{pm_planned_date}")
+                    # pm_planned_date=pm_obj .planned_date
+                    # actual_date = form.instance.actual_date
+                    # if actual_date is not None and actual_date < pm_planned_date:
+                    #     listDateCustomError.append(f"actual_date:{actual_date} must be greater than or equal planed date:{pm_planned_date}")
+                    # document_date = form.instance.document_date
+                    # if document_date is not None and document_date < pm_planned_date:
+                    #     listDateCustomError.append(f"document_date:{document_date} must be greater than or equal planed date:{pm_planned_date}")
 
                     if len(listDateCustomError)>0:
                         messages.error(request, ' , '.join(listDateCustomError))
