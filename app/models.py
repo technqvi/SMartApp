@@ -568,6 +568,8 @@ class PreventiveMaintenance(models.Model):
     site_branch = models.CharField('Site/Branch', max_length=255,null=True, blank=True)
     equipment_location=models.CharField('Equipment Location', max_length=255,null=True, blank=True)
 
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
+
     def total_pm_items(self):
         return  self.pm_inventory_set.filter(is_pm=True).count()
     def total_no_pm_items(self):
@@ -593,6 +595,7 @@ class PM_Inventory(models.Model):
     remark = models.CharField('Remark', max_length=255, null=True, blank=True)
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
+
     is_pm=models.BooleanField(default=True, verbose_name="Is PM")
 
 
