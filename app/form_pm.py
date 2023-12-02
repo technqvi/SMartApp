@@ -16,8 +16,7 @@ def validate_start_to_date(cleaned_data,startDate_fieldName,endDate_fieldName):
   end_date=cleaned_data.get(endDate_fieldName)
   if (start_date is not None) and (end_date is not None):
       if start_date >  end_date:
-       # raise ValidationError(_(f' {startDate_fieldName} must be less than {endDate_fieldName}'))
-       return  _(f' {endDate_fieldName} must be more than {startDate_fieldName}')
+       return  _(f'{endDate_fieldName} must be greater or equal {startDate_fieldName}')
   else:
       return None
 
@@ -41,9 +40,9 @@ class  PM_MasterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        error_project_date = validate_start_to_date(cleaned_data, "planned_date", "ended_pm_date")
-        if error_project_date is not None:
-            self.add_error("planned_date", ValidationError(error_project_date))
+        error_planed_date = validate_start_to_date(cleaned_data, "planned_date", "ended_pm_date")
+        if error_planed_date is not None:
+            self.add_error("planned_date", ValidationError(error_planed_date))
 
     # def __init__(self, *args, **kwargs):
     #     super(PM_MasterForm, self).__init__(*args, **kwargs)
@@ -64,4 +63,27 @@ class  PM_InventoryForm(forms.ModelForm):
     #     super(PM_InventoryForm, self).__init__(*args, **kwargs)
     #     self.fields['pm_engineer'].queryset =Employee.objects.filter(is_inactive=False)
     #     self.fields['document_engineer'].queryset =Employee.objects.filter(is_inactive=False)
+
+    def clean(self):
+
+       cleaned_data = super().clean()
+
+      # Update Individual Item by PmItem ID (It can be used for all update /update by brand)
+       if self.instance.id is not None:
+            pm_item=self.instance
+            planned_date=pm_item.pm_master.planned_date
+            actual_date = self.cleaned_data['actual_date']
+            if actual_date is not None:
+              if  actual_date < planned_date:
+                self.add_error("actual_date", f"actual_date:{actual_date} must be greater than or equal planed date:{planned_date}")
+            document_date = self.cleaned_data['document_date']
+            if document_date is not None:
+              if  document_date < planned_date:
+                self.add_error("document_date", f"document_date:{document_date} must be greater than or equal planed date :{planned_date}")
+
+       error_actual_date = validate_start_to_date(cleaned_data, "actual_date", "document_date")
+       if error_actual_date is not None:
+            self.add_error("actual_date", ValidationError(error_actual_date))
+
+
 

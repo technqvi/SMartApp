@@ -421,35 +421,49 @@ def update_pm_inventory(request,pm_id,id=0):
                 else: # update all items
                      list_item_to_update=PM_Inventory.objects.filter(pm_master_id=pm_id,is_pm=True)
                      updateAllMode = True
-
                 upatedItems=[]
 
                 form = PM_InventoryForm(request.POST)
                 if form.is_valid():
-                    temp_obj = form.save(commit=False)
-                    if updateAllMode == True and temp_obj.is_pm==False:
-                        messages.error(request, f'Not allow to set is_pm=False to all items on Update All  Mode')
+                    # Validate date
+                    listDateCustomError=[]
+                    #============================================================
+                    pm_planned_date=pm_obj .planned_date
+                    actual_date = form.instance.actual_date
+                    if actual_date is not None and actual_date < pm_planned_date:
+                        listDateCustomError.append(f"actual_date:{actual_date} must be greater than or equal planed date:{pm_planned_date}")
+                    document_date = form.instance.document_date
+                    if document_date is not None and document_date < pm_planned_date:
+                        listDateCustomError.append(f"document_date:{document_date} must be greater than or equal planed date:{pm_planned_date}")
+
+                    if len(listDateCustomError)>0:
+                        messages.error(request, ' , '.join(listDateCustomError))
+                    # ============================================================
                     else:
-                        if len(list_item_to_update):
-                            for item in list_item_to_update:
-                                item.actual_date=temp_obj.actual_date
-                                item.document_date=temp_obj.document_date
-                                item.pm_engineer=temp_obj.pm_engineer
-                                item.document_engineer=temp_obj.document_engineer
-                                item.call_number=temp_obj.call_number
-                                item.pm_document_number=temp_obj.pm_document_number
-                                item.remark=temp_obj.remark
-                                item.is_pm=temp_obj.is_pm
-                                upatedItems.append(item)
-
-                            colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
-                                           ,'call_number','pm_document_number','remark','is_pm']
-                            PM_Inventory.objects.bulk_update(upatedItems,colListToUpdate)
-
-                            return redirect('update_pm_inventory', pm_id=pm_id, id=0)
+                        temp_obj = form.save(commit=False)
+                        if updateAllMode == True and temp_obj.is_pm==False:
+                            messages.error(request, f'Not allow to set is_pm=False to all items on Update All  Mode')
                         else:
-                            messages.error(request,
-                                           f'No PM-Item(is_pm=False) to update , filter brand to get PM-Item(is_pm=True) or Update All.')
+                            if len(list_item_to_update):
+                                for item in list_item_to_update:
+                                    item.actual_date=temp_obj.actual_date
+                                    item.document_date=temp_obj.document_date
+                                    item.pm_engineer=temp_obj.pm_engineer
+                                    item.document_engineer=temp_obj.document_engineer
+                                    item.call_number=temp_obj.call_number
+                                    item.pm_document_number=temp_obj.pm_document_number
+                                    item.remark=temp_obj.remark
+                                    item.is_pm=temp_obj.is_pm
+                                    upatedItems.append(item)
+
+                                colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
+                                               ,'call_number','pm_document_number','remark','is_pm']
+                                PM_Inventory.objects.bulk_update(upatedItems,colListToUpdate)
+
+                                return redirect('update_pm_inventory', pm_id=pm_id, id=0)
+                            else:
+                                messages.error(request,
+                                               f'No PM-Item(is_pm=False) to update , filter brand to get PM-Item(is_pm=True) or Update All.')
 
                 else:
                     messages.error(request, form.errors)
