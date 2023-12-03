@@ -61,6 +61,7 @@
 
                         <li><a href="{% url 'build_ais_excel_report' %}">Advanced Pivot Report</a></li>
                         {% if user.is_staff %}
+                            <li><a href="{% url 'report_site_grade' %}">Predict Important-Or-Normal Incident</a></li>
                             <li><a href="{% url 'report_site_grade' %}">Site Grade Report</a></li>
                         {% endif %}
                         <li>
@@ -71,7 +72,7 @@
                                target="_blank">SMartDashboard-Report</a></li>
                         <li>
                             <a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/043e4c9b-95cc-4b88-8555-0e3df047170b/ReportSection"
-                               target="_blank">Predict Daily-Incident Over The Next 5 Days</a></li>
+                               target="_blank">Forecast No.DailyIncident Over The Next 5 Days</a></li>
 
                     </ul>
                 </li>
