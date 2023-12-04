@@ -454,6 +454,7 @@ def update_pm_inventory(request,pm_id,id=0):
                                     item.pm_document_number=temp_obj.pm_document_number
                                     item.remark=temp_obj.remark
                                     item.is_pm=temp_obj.is_pm
+
                                     upatedItems.append(item)
 
                                 colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
