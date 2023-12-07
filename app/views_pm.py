@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 
-
 from  app.form_pm import *
 from app.decorators import allowed_users,manger_and_viewer_only,manger_only,staff_admin_only,manger_and_viewer_engineer_only
 
@@ -91,12 +90,15 @@ def summarize_project_pm(request):
     if pmFilter.qs.count() > 0:
         my_all_pm = pmFilter.qs
         listIDs = [x.id for x in my_all_pm]
+
+        dfNonPmItem = exporter.export_non_pm_inventories_of_all_pm_plans(listIDs)
         df = exporter.export_pm_summary_by_company_project(listIDs)
+
         if df.empty==False:
             if include_expired is None:
-                return refactor2_report_summary(df, "search")
+                return refactor2_report_summary(df,dfNonPmItem, "search")
             else:
-                return refactor2_report_summary(df, "search",True)
+                return refactor2_report_summary(df,dfNonPmItem, "search",True)
         else:
           context = {}
           return render(request, 'app/pm_export.html', context)
@@ -115,14 +117,15 @@ def summarize_all(request):
                                                      project__project_end__gte=today)
     listIDs = [x.id for x in my_all_pm]
     df = exporter.export_pm_summary_by_company_project(listIDs)
+    dfNonPmItem = exporter.export_non_pm_inventories_of_all_pm_plans(listIDs)
     if df.empty==False:
-       return refactor2_report_summary(df,"all")
+       return refactor2_report_summary(df,dfNonPmItem,"all")
     else:
         context = {}
         return render(request, 'app/pm_export.html', context)
 
 
-def refactor2_report_summary(df,doc_type,includeExpiration=False):
+def refactor2_report_summary(dfPM,dfNonPMItem,doc_type,includeExpiration=False):
     if doc_type == 'search':
         if includeExpiration:
          file_name = f"Project_PM_ByCompany_IncludeExpiration.xlsx"
@@ -130,22 +133,35 @@ def refactor2_report_summary(df,doc_type,includeExpiration=False):
             file_name = f"Project_PM_ByCompany.xlsx"
     else:
         file_name = f"All_Project_PM.xlsx"
+    def clean_df(df):
 
-    df = df.fillna(value='')
-    df = df.reset_index(drop=False)
-    df.insert(0, "No", df["index"] + 1, True)
-    df = df.drop(columns=["index"])
+        df = df.fillna(value='')
+        df = df.reset_index(drop=False)
+        df.insert(0, "No", df["index"] + 1, True)
+        df = df.drop(columns=["index"])
 
-    col_remove = 'ID'
-    if col_remove in df.columns:
-        df = df.drop([col_remove], axis=1)
+        col_remove = 'ID'
+        if col_remove in df.columns:
+            df = df.drop([col_remove], axis=1)
+        return df
 
-    if len(df) > 0:
+    dfPM=clean_df(dfPM)
+    dfNonPMItem=clean_df(dfNonPMItem)
+
+
+    if len(dfPM) > 0 or len(dfNonPMItem) > 0:
         try:
             wb = openpyxl.Workbook(write_only=True)
-            ws = wb.create_sheet()
-            for r in dataframe_to_rows(df, index=False, header=True, ):
-                ws.append(r)
+
+            if len(dfPM) > 0:
+                 ws = wb.create_sheet('PM')
+                 for r in dataframe_to_rows(dfPM, index=False, header=True, ):
+                    ws.append(r)
+            if len(dfNonPMItem) > 0:
+                ws2 = wb.create_sheet('Non-PMInventory')
+                for r in dataframe_to_rows(dfNonPMItem, index=False, header=True, ):
+                    ws2.append(r)
+
         except openpyxl.utils.exceptions.IllegalCharacterError as e:
             raise e
 

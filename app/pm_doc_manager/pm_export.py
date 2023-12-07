@@ -4,6 +4,56 @@ import datetime
 import re
 import pytz
 
+# def report_inventory(listIDs) from report_manager.py
+def export_non_pm_inventories_of_all_pm_plans(listIDs):
+    listIDs=tuple(listIDs)
+    sql = f"""
+    
+select ap.enq_id as "ENQ" ,ac.company_full_name as "Company",ap.project_name as"Project Name",
+TO_CHAR(ap.project_start,'DD Mon YYYY') as "Start",TO_CHAR(ap.project_end,'DD Mon YYYY') as "End",
+ap.customer_po as "Customer PO",ap.contract_no as "Contract-No Reference",
+
+ai.serial_number as "Serial",
+(select  productype_name from app_product_type where id=ai.product_type_id ) as "ProudctType",
+(select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
+(select  model_name from app_model where id=ai.model_id ) as "Model",
+TO_CHAR(ai.customer_warranty_start,'DD Mon YYYY') as "Cust Warranty Start",
+TO_CHAR(ai.customer_warranty_end,'DD Mon YYYY') as "Cust Warranty End",
+(select sla_name from app_sla where id=ai.customer_sla_id ) as "SLA(Customer)"
+
+from  app_inventory ai
+inner join app_project ap on ap.id = ai.project_id
+inner join app_company ac on ac.id = ap.company_id
+ 
+where ai.id in(
+    select id from app_inventory
+    where
+    project_id in (select distinct project_id from app_preventivemaintenance where id in  {listIDs}  )
+    and
+    id not in ( select distinct inventory_id  from app_pm_inventory
+    where is_pm=True and pm_master_id in (select id from app_preventivemaintenance where id in  {listIDs} )
+
+))
+
+order by ap.enq_id
+
+"""
+    with connection.cursor() as cursor:
+      if len(listIDs)>0:
+         cursor.execute(sql)
+      else:
+          cursor.execute(sql)
+
+      columns = [col[0] for col in cursor.description]
+      ivtList = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+      # get inventory List to pass into SQL inventory
+
+      df = pd.DataFrame(data=ivtList)
+
+      return df
+
+
 def export_pm_summary_by_company_project(listIDs):
     pmList = []
     sql="""

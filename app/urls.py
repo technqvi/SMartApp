@@ -69,6 +69,8 @@ urlpatterns = [
     path('report/export_pm_item/', views_pm.export_pm_item, name='export_pm_item'),
     path('report/summarize_project_pm', views_pm.summarize_project_pm, name='summarize_project_pm'),
     path('report/summarize_all', views_pm.summarize_all, name='summarize_all'),
+    # path('report/export_none_pm_inventory', views_pm.export_none_pm_inventory, name='export_none_pm_inventory'),
+
 
     path('ajax/load-models/', views.load_models_by_brand, name='ajax_load_models'),
     path('ajax/load-customers/', views.load_customers_support_by_company, name='ajax_load_customers'),
