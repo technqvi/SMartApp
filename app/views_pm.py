@@ -473,9 +473,11 @@ def update_pm_inventory(request,pm_id,id=0):
 
                                     upatedItems.append(item)
 
-                                colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
-                                               ,'call_number','pm_document_number','remark','is_pm']
-                                PM_Inventory.objects.bulk_update(upatedItems,colListToUpdate)
+                                # colListToUpdate=  ['actual_date','document_date','pm_engineer','document_engineer'
+                                #                ,'call_number','pm_document_number','remark','is_pm']
+                                # PM_Inventory.objects.bulk_update(upatedItems, colListToUpdate)
+                                for pm_item_obj in upatedItems:
+                                    pm_item_obj.save()
 
                                 return redirect('update_pm_inventory', pm_id=pm_id, id=0)
                             else:
@@ -562,7 +564,9 @@ def manage_pm(request, project_id, id=0):
 
                 list_pm_items=[ PM_Inventory(inventory=item,pm_master=pm_master_obj,is_pm=True) for item in list_inventory ]
                 if len(list_pm_items)>0:
-                  PM_Inventory.objects.bulk_create( list_pm_items) # batch_size=999
+                  # PM_Inventory.objects.bulk_create( list_pm_items) # batch_size=999
+                  for pm_item_obj in list_pm_items:
+                      pm_item_obj.save()
                 messages.success(request, f'Create PM Plan and {len(list_inventory)} inventories successfully.')
 
                 return redirect('manage_pm', project_id=project_id, id=0) #success

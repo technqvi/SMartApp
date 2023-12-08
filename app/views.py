@@ -457,6 +457,8 @@ def reload_prev_inventory_for_next_one(inventory_obj):
     brand_ref = get_object_or_404(Brand, pk=inventory_obj.brand.id) if inventory_obj.brand is not None else None
     model_ref = get_object_or_404(Model, pk=inventory_obj.model.id) if inventory_obj.model is not None else None
 
+    template_ref=get_object_or_404(PM_Inventory_Template,pk=inventory_obj.pm_inventory_template.id) if inventory_obj.pm_inventory_template is not None else None
+
     customer_support_ref = get_object_or_404(Customer,
                                              pk=inventory_obj.customer_support.id) if inventory_obj.customer_support is not None else None
     customer_pm_support_ref = get_object_or_404(Customer,
@@ -519,6 +521,8 @@ def reload_prev_inventory_for_next_one(inventory_obj):
             'product_warranty_end': ref_product_warranty_end,
             'product_sla': ref_cust_sla,
 
+            'pm_inventory_template':template_ref,
+
         }
     )
 
@@ -551,6 +555,7 @@ def add_inventory(request, proj_id):
     list_customer_support = Customer.objects.filter(company_id=project_obj.company_id, is_active=True)
     list_customer_pm_support = Customer.objects.filter(company_id=project_obj.company_id, is_active=True)
     list_product_support = Product.objects.filter(customer_company_id=project_obj.company_id, is_active=True)
+    #list_template=PM_Inventory_Template.objects.all()
 
     if (request.method == "GET"):
         if len(list_inventory) == 0:
