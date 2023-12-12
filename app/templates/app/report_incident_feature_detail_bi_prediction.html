@@ -40,34 +40,34 @@
             </caption>
 
             <tr>
-                <td class="well"><h1>Service Type</h1></td>
-                <td>{{ item.incident.service_type }}</td>
+                <td class="well"><h1>Service Type:</h1></td>
+                <td><h1>{{ item.incident.service_type }}</h1></td>
             </tr>
             <tr>
-                <td class="well"><h2>Band</h2></td>
-                <td>{{ item.incident.inventory.brand }}</td>
+                <td class="well"><h2>Band:</h2></td>
+                <td><h2>{{ item.incident.inventory.brand }}</h2><</td>
             </tr>
             <tr>
-                <td class="well"><h3>Open To Close (Hour)</h3></td>
-                <td>{{ item.incident.incident_close_datetime | date:"d/M/Y H:i" }} - {{ item.incident.incident_datetime | date:"d/M/Y H:i" }}
-                    = {{ xyz_open_to_close }}
+                <td class="well"><h3>Open To Close (Hour):</h3></td>
+                <td><h3>{{ item.incident.incident_close_datetime | date:"d/M/Y H:i" }} - {{ item.incident.incident_datetime | date:"d/M/Y H:i" }}
+                    = {{ xyz_open_to_close }}</h3>
                 </td>
 
             </tr>
 
             <tr>
-                <td class="well"><h3>Incident Type</h3></td>
-                <td>{{ item.incident.incident_type }}</td>
+                <td class="well"><h3>Incident Type:</h3></td>
+                <td><h3>{{ item.incident.incident_type }}</h3></td>
 
             </tr>
             <tr>
-                <td class="well"><h4>Product Type</h4></td>
-                <td>{{ item.incident.inventory.product_type }}</td>
+                <td class="well"><h4>Product Type:</h4></td>
+                <td><h4>{{ item.incident.inventory.product_type }}</h4></td>
             </tr>
 
             <tr>
-                <td class="well"><h4>Service Level Agreement</h4></td>
-                <td>{{ item.incident.inventory.customer_sla }}</td>
+                <td class="well"><h4>Service Level Agreement:</h4></td>
+                <td><h4>{{ item.incident.inventory.customer_sla }}</h4></td>
             </tr>
 
 
