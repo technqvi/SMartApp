@@ -1,0 +1,81 @@
+{% extends "app/layout.html" %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+{% block content %}
+    {% if  message %}
+        {{ message }}
+    {% endif %}
+
+    {% if request.user|has_group:"site-manager" %}
+        <h1>Incident Feature(Column) to make prediction as <u>Critical</u> OR <u>Normal</u></h1>
+        <b>These features are ordered by feature importance score</b><br/>
+        Click the following links to see more detail: &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'update_incident' item.incident.id %}" class="btn btn-info" target="_blank">Incident</a>
+        <a href="{% url 'manage_incident_detail' item.incident.id 0 %}" class="btn btn-info" target="_blank">Incident
+            Detail</a>
+        <a href="{% url 'update_inventory' item.incident.inventory.id %}?next=close_page" target="_blank"
+           class="btn btn-info">Inventory</a></h>
+        <hr/>
+{#        <div class="container-fluid" style="text-align:right">#}
+{#            <a href="{% url 'report_incident_bi_prediction' %}" class="btn btn-primary">Back</a>#}
+{#            &nbsp; &nbsp;&nbsp;#}
+{#        </div>#}
+        <table class="table table-striped table-hover table-condensed">
+            <caption style="font-size: medium">
+                <b>Prediction</b>
+            </caption>
+            <tr>
+                <td class="well"><h3>Predicted Label: </h3></td>
+                <td style="background-color: lightgreen"><h3>{{ item.severity_name }}</h3></td>
+            </tr>
+            <tr>
+                <td class="well"><h3>Actual Label:</h3></td>
+                <td style="background-color: lightblue"><h3>{{ xyz_actual_label }}</h3></td>
+            </tr>
+        </table>
+
+        <table class="table table-striped table-hover table-condensed">
+            <caption style="font-size: medium">
+                <b>Features</b>
+            </caption>
+            <tr>
+                <td class="well"><h1>Predicted Label: {{ item.severity_name }}</h1></td>
+                <td>Actual Label: {{ xyz_actual_label }}</td>
+            </tr>
+            <tr>
+                <td class="well"><h1>Service Type</h1></td>
+                <td>{{ item.incident.service_type }}</td>
+            </tr>
+            <tr>
+                <td class="well"><h2>Band</h2></td>
+                <td>{{ item.incident.inventory.brand }}</td>
+            </tr>
+            <tr>
+                <td class="well"><h3>Open To Close (Hour)</h3></td>
+                <td>{{ item.incident.incident_close_datetime | date:"d/M/Y H:i" }} - {{ item.incident.incident_datetime | date:"d/M/Y H:i" }}
+                    = {{ xyz_open_to_close }}
+                </td>
+
+            </tr>
+
+            <tr>
+                <td class="well"><h3>Incident Type</h3></td>
+                <td>{{ item.incident.incident_type }}</td>
+
+            </tr>
+            <tr>
+                <td class="well"><h4>Product Type</h4></td>
+                <td>{{ item.incident.inventory.product_type }}</td>
+            </tr>
+
+            <tr>
+                <td class="well"><h4>Service Level Agreement</h4></td>
+                <td>{{ item.incident.inventory.customer_sla }}</td>
+            </tr>
+
+
+        </table>
+    {% endif %}
+
+
+{% endblock %}

@@ -61,7 +61,7 @@
 
                         <li><a href="{% url 'build_ais_excel_report' %}">Advanced Pivot Report</a></li>
                         {% if user.is_staff %}
-                            <li><a href="/">Predict Important-Or-Normal Incident</a></li>
+                            <li><a href="{% url 'report_incident_bi_prediction' %}">Predict Important/Normal Incident</a></li>
                             <li><a href="{% url 'report_site_grade' %}">Site Grade Report</a></li>
                         {% endif %}
                         <li>

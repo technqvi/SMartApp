@@ -1773,3 +1773,39 @@ def list_inventory_template_for_pm(request):
     return render(request, 'app/pm_template_json_data.html', context)
 
 
+@login_required(login_url='login')
+@staff_admin_only #@manger_only
+def report_incident_bi_prediction(request):
+    myuser = request.user
+    isNotEmplyQuery = checkEmpyQueryString(request)
+
+    if isNotEmplyQuery:
+        my_all_preds =  Prediction_ML2_everity_Incident.objects.filter(incident__inventory__project__company__manager__user=myuser).order_by(
+            '-prediction_at')
+    else:
+        my_all_preds =Prediction_ML2_everity_Incident.objects.filter(id=0 )
+
+    xFilter = PredictionBiSeverityIncidentFilter(request.GET, request=request, queryset=my_all_preds)
+    if xFilter.qs.count() > 0:
+        predictionList = xFilter.qs
+
+    else:
+        predictionList = None
+
+
+    context = {'predictionList': predictionList, 'predictionFilter': xFilter}
+    return render(request, 'app/report_incident_bi_prediction.html', context)
+
+def view_feature_incident_bi_prediction(request,id):
+
+    x_obj = get_object_or_404(Prediction_ML2_everity_Incident, pk=id)
+    xyz_open_to_close=(x_obj.incident.incident_close_datetime-x_obj.incident.incident_datetime)
+    xyz_open_to_close_hour=round(xyz_open_to_close.total_seconds() / (60*60),1)
+
+    xyz_actual_label= "Critical" if x_obj.incident.incident_severity.id in (1,2) else "Normal"
+
+    context={"item":x_obj,"xyz_open_to_close":xyz_open_to_close,"xyz_actual_label": xyz_actual_label }
+    return render(request, 'app/report_incident_feature_detail_bi_prediction.html', context)
+
+
+

@@ -639,6 +639,7 @@ class Prediction_ML_Severity_Incident(models.Model):
     def __str__(self):
         return self.severity_name
 
+#class Prediction_ML2_Severity_Incident(models.Model): # Typo
 class Prediction_ML2_everity_Incident(models.Model):
     incident=models.ForeignKey(Incident,on_delete=models.CASCADE,verbose_name='Incident ID')
     severity_label = models.IntegerField(verbose_name='Severity Label Prediction')

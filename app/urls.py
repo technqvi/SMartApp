@@ -60,6 +60,11 @@ urlpatterns = [
 
     path('report/site-grade/', views_report.report_site_grade, name="report_site_grade"),
     path('report/advance-report/', views_report.build_ais_excel_report, name='build_ais_excel_report'),
+    path('report/report_incident_bi_prediction', views.report_incident_bi_prediction,
+         name='report_incident_bi_prediction'),
+    path('report/report_incident_bi_prediction/detail/<int:id>/',views.view_feature_incident_bi_prediction,
+         name="view_feature_incident_bi_prediction"),
+
 
     path('report/export_project/', views.export_project, name='export_project'),
     path('report/export_all_project/', views.export_all_project, name='export_all_project'),
@@ -69,7 +74,7 @@ urlpatterns = [
     path('report/export_pm_item/', views_pm.export_pm_item, name='export_pm_item'),
     path('report/summarize_project_pm', views_pm.summarize_project_pm, name='summarize_project_pm'),
     path('report/summarize_all', views_pm.summarize_all, name='summarize_all'),
-    # path('report/export_none_pm_inventory', views_pm.export_none_pm_inventory, name='export_none_pm_inventory'),
+
 
 
     path('ajax/load-models/', views.load_models_by_brand, name='ajax_load_models'),

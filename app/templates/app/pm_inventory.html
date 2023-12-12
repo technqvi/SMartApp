@@ -167,6 +167,7 @@ pmInfo
             <th scope="col">Operation Engineer</th>
             <th scope="col">Doc Date</th>
             <th scope="col">Doc Engineer</th>
+            <th scop="col">Call-Number</th>
             <th scope="col">Is PM</th>
 
 
@@ -185,6 +186,8 @@ pmInfo
                     <td>{{ item.pm_engineer |default_if_none:"" }}</td>
                     <td>{{ item.document_date  | date:"d M Y" }}</td>
                     <td>{{ item.document_engineer |default_if_none:"" }}</td>
+                     <td>{{ item.call_number |default_if_none:""  }}</td>
+
                     <td>{{ item.is_pm }}</td>
 
                     <td>

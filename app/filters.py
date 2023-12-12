@@ -12,6 +12,7 @@ from django.db.models import Q
 import datetime as datetime
 import datetime as date
 
+#https://django-filter.readthedocs.io/en/stable/guide/usage.html
 class MyEndDateFilter(django_filters.DateFilter):
 
     def filter(self, qs, value):
@@ -225,6 +226,32 @@ class  PMInventoryItemFilter(django_filters.FilterSet):
     brand = django_filters.ModelChoiceFilter(queryset=brand_for_pm, field_name='inventory__brand', label='Brand',required=True)
     model=PM_Inventory
     exclude = ['remark']
+
+
+
+
+
+class  PredictionBiSeverityIncidentFilter(django_filters.FilterSet):
+
+   company = filters.ModelChoiceFilter(queryset=company_for_project_by_role, field_name='incident__inventory__project__company', label='Company')
+   prediction_at__gt = django_filters.DateFilter(field_name='prediction_at', lookup_expr='gte',
+                                                     widget=MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
+                                                     label="Predict between", required=True )
+   prediction_at__lt = django_filters.DateFilter(field_name='prediction_at', lookup_expr='lte',
+                                                     widget=MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
+                                                     label="To", required=True )
+
+   X_CHOICES = (
+       (1, 'Critical'),
+       (0, 'Normal'),
+   )
+   severity_label = TypedChoiceFilter(choices=X_CHOICES,required=True)
+   # severity_name = django_filters.CharFilter(field_name="severity_name",label="Prediction Class(Critical/Normal)")
+
+   class Meta:
+     model=Prediction_ML2_everity_Incident
+     exclude = ['incident','severity_label','imported_at','model_version']
+     fields = ['severity_label']
 
 
 

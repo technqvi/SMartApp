@@ -1,6 +1,7 @@
 from django import forms
 import app.utility as util
 
+from .models import *
 
 class ReportDateSearchForm(forms.Form):
 
@@ -18,4 +19,6 @@ class AdvancedReportSearchForm(forms.Form):
         self.current_user=_current_user
         list_cust_comp=util.list_customer_company(self.current_user)
         self.fields['cust_comp_list'].choices = list_cust_comp
+
+
 
