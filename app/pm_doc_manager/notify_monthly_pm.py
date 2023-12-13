@@ -136,6 +136,7 @@ def notify_monthly_pm_to_admin(is_only_admin):
         ap.project_name as "ชื่อโครงการ",
         TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",
         TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+        TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "เลื่อนวันสุดท้ายที่ทำ",
         pm.remark as  "งวดPM",
         ae.employee_name as "หัวหน้าทีม",
         (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Engineer"
@@ -175,7 +176,9 @@ def notify_monthly_pm_to_admin(is_only_admin):
                  (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
                   (select  model_name from app_model where id=ai.model_id ) as "Model",
     
-                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",
+                 TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "เลื่อนวันสุดท้ายที่ทำ",
                  pm.remark as  "งวดPM",ae.employee_name as "หัวหน้าทีม",
                  (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
     
@@ -369,7 +372,9 @@ def notify_imcomplete_pm_to_team():
                  (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
                   (select  model_name from app_model where id=ai.model_id ) as "Model",
 
-                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 TO_CHAR(pm.planned_date,'DD Mon YYYY') as "แผนจะทำPM",
+                 TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+                 TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "เลื่อนวันสุดท้ายที่ทำ",
                  pm.remark as  "งวดPM",
                  ae.employee_name as "หัวหน้าทีม",
                  (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
@@ -400,6 +405,9 @@ def notify_imcomplete_pm_to_team():
 
     and  ( pm_item.actual_date is null or pm_item.document_date is null 
            or pm_item.pm_engineer_id is null or  pm_item.document_engineer_id is null  )   
+           
+    and pm.postponed_date is null
+    
            
     and ae.id in (26) 
                                                     
