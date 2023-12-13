@@ -60,6 +60,7 @@ class ProjectForm(forms.ModelForm):
         fields ='__all__'
         widgets = {
             'project_name': forms.TextInput(attrs={'size':100}),
+            'pm_des': forms.TextInput(attrs={'size': 50}),
             'project_start': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
             'project_end': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
         }

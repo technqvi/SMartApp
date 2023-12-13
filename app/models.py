@@ -179,6 +179,9 @@ class Project(models.Model):
     customer_po = models.CharField('Cust-PO', max_length=255, null=True, blank=True)
     contract_no = models.CharField('Contract-NO/Reference', max_length=255, null=True, blank=True)
 
+    has_pm=models.BooleanField("Has PM" ,default=False)
+    pm_des= models.CharField('PM Des', max_length=255, null=True, blank=True,help_text="Describe detail(if it has PM)")
+
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
 
 
@@ -555,6 +558,9 @@ class PreventiveMaintenance(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Project')
     planned_date = models.DateField(verbose_name='PM Plan(Month)',help_text='The first day of the month e.g. 1/12/2022')
     ended_pm_date =models.DateField(verbose_name='End PM(Day)',help_text='The last day of the month e.g. 31/12/2022' )
+
+    postponed_date = models.DateField(verbose_name='Postpone PM', null=True, blank=True)
+
     remark = models.CharField('PM Period', max_length=255,help_text=' e.g. 1/2 ,2/4')
     team_lead = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='team_lead_engineer' ,
                                           verbose_name='Team Lead')
@@ -567,6 +573,8 @@ class PreventiveMaintenance(models.Model):
     contact_telephone = models.CharField('Telephone', max_length=50,default='')
     site_branch = models.CharField('Site/Branch', max_length=255,null=True, blank=True)
     equipment_location=models.CharField('Equipment Location', max_length=255,null=True, blank=True)
+
+
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
 
@@ -597,6 +605,8 @@ class PM_Inventory(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
 
     is_pm=models.BooleanField(default=True, verbose_name="Is PM")
+
+
 
 
 

@@ -11,6 +11,8 @@
         <tr>
 
             <th scope="col">Planed Date</th>
+                        <th scope="col">End Date</th>
+            <th scope="col">Postponse Date</th>
             <th scope="col">Period</th>
              <th scope="col">Team Lead</th>
                <th scope="col">Engineer</th>
@@ -20,6 +22,8 @@
         <tr style="background:palegreen">
 
             <td>{{ pmInfo.planned_date | date:"d M Y" }}</td>
+            <td>{{ pmInfo.ended_pm_date | date:"d M Y" }}</td>
+            <td>{{ pmInfo.postponed_date | date:"d M Y" }}</td>
             <td>{{ pmInfo.remark }}</td>
             <td> {{ pmInfo.team_lead |default_if_none:""}}</td>
              <td> {{ pmInfo.engineer |default_if_none:"" }}</td>
@@ -35,7 +39,7 @@
             <th scope="col">Telephone</th>
              <th scope="col">Site/Branch</th>
             <th scope="col">Equipment Location</th>
-
+  <th scope="col"></th>
 
         </tr>
         <tr style="background:palegreen">
@@ -44,7 +48,7 @@
             <td>{{ pmInfo.contact_telephone }}</td>
             <td> {{ pmInfo.site_branch |default_if_none:"" }}</td>
             <td>{{ pmInfo.equipment_location |default_if_none:"" }}</td>
-
+ <td></td>
         </tr>
 
     </table>
@@ -67,15 +71,14 @@
                         <div class="col-md-3">{{ form.customer_company | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_name | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_telephone | as_crispy_field }}</div>
-                         <div class="col-md-3">
-                                  &nbsp;&nbsp;
 
-                       </div>
                     </div>
                     <div class="row">
                   <div class="col-md-3">{{ form.site_branch | as_crispy_field }} </div>
                      <div class="col-md-3">  {{ form.equipment_location | as_crispy_field }}</div>
-                      <div class="col-md-6">
+                    <div class="col-md-3">  {{ form.postponed_date | as_crispy_field }}</div>
+
+                      <div class="col-md-3">
                           {% if request.user|has_group:"site-manager" %}
                                <input type="submit" value="Save" class="btn btn-success"
                                    onclick="return confirm('Do you want to save?')">

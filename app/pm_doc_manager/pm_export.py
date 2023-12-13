@@ -13,6 +13,9 @@ select ap.enq_id as "ENQ" ,ac.company_full_name as "Company",ap.project_name as"
 TO_CHAR(ap.project_start,'DD Mon YYYY') as "Start",TO_CHAR(ap.project_end,'DD Mon YYYY') as "End",
 ap.customer_po as "Customer PO",ap.contract_no as "Contract-No Reference",
 
+            ap.has_pm as "Has PM"
+            ,ap.pm_des as "PM Des",
+
 ai.serial_number as "Serial",
 (select  productype_name from app_product_type where id=ai.product_type_id ) as "ProudctType",
 (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
@@ -63,11 +66,18 @@ def export_pm_summary_by_company_project(listIDs):
 
             TO_CHAR(ap.project_start,'DD Mon YYYY') as "Start",TO_CHAR(ap.project_end,'DD Mon YYYY') as "End",
             ap.customer_po as "Customer PO",ap.contract_no as "Contract-No Reference",
+            
+            ap.has_pm as "Has PM"
+            ,ap.pm_des as "PM Des",
 
 
             TO_CHAR(pm.planned_date,'Mon YYYY') as "PM Plan Date", 
             TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "PM Ended Date",
+                        
            pm.remark as  "PM Period",
+            TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "PM Postpone Date",
+            
+
            (select count(*) from app_pm_inventory where pm_master_id=pm.id and is_pm=True ) as "PMItems",
            (select count(*) from app_pm_inventory where pm_master_id=pm.id and is_pm=False ) as "No-PMItems",
            (select count(*) from app_pm_inventory where pm_master_id=pm.id   ) as "Total Inventories"
@@ -91,6 +101,8 @@ def export_pm_summary_by_company_project(listIDs):
       df = pd.DataFrame(data=pmList)
 
       return df
+
+
 def export_pm_plan(listIDs):
     pmList = []
     with connection.cursor() as cursor:
@@ -98,9 +110,12 @@ def export_pm_plan(listIDs):
         select ac.company_full_name as "ชื่อลูกค้า",
        ap.contract_no as "เลขที่สัญญา",ap.enq_id as "ENQ" ,
        ap.project_name as "ชื่อโครงการ",
+       ap.has_pm as "มีการทำ PM"
+      ,ap.pm_des as "รายละเอียด PM",
        TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",
        TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
        pm.remark as  "งวดPM",
+        TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "เลื่อนวันสุดท้ายที่ทำPM",
        ae.employee_name as "หัวหน้าทีม",
        (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Engineer"
 
@@ -125,13 +140,17 @@ def export_pm_iventory_item(itemIDs):
         sql = """
  select  ac.company_full_name as "ชื่อลูกค้า",
  ap.contract_no as "เลขที่สัญญา",ap.enq_id as "ENQ" , ap.project_name as "ชื่อโครงการ",
+        ap.has_pm as "มีการทำ PM"
+      ,ap.pm_des as "รายละเอียด PM",
 
              ai.serial_number as "Serial",
              (select  productype_name from app_product_type where id=ai.product_type_id ) as "ProudctType",
              (select  brand_name from app_brand where id=ai.brand_id ) as "Brand",
               (select  model_name from app_model where id=ai.model_id ) as "Model",
 
-             TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+             TO_CHAR(pm.planned_date,'Mon YYYY') as "แผนจะทำPM",
+             TO_CHAR(pm.ended_pm_date,'DD Mon YYYY') as "วันสุดท้ายที่ทำPM",
+             TO_CHAR(pm.postponed_date,'DD Mon YYYY') as "เลื่อนวันสุดท้ายที่ทำPM",
              pm.remark as  "งวดPM",ae.employee_name as "หัวหน้าทีม",
              (select emp.employee_name emp from app_employee emp where emp.id=pm.engineer_id ) as "Planed Engineer",
 

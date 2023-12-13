@@ -20,6 +20,8 @@ def report_project(listIDs):
            (select count(*) from app_incident where inventory_id in
              (select id from app_inventory where app_inventory.project_id=ap.id )
            ) as "Total Incidents"
+           ,ap.has_pm as "Has PM"
+           ,ap.pm_des as "PM Des"
 
 
        from app_project ap

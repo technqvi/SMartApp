@@ -58,7 +58,7 @@ class ProjectFilter(django_filters.FilterSet):
 
     class Meta:
         model = Project
-        fields = ['is_dummy']
+        fields = ['is_dummy','has_pm']
     def __init__(self, *args, author=None, **kwargs):
       super().__init__(*args, **kwargs)
       self.form.initial['is_dummy'] = 'No'

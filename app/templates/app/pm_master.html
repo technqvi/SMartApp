@@ -41,22 +41,18 @@
                         <div class="col-md-3">{{ form.customer_company | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_name | as_crispy_field }}</div>
                         <div class="col-md-3">{{ form.contact_telephone | as_crispy_field }}</div>
-                         <div class="col-md-3">
-                                  &nbsp;&nbsp;
 
-                       </div>
                     </div>
                     <div class="row">
                   <div class="col-md-3">{{ form.site_branch | as_crispy_field }} </div>
                      <div class="col-md-3">  {{ form.equipment_location | as_crispy_field }}</div>
                       <div class="col-md-3">
-                          {% if request.user|has_group:"site-manager" %}
-                               <input type="submit" value="Save" class="btn btn-success"
-                                   onclick="return confirm('Do you want to save?')">
-                          {% endif %}
+                          {{ form.postponed_date | as_crispy_field }}
                       </div>
                     <div class="col-md-3">
                           {% if request.user|has_group:"site-manager" %}
+                                  <input type="submit" value="Save" class="btn btn-success"
+                                   onclick="return confirm('Do you want to save?')">&nbsp;&nbsp;&nbsp;
                            <a href="{% url 'manage_pm' projectInfo.id 0 %}" class="btn btn-success">Reset</a>
                           {% endif %}
                       </div>
@@ -74,8 +70,9 @@
             <tr>
                 <th scope="col">Planed Date</th>
                 <th scope="col">End Date</th>
+                <th scope="col">Postponse Date</th>
                 <th scope="col">PM Period</th>
-                <th scope="col">Customer</th>
+{#                <th scope="col">Customer</th>#}
                 <th scope="col">Team Lead</th>
                 
                 <th scope="col">Delete</th>
@@ -91,12 +88,13 @@
                 <tr>
                   <td>{{ item.planned_date | date:"M Y" }}</td>
                   <td>{{ item.ended_pm_date | date:"d M Y"  }}</td>
+                <td>{{ item.postponed_date | date:"d M Y"  }}</td>
                     <td>
                         {{ item.remark }}
                     </td>
-                    <td>
-                        {{ item.customer_company }}
-                    </td>
+{#                    <td>#}
+{#                        {{ item.customer_company }}#}
+{#                    </td>#}
                     <td>
                         {{ item.team_lead |default_if_none:"" }}
                     </td>

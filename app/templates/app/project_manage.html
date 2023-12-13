@@ -19,14 +19,15 @@
                 <div class='row'>
                     <div class='col-md-3'>  {{ form.project_start | as_crispy_field }}</div>
                     <div class='col-md-3'>{{ form.project_end | as_crispy_field }}</div>
-                    <div class='col-md-3'>{{ form.customer_po | as_crispy_field }}</div>
-                    <div class='col-md-3'>{{ form.contract_no | as_crispy_field }}</div>
-
+                    <div class='col-md-2'>{{ form.has_pm | as_crispy_field }}</div>
+                    <div class='col-md-4'> {{ form.pm_des | as_crispy_field }}</div>
 
                 </div>
-                <div class='row text-center'>
-                    <br>
-                    <div class="col-md-12 center-block">
+
+                <div class='row'>
+                    <div class='col-md-3'>{{ form.customer_po | as_crispy_field }}</div>
+                    <div class='col-md-3'>{{ form.contract_no | as_crispy_field }}</div>
+                    <div class='col-md-6 center-block'>
                         {% if request.user|has_group:"site-manager" %}
                             <a href="{% url 'manage_project' %}" class="btn btn-success">New Project</a>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -36,7 +37,6 @@
                     </div>
 
                 </div>
-
             </div>
         </div>
     </form>
@@ -51,15 +51,14 @@
                 <div class='row'>
 
                     <div class='col-md-3'>   {{ projectFilter.form.company | as_crispy_field }}</div>
-                    <div class='col-md-3'>   {{ projectFilter.form.enq_id | as_crispy_field }}</div>
+                    <div class='col-md-2'>   {{ projectFilter.form.enq_id | as_crispy_field }}</div>
                     <div class='col-md-3'>   {{ projectFilter.form.project | as_crispy_field }}</div>
-                    <div class='col-md-3'>   {{ projectFilter.form.is_dummy | as_crispy_field }}
-                                <input type="checkbox" id="expired_project" name="expired_project">
+                    <div class='col-md-2'>   {{ projectFilter.form.has_pm| as_crispy_field }}</div>
+                    <div class='col-md-2'>
+                        {{ projectFilter.form.is_dummy | as_crispy_field }}
+                        <input type="checkbox" id="expired_project" name="expired_project">
                         <label for="expired_project">Include Expiration</label>
                     </div>
-{#                    <div class='col-md-2'>#}
-{#            #}
-{#                    </div>#}
 
                 </div>
                 <div class='row'>
@@ -75,9 +74,12 @@
     {% if request.user|has_group:"site-manager" %}
         <div style="text-align: right">
             {% if  projectList  and isNotEmplyQuery %}
-                <a href="{% url 'export_project' %}" class="btn btn-info"  onclick="return confirm('Do you want to export projects as an excel file ?')" >Export Project </a>
+                <a href="{% url 'export_project' %}" class="btn btn-info"
+                   onclick="return confirm('Do you want to export projects as an excel file ?')">Export Project </a>
             {% endif %}
-            <a href="{% url 'export_all_project' %}" class="btn btn-info"  onclick="return confirm('Do you want to export all projects  as an excel file ?')" >Export All Projects</a>
+            <a href="{% url 'export_all_project' %}" class="btn btn-info"
+               onclick="return confirm('Do you want to export all projects  as an excel file ?')">Export All
+                Projects</a>
         </div>
     {% endif %}
 
@@ -95,8 +97,9 @@
                 <th scope="col"> Delete</th>
                 <th scope="col">Update & View Project</th>
                 <th scope="col">Add & View Inventory</th>
-                <th scope="col">Copy Inventory<br><u style="background-color: #5cb85c">WarrantyDate-EveryItem</u></th>
-                <th scope="col">Copy Inventory<br><u style="background-color:#46b8da">WarrantyDate-FirstItem</u></th>
+                <th scope="col">Copy Inventory<br><u style="background-color: #5cb85c">EveryItem</u></th>
+                <th scope="col">Copy Inventory<br><u style="background-color:#46b8da">FirstItem</u></th>
+                <th scope="col">Is PM</th>
                 <th scope="col">Total PM</th>
                 <th scope="col">Operate PM</th>
             </tr>
@@ -104,25 +107,7 @@
             <tbody>
             {% for project in projectList %}
                 <tr>
-                    {#                    <td>#}
-                    {#                        <div class="dropdown">#}
-                    {#                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"#}
-                    {#                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                    {#                                Click Menu#}
-                    {#                            </button>#}
-                    {#                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
-                    {#                                <a class="dropdown-item" href="{% url 'manage_project' project.id %}">a</a>#}
-                    {#                                <a class="dropdown-item" href="{% url 'add_inventory' project.id %}">b</a>#}
-                    {#                                <a class="dropdown-item" href="{% url 'manage_pm' project.id 0 %}">Manage PM</a>#}
-                    {#                                <a class="dropdown-item"#}
-                    {#                                   href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=1" target="_blank">Copy#}
-                    {#                                    Inventory(EveryItem)</a>#}
-                    {#                                <a class="dropdown-item"#}
-                    {#                                   href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=0" target="_blank">Copy#}
-                    {#                                    Inventory(FirstItem)</a>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                    </td>#}
+
                     <td>{{ project.enq_id }}</td>
                     <td>{{ project.company.company_name }}</td>
                     <td>{{ project.project_name }}</td>
@@ -161,6 +146,9 @@
                                    class="btn btn-link" target="_blank">Click</a>
 
                             {% endif %}
+                        </td>
+                        <td>
+                            {{ project.has_pm }}
                         </td>
                         <td>
                             {{ project.total_pm_plans }}

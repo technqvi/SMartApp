@@ -321,14 +321,13 @@ def copy_pm_inventory(request,pm_id):
 
     # pm is used to copy the inventory
     pm_obj = get_object_or_404(PreventiveMaintenance, pk=pm_id)
-
-    # new pm
-    form = PM_MasterForm()
     listItem = pm_obj.pm_inventory_set.filter()
 
     if request.method == "POST":
         form = PM_MasterForm(request.POST)
         if form.is_valid():
+
+
             new_pm_obj = form.save(commit=False)
 
             new_pm_obj.project_id = pm_obj.project_id
@@ -342,18 +341,24 @@ def copy_pm_inventory(request,pm_id):
         else:
                 messages.error(request, form.errors)
     else: # Get
-        listSubComp=SubCompany.objects.filter( head_company_id=pm_obj.project.company.id  )
+        listSubComp = SubCompany.objects.filter(head_company_id=pm_obj.project.company.id)
 
+        form = PM_MasterForm(
+            initial={
+                'customer_company':pm_obj.customer_company.id,
+                'team_lead':pm_obj.team_lead.id,
+                'engineer':pm_obj.engineer.id,
+                'contact_name':pm_obj.contact_name,
+                'contact_telephone':pm_obj.contact_telephone,
+                'site_branch':pm_obj.site_branch,
+                'equipment_location':pm_obj.equipment_location
+            })
         form.fields['customer_company'].queryset=listSubComp
-        form.fields['customer_company'].value=pm_obj.customer_company.id
         form.fields['team_lead'].queryset = Employee.objects.filter(is_inactive=False).order_by('-is_team_lead','employee_name')
-        form.fields['team_lead'].value=pm_obj.team_lead
-
-        form.fields['engineer'].value = pm_obj.engineer
+        # form.fields['team_lead'].value=pm_obj.team_lead
         form.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
+        # form.fields['engineer'].value = pm_obj.engineer
 
-        form.fields['contact_name'].value = pm_obj.contact_name
-        form.fields['contact_telephone'].value = pm_obj.contact_telephone
 
     context = {'pmInfo':pm_obj,'form': form,'inventoryPMList':listItem.order_by('-is_pm')}
     return render(request, "app/pm_copy_inventory.html", context)
