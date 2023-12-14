@@ -347,7 +347,7 @@ def copy_pm_inventory(request,pm_id):
             initial={
                 'customer_company':pm_obj.customer_company.id,
                 'team_lead':pm_obj.team_lead.id,
-                'engineer':pm_obj.engineer.id,
+                'engineer':pm_obj.engineer.id if pm_obj.engineer is not None else None,
                 'contact_name':pm_obj.contact_name,
                 'contact_telephone':pm_obj.contact_telephone,
                 'site_branch':pm_obj.site_branch,
