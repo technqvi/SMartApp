@@ -3,27 +3,107 @@
 {#https://forum.djangoproject.com/t/nested-table-not-show-in-outer-table-in-html/6506#}
 {% load auth_extras %}
 {% block content %}
-    Company &nProject <br>
-    Inventory : <br>
-    Incident : <br>
+    <h1>Incident Detail : {{ incident.incident_no }}</h1>
+    <h3>Basic Info : Customer & Project & Inventory</h3>
+    <table class="table table-striped table-hover table-condensed">
+        <tr>
+            <th scope="col">Company Name</th>
+            <th scope="col">ENQ ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+        </tr>
+        <tr style="background:#93c6ef">
+            <td>{{ incident.inventory.project.company }}</td>
+            <td>{{ incident.inventory.project.enq_id }}</td>
+            <td>{{ incident.inventory.project.project_name }}</td>
+            <td>{{ incident.inventory.project.project_start | date:"d M Y" }}</td>
+            <td>{{ incident.inventory.project.project_end | date:"d M Y" }}</td>
+
+        </tr>
+    </table>
+
+    <table class="table table-striped table-hover table-condensed">
+        <tr>
+            <th scope="col">Serial No</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Type</th>
+            <th scope="col">Warranty Date/</th>
+            <th scope="col">SLA</th>
+        </tr>
+        <tr style="background:#93c6ef">
+            <td>{{ incident.inventory.serial_number }}</td>
+            <td>{{ incident.inventory.brand }}</td>
+            <td>{{ incident.inventory.model }}</td>
+             <td>{{ incident.inventory.product_type }}</td>
+            <td>
+                {{ incident.inventory.customer_warranty_start | date:"d M Y" }}
+                -
+                {{ incident.inventory.customer_warranty_end | date:"d M Y" }}
+            </td>
+            <td>
+               {{ incident.inventory.customer_sla }}
+            </td>
+
+        </tr>
+    </table>
+<h3>Incident Detail</h3>
+<table class="table table-striped table-hover table-condensed">
+     <tr>
+         <td class="well"><h5>Incident-Date</h5>
+         {{ incident.incident_datetime | date:"d/M/Y H:m" }}
+         </td>
+         <td class="well"><h5>Response Date/Time </h5>
+           {{  incident.incident_problem_start  | date:"d/M/Y H:m" }}
+         </td>
+         <td class="well"><h5>Resolved Date/Time </h5>
+           {{ incident.incident_problem_end   | date:"d/M/Y H:m" }}
+         </td>
+         <td class="well"><h5>Incident-Closed-Date  </h5>
+           {{  incident.incident_close_datetime | date:"d/M/Y H:m" }}
+         </td>
+     </tr>
+<tr>
+
+      <td class="well"><h5>Incident Type</h5>
+         {{ incident.incident_type  }}
+         </td>
+         <td class="well"><h5>Service Type</h5>
+        {{ incident.service_type  }}
+         </td>
+      <td class="well"><h5>Status</h5>
+         {{ incident.incident_status  }}
+         </td>
+     <td class="well"><h5>Engineer Incident Owner</h5>
+        {{ incident.incident_owner  }}
+         </td>
+
+</tr>
+</table>
 
     <hr>
     <h></h>
-    Subject:  <pre style="background-color:darkgray"> {{ incident.incident_subject }}  </pre>
-    Description:
+    <h3>Subject</h3>
+
+    <pre style="background-color:lightgreen;font-size: medium"> {{ incident.incident_subject }}  </pre>
+
+    <h3>Description</h3>
     <pre style="background-color:#bbccdd"> {{ incident.incident_description  |linebreaksbr }} </pre> <br>
 
     {% if detailList %}
+     <h3>List Solution Detail</h3>
 
         <table class="table table-striped table-hover table-condensed">
 
             {% for item in detailList %}
                 <tr>
-                    <th scope="col">{{ item.service_team }}</th>
-                    <th scope="col">{{ item.employee }}</th>
+                    <th scope="col">Team: {{ item.service_team }}</th>
+                    <th scope="col">Engineer: {{ item.employee }}</th>
+                <th scope="col">Time To Service: {{ item.task_start | date:"d/M/Y H:m" }} - {{ item.task_end | date:"d/M/Y H:m" }} </th>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                         <pre style="background-color:wheat"> {{ item.workaround_resolution }} </pre>
                     </td>
                 </tr>
