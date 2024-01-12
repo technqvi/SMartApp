@@ -1,142 +1,167 @@
-    {% extends "app/layout.html" %}
+{% extends "app/layout.html" %}
 
 
-    {% block content %}
-        <style>
-            th.incident {
-                padding: 15px;
-                border: 2px solid black;
-                border-color: darkgreen;
-                border-right: 2px solid black;
-                background-color: lightblue
-            }
+{% block content %}
+    <style>
+        th.incident {
+            padding: 15px;
+            border: 2px solid black;
+            border-color: darkgreen;
+            border-right: 2px solid black;
+            background-color: lightblue
+        }
 
-            th.inventory {
-                padding: 15px;
-                border: 2px solid black;
-                border-color: darkgreen;
-                border-right: 2px solid black;
-                background-color: palegreen;
-            }
-        </style>
+        th.inventory {
+            padding: 15px;
+            border: 2px solid black;
+            border-color: darkgreen;
+            border-right: 2px solid black;
+            background-color: palegreen;
+        }
+    </style>
 
-        {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
 
-            <div class="well well-lg">
-                <h1>SMart App</h1>
-                {% if  site_in_control %}
-                    <p class="lead">{{ user.first_name }} {{ user.last_name }} 's Dashboard in {{ current_year }}</p>
-                {% endif %}
-            </div>
-              <div class="well well-sm">
-                <h4><a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/555ac954-ef60-4a70-95a8-a1b7cdbc7079/ReportSection" target="_blank">Click PowerBI SMartBI-Report (For Customer)</a></h4>
+        <div class="well well-lg">
+            <h1>SMart App</h1>
+            {% if  site_in_control %}
+                <p class="lead">{{ user.first_name }} {{ user.last_name }} 's Dashboard in {{ current_year }}</p>
+            {% endif %}
+        </div>
 
-            </div>
-
+        {% if user.is_staff %}
             <div class="well well-sm">
-                <h4><a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/e4ef212a-208c-4bf3-8066-03d9c481ad67/ReportSection" target="_blank">Click PowerBI SMartDashboard-Report</a></h4>
+                <h4>
+                    <a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/4ab7c817-8712-42e7-936c-a3e2fff7150c/ReportSection"
+                       target="_blank">SMart PM Report (Preview)</a></h4>
 
             </div>
+        {% endif %}
+
+        <div class="well well-sm">
+            <h4>
+                <a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/555ac954-ef60-4a70-95a8-a1b7cdbc7079/ReportSection"
+                   target="_blank">Click PowerBI SMartBI-Report (For Customer)</a></h4>
+
+        </div>
+
+        <div class="well well-sm">
+            <h4>
+                <a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/e4ef212a-208c-4bf3-8066-03d9c481ad67/ReportSection"
+                   target="_blank">Click PowerBI SMartDashboard-Report</a></h4>
+
+        </div>
 
 
-             <div class="well well-sm">
-                <h4><a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/b3e2036b-5b03-4e3e-b039-a7dc1f79070b/ReportSection" target="_blank">Click Predict Daily-Incident Over The Next 5 Days</a></h4>
+        <div class="well well-sm">
+            <h4>
+                <a href="https://app.powerbi.com/groups/9e2bf31d-73e3-4424-b0e9-63d887552a68/reports/b3e2036b-5b03-4e3e-b039-a7dc1f79070b/ReportSection"
+                   target="_blank">Click Predict Daily-Incident Over The Next 5 Days</a></h4>
 
-            </div>
+        </div>
 
 
-            <br>
 
-            {% if site_in_control %}
 
-                <form method="GET" action=".">
-                    <div class="well well-sm">
-                        <div class='row'>
 
-                            <div class='col-md-3'>
-                                <label for="Company">Company</label>
-                                <select id="select_company" class="form-control" name="select_company">
-                                    {% for comp in my_sites %}
-                                        <option value="{{ comp.id }}">{{ comp.company_name }} - {{ comp.company_full_name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+        <br>
 
-                            <div class='col-md-3'>
-                                <label for="Year">Year(For only incident)</label>
-                                <select id="select_year" class="form-control" name="select_year">
-                                    {% for year in my_years %}
-                                        <option value="{{ year}}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+        {% if site_in_control %}
 
-                            <div class='col-md-3'>
-                                <label for="Month">Month (For only incident)</label>
-                                <select id="select_month" class="form-control" name="select_month">
-                                    <option value="0" selected>All Months</option>
-                                    <option value="1">Jan</option>
-                                    <option value="2">Feb</option>
-                                    <option value="3">Mar</option>
-                                    <option value="4">Apr</option>
-                                    <option value="5">May</option>
-                                    <option value="6">Jun</option>
-                                    <option value="7">Jul</option>
-                                    <option value="8">Aug</option>
-                                    <option value="9">Sep</option>
-                                    <option value="10">Oct</option>
-                                    <option value="11">Nov</option>
-                                    <option value="12">Dec</option>
+            <form method="GET" action=".">
+                <div class="well well-sm">
+                    <div class='row'>
 
-                                </select>
+                        <div class='col-md-3'>
+                            <label for="Company">Company</label>
+                            <select id="select_company" class="form-control" name="select_company">
+                                {% for comp in my_sites %}
+                                    <option value="{{ comp.id }}">{{ comp.company_name }}
+                                        - {{ comp.company_full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                            </div>
-                            <div class='col-md-3'>
-                                <button type="submit" class="btn btn-primary">Filter By Company & Month</button>
-                                <br>
-                            </div>
+                        <div class='col-md-3'>
+                            <label for="Year">Year(For only incident)</label>
+                            <select id="select_year" class="form-control" name="select_year">
+                                {% for year in my_years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
+                        <div class='col-md-3'>
+                            <label for="Month">Month (For only incident)</label>
+                            <select id="select_month" class="form-control" name="select_month">
+                                <option value="0" selected>All Months</option>
+                                <option value="1">Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">Jun</option>
+                                <option value="7">Jul</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+
+                            </select>
+
+                        </div>
+                        <div class='col-md-3'>
+                            <button type="submit" class="btn btn-primary">Filter By Company & Month</button>
+                            <br>
                         </div>
 
                     </div>
-                </form>
-                <h3>Incidents of {{ title_site }} in {{ title_time }} </h3>
-                <div style="background-color: lightgoldenrodyellow"><h5>You need to select company in order to link on status to incident detail</h5></div>
-                <h4>
-                    <table>
-                        <tr>
-                            {% for item in countStatusList %}
-                                <th class="incident">
 
-                                    {% if siteID and  item.id != 0 %}
-                                       <a target="_blank" href="{% url 'manage_incident' %}?company={{ siteID }}&incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}&incident_status={{ item.id }}">
-                                    {% elif siteID and  item.id == 0%}
-                                         <a target="_blank" href="{% url 'manage_incident' %}?company={{ siteID }}&incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}">
+                </div>
+            </form>
+            <h3>Incidents of {{ title_site }} in {{ title_time }} </h3>
+            <div style="background-color: lightgoldenrodyellow"><h5>You need to select company in order to link on
+                status to incident detail</h5></div>
+            <h4>
+                <table>
+                    <tr>
+                        {% for item in countStatusList %}
+                            <th class="incident">
+
+                                {% if siteID and  item.id != 0 %}
+                                    <a target="_blank"
+                                       href="{% url 'manage_incident' %}?company={{ siteID }}&incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}&incident_status={{ item.id }}">
+                                {% elif siteID and  item.id == 0 %}
+                                    <a target="_blank"
+                                       href="{% url 'manage_incident' %}?company={{ siteID }}&incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}">
+                                {% else %}
+
+                                    {% if item.id > 0 %}
+                                        <a target="_blank"
+                                           href="{% url 'manage_incident' %}?incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}&incident_status={{ item.id }}">
                                     {% else %}
-
-                                         {% if item.id > 0  %}
-                                         <a target="_blank" href="{% url 'manage_incident' %}?incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}&incident_status={{ item.id }}">
-                                         {% else %}
-                                             <a target="_blank" href="{% url 'manage_incident' %}?incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}">
-                                          {% endif %}
-
+                                        <a target="_blank"
+                                           href="{% url 'manage_incident' %}?incident_datetime__gt={{ incident_date_from }}&incident_datetime__lt={{ incident_date_end }}">
                                     {% endif %}
-                                     {{ item.incident_status_name }}= {{ item.count }}</a>
-                                </th>
-                            {% endfor %}
-                        </tr>
-                    </table>
-                </h4>
-                <br>
 
+                                {% endif %}
+                                {{ item.incident_status_name }}= {{ item.count }}</a>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </h4>
+            <br>
 
-            {% endif %}
-
-
-        {% else %}
-            <H2>Welcome, new user. Please log in.</H2>
 
         {% endif %}
 
 
-    {% endblock %}
+    {% else %}
+        <H2>Welcome, new user. Please log in.</H2>
+
+    {% endif %}
+
+
+{% endblock %}

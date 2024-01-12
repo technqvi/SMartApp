@@ -10,6 +10,26 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 import datetime
 
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+import datetime
+
+# python an't compare offset-naive and offset-aware datetimes
+#validators=[validate_datetime_field_1year]
+def validate_datetime_field_1year(value):
+    if type(value) is datetime.datetime or  type(value) is datetime.date:
+        if type(value) is datetime.date:
+            value=datetime.datetime.combine(value, datetime.time())
+        day_in_one_year_from_now = datetime.datetime.now() + datetime.timedelta(days=366)
+        first_day=datetime.datetime.strptime(settings.FIRST_DAY_ALLOWED_TO_FILL_IN_FORM,"%Y-%m-%d")
+        if value<first_day or value>day_in_one_year_from_now:
+            raise ValidationError(
+                _(f'1 Year limit :Not allow to fill in date value <{first_day}  or >{day_in_one_year_from_now}'),
+                params={'value': value},
+            )
+
+
+
 class Manager(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,unique=True)
     #user = models.OneToOneField(get_user_model(), null=True, on_delete=models.CASCADE)
@@ -556,10 +576,13 @@ class ReportLevelDefinition(models.Model):
 
 class PreventiveMaintenance(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Project')
-    planned_date = models.DateField(verbose_name='PM Plan(Month)',help_text='The first day of the month e.g. 1/12/2022')
-    ended_pm_date =models.DateField(verbose_name='End PM(Day)',help_text='The last day of the month e.g. 31/12/2022' )
+    planned_date = models.DateField(verbose_name='PM Plan(Month)'
+                                    ,help_text='The first day of the month e.g. 1/12/2022'
+                                    ,validators=[validate_datetime_field_1year])
+    ended_pm_date =models.DateField(verbose_name='End PM(Day)',help_text='The last day of the month e.g. 31/12/2022'
+                                    ,validators=[validate_datetime_field_1year])
 
-    postponed_date = models.DateField(verbose_name='Postpone PM', null=True, blank=True)
+    postponed_date = models.DateField(verbose_name='Postpone PM', null=True, blank=True,validators=[validate_datetime_field_1year])
 
     remark = models.CharField('PM Period', max_length=255,help_text=' e.g. 1/2 ,2/4')
     team_lead = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='team_lead_engineer' ,
@@ -589,12 +612,12 @@ class PM_Inventory(models.Model):
     pm_master= models.ForeignKey(PreventiveMaintenance, on_delete=models.CASCADE, verbose_name='PM Master')
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, verbose_name='Inventory')
 
-    actual_date = models.DateField(verbose_name='ActualDate To PM', null=True, blank=True) # actually we  performed PM at any given date
+    actual_date = models.DateField(verbose_name='ActualDate To PM', null=True, blank=True,validators=[validate_datetime_field_1year]) # actually we  performed PM at any given date
     pm_engineer = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='pm_engineer' ,verbose_name='PM Engineer',null=True, blank=True)
     call_number = models.CharField('Call Number', max_length=50, null=True, blank=True)
 
 
-    document_date = models.DateField(verbose_name='DocumentDate To PM', null=True,
+    document_date = models.DateField(verbose_name='DocumentDate To PM', null=True,validators=[validate_datetime_field_1year],
                                      blank=True)  # actually customer accept PM at any given date
     document_engineer = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='document_engineer',
                                           verbose_name='Document Engineer', null=True, blank=True)

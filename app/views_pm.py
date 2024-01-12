@@ -335,8 +335,11 @@ def copy_pm_inventory(request,pm_id):
 
             # way insert bulk , copy all item from master including  no-pm
             listNewCopiedItems=[ PM_Inventory(pm_master=new_pm_obj,is_pm=item.is_pm,inventory=item.inventory,) for item in listItem ]
+
             if len(listNewCopiedItems)>0:
-                      PM_Inventory.objects.bulk_create( listNewCopiedItems)
+                      #  PM_Inventory.objects.bulk_create( listNewCopiedItems)  # this methond is unable to log in models_logging_change
+                      for pm_item in listNewCopiedItems:
+                          pm_item.save()
             return redirect('manage_pm', project_id=pm_obj.project.id, id=0)
         else:
                 messages.error(request, form.errors)

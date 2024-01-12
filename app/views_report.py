@@ -21,7 +21,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 
 @login_required(login_url='login')
-@manger_and_viewer_engineer_only
+@manger_only
+# @manger_and_viewer_engineer_only
 def search_entry(request):
     context = {}
     return render(request, 'app/search_entry.html', context)
@@ -29,7 +30,8 @@ def search_entry(request):
 
 
 @login_required(login_url='login')
-@manger_and_viewer_engineer_only
+@manger_only
+# @manger_and_viewer_engineer_only
 def search_result(request,incident_id):
     incident= get_object_or_404(Incident, pk=incident_id)
     detailList=incident.incident_detail_set.all()
