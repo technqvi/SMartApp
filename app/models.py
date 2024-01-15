@@ -20,8 +20,13 @@ def validate_datetime_field_1year(value):
     if type(value) is datetime.datetime or  type(value) is datetime.date:
         if type(value) is datetime.date:
             value=datetime.datetime.combine(value, datetime.time())
+        else:
+            value=datetime.datetime(value.year,value.month,value.day)
+            value = datetime.datetime.combine(value, datetime.time())
+
         day_in_one_year_from_now = datetime.datetime.now() + datetime.timedelta(days=366)
         first_day=datetime.datetime.strptime(settings.FIRST_DAY_ALLOWED_TO_FILL_IN_FORM,"%Y-%m-%d")
+
         if value<first_day or value>day_in_one_year_from_now:
             raise ValidationError(
                 _(f'1 Year limit :Not allow to fill in date value <{first_day}  or >{day_in_one_year_from_now}'),
@@ -408,10 +413,11 @@ class Incident(models.Model):
 
     incident_no=models.CharField('Incident-No',max_length=30,unique=True)
 
-    incident_datetime = models.DateTimeField('Incident-Date')
-    incident_close_datetime = models.DateTimeField('Incident-Closed-Date', null=True, blank=True,help_text = "For closed status")
-    incident_problem_start = models.DateTimeField('Response Date/Time')
-    incident_problem_end = models.DateTimeField('Resolved Date/Time', null=True, blank=True)
+    incident_datetime = models.DateTimeField('Incident-Date',validators=[validate_datetime_field_1year])
+    incident_close_datetime = models.DateTimeField('Incident-Closed-Date', null=True, validators=[validate_datetime_field_1year]
+                                                   ,blank=True,help_text = "For closed status")
+    incident_problem_start = models.DateTimeField('Response Date/Time', validators=[validate_datetime_field_1year])
+    incident_problem_end = models.DateTimeField('Resolved Date/Time', null=True, blank=True, validators=[validate_datetime_field_1year])
 
     incident_owner = models.ForeignKey(Employee,on_delete=models.CASCADE,verbose_name='Engineer Incident Owner' )
 
@@ -464,8 +470,8 @@ class Incident_Detail(models.Model):
     service_team= models.ForeignKey(ServiceTeam, on_delete=models.CASCADE, verbose_name='Service Team')
     employee=models.ForeignKey(Employee,on_delete=models.CASCADE,verbose_name='Engineer')
 
-    task_start = models.DateTimeField('Task Start Date')
-    task_end = models.DateTimeField('Task End Date', null=True, blank=True)
+    task_start = models.DateTimeField('Task Start Date',validators=[validate_datetime_field_1year])
+    task_end = models.DateTimeField('Task End Date', null=True, blank=True,validators=[validate_datetime_field_1year])
     workaround_resolution = models.TextField('Resolution Description')
 
 
