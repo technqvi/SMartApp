@@ -267,7 +267,7 @@ class ServiceTeamAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         # yit only ID=1
         if db_field.name == "company":
-            kwargs["queryset"] =Company.objects.filter(company_name__iexact  ='yit')
+            kwargs["queryset"] =Company.objects.filter(is_subcontractor__exact=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 

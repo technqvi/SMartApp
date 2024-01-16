@@ -24,7 +24,7 @@ def validate_datetime_field_1year(value):
             value=datetime.datetime(value.year,value.month,value.day)
             value = datetime.datetime.combine(value, datetime.time())
 
-        day_in_one_year_from_now = datetime.datetime.now() + datetime.timedelta(days=366)
+        day_in_one_year_from_now = datetime.datetime.now() + datetime.timedelta(days=3660)
         first_day=datetime.datetime.strptime(settings.FIRST_DAY_ALLOWED_TO_FILL_IN_FORM,"%Y-%m-%d")
 
         if value<first_day or value>day_in_one_year_from_now:
@@ -266,7 +266,7 @@ class ServiceTeam(models.Model):
     service_team_name=models.CharField('Service Team Name ',max_length=255)
     service_team_telephone = models.CharField('Service Team Telephone', max_length=255, default='-')
     service_team_email = models.CharField('Service Team Email', max_length=150, default='-')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Company Name')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Yip and SubContractor',help_text="Default=Yip - Yip In Tsoi",default=1)
     def __str__(self):
         return f'{self.service_team_name} - {self.company.company_name}'
 

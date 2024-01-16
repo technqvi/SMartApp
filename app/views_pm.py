@@ -451,15 +451,6 @@ def update_pm_inventory(request,pm_id,id=0):
                 if form.is_valid():
                     # Validate date
                     listDateCustomError=[]
-                    #============================================================
-                    # pm_planned_date=pm_obj .planned_date
-                    # actual_date = form.instance.actual_date
-                    # if actual_date is not None and actual_date < pm_planned_date:
-                    #     listDateCustomError.append(f"actual_date:{actual_date} must be greater than or equal planed date:{pm_planned_date}")
-                    # document_date = form.instance.document_date
-                    # if document_date is not None and document_date < pm_planned_date:
-                    #     listDateCustomError.append(f"document_date:{document_date} must be greater than or equal planed date:{pm_planned_date}")
-
                     if len(listDateCustomError)>0:
                         messages.error(request, ' , '.join(listDateCustomError))
                     # ============================================================
@@ -538,21 +529,19 @@ def manage_pm(request, project_id, id=0):
     if msg_check is not None: return HttpResponse(msg_check)
 
     project_obj = get_object_or_404(Project, pk=project_id)
-    myuser = request.user
 
     if request.method == "GET":
         listSubComp=SubCompany.objects.filter( head_company_id=project_obj .company.id )
         if id == 0:  # new detail
-            form = PM_MasterForm()
+            # form = PM_MasterForm(initial={'project': project_obj }) # error
+            form = PM_MasterForm   ()
             form_mode = 'New'
-
             form.fields['team_lead'].queryset = Employee.objects.filter(is_inactive=False).order_by('-is_team_lead', 'employee_name')
             form.fields['engineer'].queryset = Employee.objects.filter(is_inactive=False).order_by('employee_name')
         else:
             obj = get_object_or_404(PreventiveMaintenance, pk=id)
             form = PM_MasterForm(instance=obj)
             form_mode = 'Update'
-
             form.fields['team_lead'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=obj.team_lead_id)).order_by('-is_team_lead','employee_name')
             form.fields['engineer'].queryset = Employee.objects.filter(Q(is_inactive=False) | Q(id=obj.engineer_id)).order_by('employee_name')
 
@@ -566,18 +555,35 @@ def manage_pm(request, project_id, id=0):
             list_inventory = Inventory.objects.filter(project_id=project_obj.id)
             if form.is_valid() and len(list_inventory)>0 :
 
-                pm_master_obj = form.save(commit=False)
-                pm_master_obj.project=project_obj
-                pm_master_obj.save()
+                listDateCustomError = []
+                start_project=project_obj.project_start
+                end_project=project_obj.project_end
+                planned_date = form.instance.planned_date
+                if planned_date < start_project or planned_date > end_project:
+                    listDateCustomError.append(
+                                   f"planned_date:{planned_date} must be between project start:{start_project} and proeject-end:{end_project}")
 
-                list_pm_items=[ PM_Inventory(inventory=item,pm_master=pm_master_obj,is_pm=True) for item in list_inventory ]
-                if len(list_pm_items)>0:
-                  # PM_Inventory.objects.bulk_create( list_pm_items) # batch_size=999
-                  for pm_item_obj in list_pm_items:
-                      pm_item_obj.save()
-                messages.success(request, f'Create PM Plan and {len(list_inventory)} inventories successfully.')
+                ended_pm_date = form.instance.ended_pm_date
+                if ended_pm_date < start_project or ended_pm_date > end_project:
+                    listDateCustomError.append(
+                                   f"ended_pm_date:{ended_pm_date} must be between project start:{start_project} and proeject-end:{end_project}")
 
-                return redirect('manage_pm', project_id=project_id, id=0) #success
+                if len(listDateCustomError) > 0:
+                    messages.error(request, ' and '.join(listDateCustomError))
+                # ============================================================
+                else:
+                    pm_master_obj = form.save(commit=False)
+                    pm_master_obj.project=project_obj
+                    pm_master_obj.save()
+
+                    list_pm_items=[ PM_Inventory(inventory=item,pm_master=pm_master_obj,is_pm=True) for item in list_inventory ]
+                    if len(list_pm_items)>0:
+                      # PM_Inventory.objects.bulk_create( list_pm_items) # batch_size=999
+                      for pm_item_obj in list_pm_items:
+                          pm_item_obj.save()
+                    messages.success(request, f'Create PM Plan and {len(list_inventory)} inventories successfully.')
+
+                    return redirect('manage_pm', project_id=project_id, id=0) #success
             else:
                 messages.error(request, form.errors)
         else:  # save from  edit

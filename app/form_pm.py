@@ -31,7 +31,8 @@ class MyDateInput(forms.DateInput):
 class  PM_MasterForm(forms.ModelForm):
     class Meta:
         model= PreventiveMaintenance
-        exclude = ['project']
+        exclude=['project']
+        # fields ='__all__'
         widgets = {
             'remark': forms.TextInput(attrs={'size': 150}),
             'planned_date': MyDateInput(format=["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"], ),
@@ -42,9 +43,26 @@ class  PM_MasterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        # validate#1
         error_planed_date = validate_start_to_date(cleaned_data, "planned_date", "ended_pm_date")
         if error_planed_date is not None:
             self.add_error("planned_date", ValidationError(error_planed_date))
+
+        # # validate#2
+        if self.instance.id is not None:
+            pm=self.instance
+            project=pm.project
+
+            start_project=project.project_start
+            end_project=project.project_end
+            planned_date=self.cleaned_data['planned_date']
+            if planned_date<start_project or planned_date>end_project:
+                self.add_error("planned_date", f"planned_date:{planned_date} must be between project start:{start_project} and project-end:{end_project}")
+
+            ended_pm_date=self.cleaned_data['ended_pm_date']
+            if ended_pm_date<start_project or ended_pm_date>end_project:
+                self.add_error("ended_pm_date", f"ended_pm_date:{ended_pm_date} must be between project start:{start_project} and project-end:{end_project}")
+
 
     # def __init__(self, *args, **kwargs):
     #     super(PM_MasterForm, self).__init__(*args, **kwargs)
