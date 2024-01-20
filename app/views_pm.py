@@ -524,13 +524,13 @@ def update_pm_inventory(request,pm_id,id=0):
 @login_required(login_url='login')
 @manger_and_viewer_only
 def manage_pm(request, project_id, id=0):
+    opt_name="AddPM"
+    rt=app.user_access.check_user_to_do(request,project_id,opt_name)
+    if isinstance(rt, bool):
+        return HttpResponse(app.utility.message_inaccessible_tasks(request,opt_name))
+    else:
+        project_obj = rt
 
-    msg_check=app.user_access.check_user_to_do(request,project_id,"AddPM")
-    if msg_check is not None: return HttpResponse(msg_check)
-
-    project_obj = get_object_or_404(Project, pk=project_id)
-    # abcxyz
-    # project_obj = get_object_or_404(Project, pk=project_id).objects.select_related("company")
 
     if request.method == "GET":
         listSubComp=SubCompany.objects.filter( head_company_id=project_obj .company.id )

@@ -1,5 +1,9 @@
 from datetime import datetime
 from app.models import Company
+
+def message_inaccessible_tasks(request,operation):
+    return f'<h2>{request.user} are not authorized to {operation} of this company.</h2><b>Contact administrator to add this user to the manager OR engineer table in company</b>'
+
 def list_customer_company(current_user):
 
    #list_cust_company= Company.objects.filter( is_customer=True,id__in=[2,1]).values_list('id','company_name','company_full_name')# ais and yip

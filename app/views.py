@@ -254,6 +254,8 @@ def filter_project(request):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_and_viewer_only
 def manage_project(request, id=0):
+
+
     form_mode = 'NEW'
     if request.method == "GET":
         projectFilter, projectList,isNotEmplyQuery = filter_project(request)
@@ -265,7 +267,12 @@ def manage_project(request, id=0):
             form.fields["company"].queryset = Company.objects.filter(manager__user=request.user, is_customer=True)
             form_mode = 'NEW'
         else:  # edit
-            project = get_object_or_404(Project, pk=id)
+            opt_name= "ManageProject"
+            rt = app.user_access.check_user_to_do(request, id,opt_name)
+            if isinstance(rt, bool):
+                return HttpResponse(app.utility.message_inaccessible_tasks(request, opt_name))
+            else:
+                project = rt
             form = ProjectForm(instance=project)
             form.fields["company"].queryset = Company.objects.filter(manager__user=request.user, is_customer=True)
             form.fields["company"].value = project.company
@@ -534,13 +541,14 @@ def reload_prev_inventory_for_next_one(inventory_obj):
 @manger_and_viewer_only
 def add_inventory(request, proj_id):
 
-    isAccesible=app.user_access.check_user_to_do(request,proj_id,"AddInventory")
-    if isAccesible==False:
-        return HttpResponse(f'<h2>{request.user} are not authorized to manage any items of this company.</h2><b>Contact '
-                            f'administrator to add this user to the manager OR engineer table in company</b>')
 
+    opt_name="AddInventory"
+    rt=app.user_access.check_user_to_do(request,proj_id,opt_name)
+    if isinstance(rt, bool):
+        return HttpResponse(app.utility.message_inaccessible_tasks(request,opt_name))
+    else:
+        project_obj = rt
 
-    project_obj = get_object_or_404(Project, pk=proj_id)
     list_inventory = Inventory.objects.filter(project_id=proj_id).order_by('-id')
 
     # product type brand , model , all item   is loaded because of no additional filter
