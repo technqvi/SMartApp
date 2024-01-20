@@ -7,9 +7,12 @@ from django.urls import path,include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
-
+import debug_toolbar
 
 urlpatterns = [
+
+    path('__debug__/', include(debug_toolbar.urls)),
+
     path('', views.home, name='home'),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),

@@ -143,7 +143,7 @@ class SubCompanyAdmin(admin.ModelAdmin):
 @admin.register(Manager)
 class ManagerAdmin(admin.ModelAdmin):
     actions = None
-    list_display =('manager_nickname','user')
+    list_display =('manager_nickname','user','is_site_manager')
     search_fields = ['manager_nickname','user__first_name','user__last_name']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

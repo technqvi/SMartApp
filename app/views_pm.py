@@ -529,6 +529,8 @@ def manage_pm(request, project_id, id=0):
     if msg_check is not None: return HttpResponse(msg_check)
 
     project_obj = get_object_or_404(Project, pk=project_id)
+    # abcxyz
+    # project_obj = get_object_or_404(Project, pk=project_id).objects.select_related("company")
 
     if request.method == "GET":
         listSubComp=SubCompany.objects.filter( head_company_id=project_obj .company.id )

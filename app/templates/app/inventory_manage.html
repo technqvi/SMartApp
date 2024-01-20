@@ -43,11 +43,11 @@
                 <a href="{% url 'manage_project' %}" class="btn btn-info">Add New Inventory </a>
 
             {% endif %}
-        &nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;{% if request.user|has_group_viewer:"site-manager" %}
             {% if inventoryList  and isNotEmplyQuery %}
                 <a href="{% url 'export_inventory' %}" class="btn btn-info"  onclick="return confirm('Do you want to export inventories as an excel file ?')"  >Export Inventory-Report </a>
             {% endif %}
-
+       {% endif %}
         </div>
 
         <table class="table table-striped table-hover table-condensed">

@@ -24,7 +24,7 @@
     </form>
 
 
-    {% if request.user|has_group:"site-manager" %}
+    {% if request.user|has_group_viewer:"site-manager" %}
         <div style="text-align: right">
             {% if pmList  and isNotEmplyQuery %}
                 <a href="{% url 'export_pm_plan' %}{{ date_between_qstring }}" class="btn btn-info"
