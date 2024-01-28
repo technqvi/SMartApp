@@ -6,10 +6,7 @@ Debug
 Any CPU
 obj
 incident_docs
-settings.py
-settings_adfs_azure.py
-settings_ldap.py
-settings_oauth2_jwt.py
+settings*.py
 /app/genOAuthToken.py
 /app/templates/app/search_entry.html
 YIT-Widecard-2022.pfx
@@ -24,4 +21,5 @@ YIT-Widecard-2022.pfx
 *.pyproj
 *.pyproj.user
 *.sln
+*.docx
 o365_token.txt
