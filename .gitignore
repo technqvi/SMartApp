@@ -6,9 +6,11 @@ Debug
 Any CPU
 obj
 incident_docs
-settings*.py
-/app/genOAuthToken.py
-/app/templates/app/search_entry.html
+settings_azureAD2FA.py
+settings_ldap.py
+settings_oauth2_jwt.py
+genOAuthToken.py
+search_entry.html
 YIT-Widecard-2022.pfx
 .env
 *.lnk
