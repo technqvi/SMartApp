@@ -35,8 +35,10 @@
    - Site Grade Report (Excel)
    - SMartDashboard-Report For Site-Manager (PowerBI)
    - SMartBI For Customer (PowerBI)
- - Machine Learing Prediction (Preview)
-   - Post-Severity Level Prediction (Critical/Normal) and (Critical/Major/Minor/Costmetic)
-   - Daily Incident Forecast Over the next 5 days
+ - Data Analystics & ML/AI on Google PlatForm (Preview)
+   - [Severity Level Prediction (Critical/Normal)](https://github.com/technqvi/SMart-AI/tree/main/Model-TF_DF)
+   - [Daily Incident Forecast Over the next 5 days] (https://github.com/technqvi/SMart-AI/tree/main/DailyIncidentForecast)
+   - [Knowlege-Base Incident and Incident Summarization Powered By Google Search Vertex AI](https://github.com/technqvi/SMartSearch-Summarization)
+   - [Smart Analytics Data Warehouse on BigQuery](https://github.com/technqvi/SMartDataHub-DBToBigQuery)
  - [SMartApp_ScriptDev](https://github.com/technqvi/SMartApp_ScriptDev)
    
