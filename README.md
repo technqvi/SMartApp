@@ -1,5 +1,5 @@
 # About
- SMartApp System  consists of 2 sub systems.
+### SMartApp System  consists of 2 sub systems.
 <img width="750" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a7c06417-2e6a-489b-be2f-574b852c967c">
 <img width="725" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a5875f1a-040a-4947-9546-4b028eba543b">
 
