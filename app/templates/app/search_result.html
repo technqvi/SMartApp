@@ -5,8 +5,9 @@
 {% block content %}
     <h1>
        Incident: {{ incident.incident_no }}
-       <a href="/" target="_blank"
-                           class="btn btn-primary">Click to Solution-Summary For Closed-Incident (Gen-AI)</a>
+       <a  target="_blank" href="{% url 'generate_summarization' incident.id %}"
+                           class="btn btn-primary">Incident-Summary(Gen-AI)</a>
+
     </h1>
     <h3>Basic Info : Customer & Project & Inventory</h3>
     <table class="table table-striped table-hover table-condensed">

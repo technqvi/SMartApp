@@ -11,6 +11,7 @@ from datetime import datetime,timedelta
 from .forms_report import AdvancedReportSearchForm,ReportDateSearchForm
 import app.utility as util
 import pandas as pd
+from django.contrib import messages
 
 from io import BytesIO
 from app.decorators import allowed_users,manger_and_viewer_only,manger_only,staff_admin_only,manger_and_viewer_engineer_only
@@ -19,6 +20,30 @@ from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render, redirect, get_object_or_404
 
+
+@login_required(login_url='login')
+@manger_only
+# @manger_and_viewer_engineer_only
+def generate_summarization(request,incident_id):
+    import requests
+    response = requests.get(f'http://127.0.0.1:5000/get_incident_summarization_by_id/{incident_id}')
+    if response.status_code == 200:
+        data = response.json()
+        # {'success': True, 'incident_content': incident_content,
+        # 'incident_summarization': incident_summarization,'model':model})
+        print("==========================================================================================")
+        if data['success'] == True:
+            incident_summarization = data['incident_summarization']
+            print(incident_summarization)
+        else:
+            error_message=f"{response.status_code} : {data['error']}"
+            messages.error(request, error_message)
+    else:
+        messages.error(request, response.status_code)
+
+    context={"id": incident_id, "incident_summarization":incident_summarization,"incident_content":data["incident_content"]}
+
+    return render(request, 'app/search_summarization.html', context)
 
 @login_required(login_url='login')
 @manger_only
