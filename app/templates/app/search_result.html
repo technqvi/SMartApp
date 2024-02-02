@@ -5,10 +5,11 @@
 {% block content %}
     <h1>
        Incident: {{ incident.incident_no }}
-       <a  target="_blank" href="{% url 'generate_summarization' incident.id %}"
-
+         {% if  incident.incident_status_id == 4 %}
+         <a   href="{% url 'generate_summarization' incident.id %}"
             onclick="return confirm('Do you want incident summarization ?')"
-                           class="btn btn-primary">Incident-Summary(Gen-AI)</a>
+                           class="btn btn-primary btn-lg">Get Incident-Summary</a>
+        {% endif %}
 
     </h1>
     <h3>Basic Info : Customer & Project & Inventory</h3>

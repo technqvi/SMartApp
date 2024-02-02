@@ -702,3 +702,10 @@ class Incident_Summary(models.Model):
     incident_updated_at = models.DateTimeField('Last Incident Update DateTime',validators=[validate_datetime_field_1year])
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
+
+class Incident_Summary_UserFeedback(models.Model):
+    incident_summary = models.ForeignKey(Incident_Summary, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    satisfactory=models.BooleanField('Satisfactory',)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
+

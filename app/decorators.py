@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 from app.models import *
 
 
-
 def manger_and_viewer_engineer_only(view_func):
 	def wrapper_function(request, *args, **kwargs):
 

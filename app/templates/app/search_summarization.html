@@ -5,9 +5,17 @@
     <h1>Summarize Incident-ID : {{ x.incident.id }} as of {{  x.incident_updated_at | date:"d M Y H:i" }}  </h1>
     <h3>Model {{ x.model }} at   {{  x.updated_at | date:"d M Y H:i" }}</h3>
     <h3>Summary</h3>
+
+    {% if user_feedback == False %}
+    <a   href="{% url 'give_summary_feedback' x.id %}"
+    onclick="return confirm('Satisfactory?')" class="btn btn-primary btn-lg">Satisfactory</a>
+    {%  endif %}
     <pre style="width: auto">
     {{ x.output_summary}}
     </pre>
+
+
+>
 
 
 {% endblock %}

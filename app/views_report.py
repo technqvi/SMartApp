@@ -23,14 +23,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 @login_required(login_url='login')
 @manger_only
-# @manger_and_viewer_engineer_only
+# http://127.0.0.1:8123/search/result/4300/
 def generate_summarization(request,incident_id):
     import requests
+    user_feedback=False
     try:
         x = Incident_Summary.objects.get(incident_id=incident_id)
+        user_feedback=x.incident_summary_userfeedback_set.filter(user_id=request.user.id).exists()
+        
     except Incident_Summary.DoesNotExist:
+
         print(f"Incident Summary with ID {incident_id} does not exist")
         print(f"We need to invoke Gen-AI to generate incident summarization")
+
         response = requests.get(f'http://127.0.0.1:5000/get_incident_summarization_by_id/{incident_id}')
         if response.status_code == 200:
             data = response.json()
@@ -51,14 +56,28 @@ def generate_summarization(request,incident_id):
             else:
                 error_message = f"{response.status_code} : {data['error']}"
                 messages.error(request, error_message)
-
-
         else:
                 messages.error(request, response.status_code)
 
-    context = {"x": x}
+    context = {"x": x,"user_feedback":user_feedback}
 
     return render(request, 'app/search_summarization.html', context)
+
+# truncate app_incident_summary_userfeedback RESTART IDENTITY;
+# truncate  app_incident_summary RESTART IDENTITY CASCADE
+def give_summary_feedback(request,id):
+
+    try:
+        x = Incident_Summary_UserFeedback.objects.get(user_id=request.user.id, incident_summary_id=id)
+    except Incident_Summary_UserFeedback.DoesNotExist:
+        x = Incident_Summary_UserFeedback(user_id=request.user.id, incident_summary_id=id,satisfactory=True)
+        x.save()
+
+    context = {"x": x}
+    
+
+    return redirect('search_result', x.incident_summary.incident.id)
+
 
 @login_required(login_url='login')
 @manger_only
