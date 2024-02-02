@@ -6,6 +6,8 @@
     <h1>
        Incident: {{ incident.incident_no }}
        <a  target="_blank" href="{% url 'generate_summarization' incident.id %}"
+
+            onclick="return confirm('Do you want incident summarization ?')"
                            class="btn btn-primary">Incident-Summary(Gen-AI)</a>
 
     </h1>

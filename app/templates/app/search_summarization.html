@@ -1,17 +1,13 @@
 {% extends "app/layout.html" %}
-
-{#https://forum.djangoproject.com/t/nested-table-not-show-in-outer-table-in-html/6506#}
 {% load auth_extras %}
+
 {% block content %}
-    <h1>Incident ID : {{ id }}</h1>
-   <h3>Summary</h3>
+    <h1>Summarize Incident-ID : {{ x.incident.id }} as of {{  x.incident_updated_at | date:"d M Y H:i" }}  </h1>
+    <h3>Model {{ x.model }} at   {{  x.updated_at | date:"d M Y H:i" }}</h3>
+    <h3>Summary</h3>
     <pre style="width: auto">
-    {{ incident_summarization }}
+    {{ x.output_summary}}
     </pre>
 
-    <h3>Content</h3>
-    <pre style="width: auto">
-    {{ incident_content }}
-    </pre>
 
 {% endblock %}

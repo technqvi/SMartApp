@@ -26,22 +26,37 @@ from django.shortcuts import render, redirect, get_object_or_404
 # @manger_and_viewer_engineer_only
 def generate_summarization(request,incident_id):
     import requests
-    response = requests.get(f'http://127.0.0.1:5000/get_incident_summarization_by_id/{incident_id}')
-    if response.status_code == 200:
-        data = response.json()
-        # {'success': True, 'incident_content': incident_content,
-        # 'incident_summarization': incident_summarization,'model':model})
-        print("==========================================================================================")
-        if data['success'] == True:
-            incident_summarization = data['incident_summarization']
-            print(incident_summarization)
-        else:
-            error_message=f"{response.status_code} : {data['error']}"
-            messages.error(request, error_message)
-    else:
-        messages.error(request, response.status_code)
+    try:
+        x = Incident_Summary.objects.get(incident_id=incident_id)
+    except Incident_Summary.DoesNotExist:
+        print(f"Incident Summary with ID {incident_id} does not exist")
+        print(f"We need to invoke Gen-AI to generate incident summarization")
+        response = requests.get(f'http://127.0.0.1:5000/get_incident_summarization_by_id/{incident_id}')
+        if response.status_code == 200:
+            data = response.json()
+            if data['success'] == True:
+                try:
+                    incident = get_object_or_404(Incident, id=incident_id)
+                except Incident.DoesNotExist as exception :
+                    messages.error(request, exception)
 
-    context={"id": incident_id, "incident_summarization":incident_summarization,"incident_content":data["incident_content"]}
+                incident_summary = data['incident_summarization']
+                incident_content = data['incident_content']
+                model = data['model']
+                incident_updated_at = incident.updated_at
+
+                x = Incident_Summary(incident=incident, incident_updated_at=incident_updated_at, model=model,
+                                     input_content=incident_content, output_summary=incident_summary)
+                x.save()
+            else:
+                error_message = f"{response.status_code} : {data['error']}"
+                messages.error(request, error_message)
+
+
+        else:
+                messages.error(request, response.status_code)
+
+    context = {"x": x}
 
     return render(request, 'app/search_summarization.html', context)
 

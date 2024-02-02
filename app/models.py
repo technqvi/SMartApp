@@ -688,3 +688,17 @@ class Prediction_ML2_everity_Incident(models.Model):
     model_version = models.CharField(verbose_name='Model Version', max_length=50)
     def __str__(self):
         return self.severity_label
+
+
+
+class Incident_Summary(models.Model):
+
+    incident=models.ForeignKey(Incident,on_delete=models.CASCADE,verbose_name='Incident',unique=True)
+    input_content = models.TextField('Incident Content',null=True, blank=True)
+    output_summary = models.TextField('Incident Summary')
+
+    model= models.CharField(verbose_name='GenAI-Model', max_length=50)
+
+    incident_updated_at = models.DateTimeField('Last Incident Update DateTime',validators=[validate_datetime_field_1year])
+
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
