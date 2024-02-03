@@ -11,8 +11,9 @@ urlpatterns = [
 
     path('search/', views_report.search_entry, name='search_entry'),
     path('search/result/<int:incident_id>/',views_report.search_result,name='search_result'),
+
     path('summarization/<int:incident_id>/',views_report.generate_summarization,name='generate_summarization'),
-    path('summarization/feedback/<int:id>/',views_report.give_summary_feedback,name='give_summary_feedback'), 
+    path('summarization/<int:id>/feedback/<int:response_01>/',views_report.give_summary_feedback,name='give_summary_feedback'),
 
     path('projects/', views.manage_project, name='manage_project'),
     path('projects/<int:id>/', views.manage_project, name='manage_project'),

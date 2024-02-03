@@ -65,18 +65,22 @@ def generate_summarization(request,incident_id):
 
 # truncate app_incident_summary_userfeedback RESTART IDENTITY;
 # truncate  app_incident_summary RESTART IDENTITY CASCADE
-def give_summary_feedback(request,id):
+def give_summary_feedback(request,id,response_01):
+
+    is_satisfactory=False
+    try:
+       is_satisfactory=bool(response_01)
+    except Exception as ex:
+       messages.error(request, "Give feedback allow you to 0(dissatisfactory) or 1(satisfactory)")
 
     try:
-        x = Incident_Summary_UserFeedback.objects.get(user_id=request.user.id, incident_summary_id=id)
+        x = Incident_Summary_UserFeedback.objects.get(user_id=request.user.id,incident_summary_id=id)
     except Incident_Summary_UserFeedback.DoesNotExist:
-        x = Incident_Summary_UserFeedback(user_id=request.user.id, incident_summary_id=id,satisfactory=True)
+        x = Incident_Summary_UserFeedback(user_id=request.user.id, incident_summary_id=id,satisfactory=is_satisfactory)
         x.save()
 
-    context = {"x": x}
-    
-
-    return redirect('search_result', x.incident_summary.incident.id)
+    return HttpResponse(
+        '<script type="text/javascript">window.close(); window.parent.location.href = "/";</script>')
 
 
 @login_required(login_url='login')

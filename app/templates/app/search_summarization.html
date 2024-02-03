@@ -2,20 +2,26 @@
 {% load auth_extras %}
 
 {% block content %}
-    <h1>Summarize Incident-ID : {{ x.incident.id }} as of {{  x.incident_updated_at | date:"d M Y H:i" }}  </h1>
-    <h3>Model {{ x.model }} at   {{  x.updated_at | date:"d M Y H:i" }}</h3>
-    <h3>Summary</h3>
+    <h1>Summarize Incident-ID : {{ x.incident.id }} as of {{ x.incident_updated_at | date:"d M Y H:i" }}  </h1>
 
-    {% if user_feedback == False %}
-    <a   href="{% url 'give_summary_feedback' x.id %}"
-    onclick="return confirm('Satisfactory?')" class="btn btn-primary btn-lg">Satisfactory</a>
-    {%  endif %}
+    <h4>ประเมินความพอใจในการสรุป Incident Case #
+     จำนวนการพอใจ: <b>10 </b> | จำนวนการไม่พอใจ: <b>5 </b> <br>
+      {% if user_feedback == False %}
+        <a href="{% url 'give_summary_feedback' x.id 1 %}"
+           onclick="return confirm('พอใจในการสรุป Incident Case')" class="btn btn-primary btn-lg">พอใจ</a>
+        <a href="{% url 'give_summary_feedback' x.id 0 %}"
+           onclick="return confirm('ไม่พอใจในการสรุป Incident Case')" class="btn btn-primary btn-lg">ไม่พอใจ</a>
+    {% endif %}
+
+    </h4>
+
+
+
+    <h3>Summarization by Model-{{ x.model }} at {{ x.updated_at | date:"d M Y H:i" }} </h3>
     <pre style="width: auto">
-    {{ x.output_summary}}
+    {{ x.output_summary }}
     </pre>
 
-
->
 
 
 {% endblock %}
