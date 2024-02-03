@@ -2,10 +2,9 @@
 {% load auth_extras %}
 
 {% block content %}
-    <h1>Summarize Incident-ID : {{ x.incident.id }} as of {{ x.incident_updated_at | date:"d M Y H:i" }}  </h1>
-
-    <h4>ประเมินความพอใจในการสรุป Incident Case #
-     จำนวนการพอใจ: <b>10 </b> | จำนวนการไม่พอใจ: <b>5 </b> <br>
+    <h2>Summarize Incident-ID : {{ x.incident.id }} as of {{ x.incident_updated_at | date:"d M Y H:i" }}  </h2>
+    <h3>ประเมินความพอใจในการสรุป Incident Case #
+     จำนวนพอใจ: <b style="background-color: lightgreen">{{ no_ok }} </b> | จำนวนไม่พอใจ: <b style="background-color: lightpink"> {{ no_not_ok }} </b> <br>
       {% if user_feedback == False %}
         <a href="{% url 'give_summary_feedback' x.id 1 %}"
            onclick="return confirm('พอใจในการสรุป Incident Case')" class="btn btn-primary btn-lg">พอใจ</a>
@@ -13,7 +12,7 @@
            onclick="return confirm('ไม่พอใจในการสรุป Incident Case')" class="btn btn-primary btn-lg">ไม่พอใจ</a>
     {% endif %}
 
-    </h4>
+    </h3>
 
 
 

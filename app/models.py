@@ -709,3 +709,6 @@ class Incident_Summary_UserFeedback(models.Model):
     satisfactory=models.BooleanField('Satisfactory',)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
 
+    def __str__(self):
+        return f"{self.incident_summary.incident} - {self.user.username}"
+

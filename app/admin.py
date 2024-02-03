@@ -413,3 +413,27 @@ class TaskSchedule_PMDocAdmin(admin.ModelAdmin):
         return False
     # def has_change_permission(self, request, obj=None):
     #     return  False
+
+
+@admin.register(Incident_Summary)
+class Incident_SummaryAdmin(admin.ModelAdmin):
+
+    list_display = ['incident','model','incident_updated_at','updated_at']
+    def has_delete_permission(self, request, obj=None):
+        return False
+    def has_add_permission(self, request, obj=None):
+        return False
+    def has_change_permission(self, request, obj=None):
+        return  False
+
+@admin.register(Incident_Summary_UserFeedback)
+class Incident_Summary_UserFeedbackAdmin(admin.ModelAdmin):
+
+    list_display = ['id','incident_summary','satisfactory','updated_at']
+    def has_delete_permission(self, request, obj=None):
+        return False
+    def has_add_permission(self, request, obj=None):
+        return False
+    def has_change_permission(self, request, obj=None):
+        return  False
+

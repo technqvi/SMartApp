@@ -16,6 +16,7 @@ from django.contrib import messages
 from io import BytesIO
 from app.decorators import allowed_users,manger_and_viewer_only,manger_only,staff_admin_only,manger_and_viewer_engineer_only
 from app.models import *
+from django.db.models import Prefetch
 from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -27,9 +28,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 def generate_summarization(request,incident_id):
     import requests
     user_feedback=False
+    no_ok=0
+    no_not_ok=0
     try:
-        x = Incident_Summary.objects.get(incident_id=incident_id)
-        user_feedback=x.incident_summary_userfeedback_set.filter(user_id=request.user.id).exists()
+
+        x = Incident_Summary.objects.prefetch_related(
+            Prefetch('incident_summary_userfeedback_set')
+    ).get(incident_id=incident_id)
+
+        xFeedBack=x.incident_summary_userfeedback_set
+        no_all=xFeedBack.count()
+
+        user_feedback=xFeedBack.filter(user_id=request.user.id).exists()
+        if user_feedback:
+            no_ok=xFeedBack.filter(satisfactory=True).count()
+            no_not_ok=no_all-no_ok
+
+
         
     except Incident_Summary.DoesNotExist:
 
@@ -59,7 +74,7 @@ def generate_summarization(request,incident_id):
         else:
                 messages.error(request, response.status_code)
 
-    context = {"x": x,"user_feedback":user_feedback}
+    context = {"x": x,"user_feedback":user_feedback,"no_ok":no_ok,"no_not_ok":no_not_ok}
 
     return render(request, 'app/search_summarization.html', context)
 
