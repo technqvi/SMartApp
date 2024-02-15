@@ -3,7 +3,12 @@
 <img width="750" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a7c06417-2e6a-489b-be2f-574b852c967c">
 <img width="725" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a5875f1a-040a-4947-9546-4b028eba543b">
 
- 
+ ### SMart DashBoard Asset & Incident
+![image](https://github.com/technqvi/SMartApp/assets/38780060/a095f115-0c59-4ab1-9c0c-af14bc964d21)
+
+### SMartApp System Overview.
+![image](https://github.com/technqvi/SMartApp/assets/38780060/9da3fc89-4107-4e86-bf52-ce57f939cb11)
+
 ### Incident System
 * Customer will issue incident case to Site-Manager who is in charge of.
 * Site manager will assign Engineer to fix any error/problem of such an inventory.
@@ -14,8 +19,6 @@
 * The system allows the manager to remove undesirable inventory items from PM Plan.
 * The engineer can access to application to update any PM-Operation progress of each inventory.
 
-### The figure below shows  SMartApp System Overview.
-![image](https://github.com/technqvi/SMartApp/assets/38780060/9da3fc89-4107-4e86-bf52-ce57f939cb11)
 
 ## Tool and Framework
 - Database: Postqresql 12
