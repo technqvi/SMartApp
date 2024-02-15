@@ -210,10 +210,10 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Update At")
 
 
-    def total_inventories(self):
-        return  self.inventory_set.count()
-    def total_pm_plans(self):
-        return  self.preventivemaintenance_set.count()
+    # def total_inventories(self):
+    #     return  self.inventory_set.count()
+    # def total_pm_plans(self):
+    #     return  self.preventivemaintenance_set.count()
     def __str__(self):
         return f'{self.company.company_name} : {self.enq_id}'
 

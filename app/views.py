@@ -223,13 +223,13 @@ def filter_project(request):
     if isNotEmplyQuery:
         include_expired = request.GET.get('expired_project')
         if include_expired is None:
-            my_all = Project.objects.filter(company__manager__user=myuser, project_end__gte=datetime.date.today(),
+            my_all = Project.objects.prefetch_related('company__manager').filter(company__manager__user=myuser, project_end__gte=datetime.date.today(),
                                             is_dummy=False).order_by('-id')
         else:
-            my_all = Project.objects.filter(company__manager__user=myuser,
+            my_all = Project.objects.prefetch_related('company__manager').filter(company__manager__user=myuser,
                                             is_dummy=False).order_by('-id')
     else:
-        my_all = Project.objects.filter(company__manager__user=myuser, project_end__gte=datetime.date.today(),
+        my_all = Project.objects.prefetch_related('company__manager').filter(company__manager__user=myuser, project_end__gte=datetime.date.today(),
                                         is_dummy=False).order_by('-id')[
                  :settings.MY_PAGE_PER]
 
@@ -264,7 +264,7 @@ def manage_project(request, id=0):
 
         if id == 0:  # new
             form = ProjectForm()
-            form.fields["company"].queryset = Company.objects.filter(manager__user=request.user, is_customer=True)
+            form.fields["company"].queryset = Company.objects.prefetch_related("manager").filter(manager__user=request.user, is_customer=True)
             form_mode = 'NEW'
         else:  # edit
             opt_name= "ManageProject"
@@ -274,7 +274,7 @@ def manage_project(request, id=0):
             else:
                 project = rt
             form = ProjectForm(instance=project)
-            form.fields["company"].queryset = Company.objects.filter(manager__user=request.user, is_customer=True)
+            form.fields["company"].queryset = Company.objects.prefetch_related("manager").filter(manager__user=request.user, is_customer=True)
             form.fields["company"].value = project.company
             form_mode = 'UPDATE'
 
@@ -540,7 +540,6 @@ def reload_prev_inventory_for_next_one(inventory_obj):
 # @allowed_users(allowed_roles=['site-manager', 'report-viewer'])
 @manger_and_viewer_only
 def add_inventory(request, proj_id):
-
 
     opt_name="AddInventory"
     rt=app.user_access.check_user_to_do(request,proj_id,opt_name)

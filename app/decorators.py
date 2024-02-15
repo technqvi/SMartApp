@@ -5,9 +5,10 @@ from app.models import *
 
 def manger_and_viewer_engineer_only(view_func):
 	def wrapper_function(request, *args, **kwargs):
+	
 
-	  is_in_manager_group = Manager.objects.filter(user_id__exact=request.user.id).exists()
-	  is_in_engineer_group = Engineer.objects.filter(user_id__exact=request.user.id).exists()
+	  is_in_manager_group = Manager.objects.filter(user=request.user).exists()
+	  is_in_engineer_group = Engineer.objects.filter(user=request.user).exists()
 
 	  if   is_in_manager_group or is_in_engineer_group:
 		  return view_func(request, *args, **kwargs)
@@ -19,7 +20,7 @@ def manger_and_viewer_engineer_only(view_func):
 def manger_and_viewer_only(view_func):
 	def wrapper_function(request, *args, **kwargs):
 
-	  is_in_manager_group = Manager.objects.filter(user_id__exact=request.user.id).exists()
+	  is_in_manager_group = Manager.objects.filter(user=request.user).exists()
 	  if   is_in_manager_group:
 		  return view_func(request, *args, **kwargs)
 	  else:
@@ -30,7 +31,7 @@ def manger_and_viewer_only(view_func):
 def manger_only(view_func):
 	def wrapper_function(request, *args, **kwargs):
 
-	  is_in_manager_group = Manager.objects.filter(user_id__exact=request.user.id,is_site_manager__exact=True).exists()
+	  is_in_manager_group = Manager.objects.filter(user=request.user,is_site_manager__exact=True).exists()
 	  if   is_in_manager_group:
 		  return view_func(request, *args, **kwargs)
 	  else:

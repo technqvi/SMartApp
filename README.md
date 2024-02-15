@@ -6,8 +6,8 @@
  ### SMart DashBoard Asset & Incident
 ![image](https://github.com/technqvi/SMartApp/assets/38780060/a095f115-0c59-4ab1-9c0c-af14bc964d21)
 
-### SMartApp System Overview.
-![image](https://github.com/technqvi/SMartApp/assets/38780060/9da3fc89-4107-4e86-bf52-ce57f939cb11)
+### SMartApp Process Overview.
+![SMartApp-Process](https://github.com/technqvi/SMartApp/assets/38780060/f0dd75cf-01e3-4054-8225-a8a6e4a4e151)
 
 ### Incident System
 * Customer will issue incident case to Site-Manager who is in charge of.

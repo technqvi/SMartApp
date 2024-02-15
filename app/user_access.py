@@ -19,8 +19,8 @@ def check_user_to_do(request,id,operation):
             x_accessible = None
     # improve 20024
     elif operation in ["AddInventory","ManageProject","AddPM"]:  # project_id
-        # obj = get_object_or_404(Project, pk=id)
-        obj = Project.objects.select_related("company").get(pk=id)
+        obj = get_object_or_404(Project, pk=id)
+        # obj = Project.objects.prefetch_related("company").get(pk=id)
         if obj.company.manager.filter(user_id=x_user.id).exists():
             return obj
         else:

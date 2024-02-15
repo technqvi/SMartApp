@@ -31,12 +31,7 @@ def company_for_project_by_role(request):
     # elif request.user.is_staff or  request.user.is_superuser:
         return Company.objects.filter(is_customer=True)
     else:
-        # next version
-        # is_in_manager_group = Manager.objects.filter(user_id__exact=request.user.id,is_site_manager__exact=True).exists()
-        # is_in_office_admin_group = OfficeAdmin.objects.filter(user_id__exact=request.user.id).exists()
-        # return Company.objects.filter(manager__user=request.user, is_customer=is_in_manager_group,is_for_office_admin=is_in_office_admin_group)
-
-        manager_comp= Company.objects.filter(manager__user=request.user,is_customer=True)
+        manager_comp= Company.objects.prefetch_related('manager').filter(manager__user=request.user,is_customer=True)
         engineer_comp=Company.objects.filter(engineer__user=request.user,is_customer=True)
         if manager_comp.count() > 0:
             return manager_comp
@@ -45,6 +40,10 @@ def company_for_project_by_role(request):
         else:
             return None
         #return Company.objects.filter( ( Q(manager__user=request.user) | Q(engineer__user=request.user)), is_customer=True)
+                # next version
+        # is_in_manager_group = Manager.objects.filter(user_id__exact=request.user.id,is_site_manager__exact=True).exists()
+        # is_in_office_admin_group = OfficeAdmin.objects.filter(user_id__exact=request.user.id).exists()
+        # return Company.objects.filter(manager__user=request.user, is_customer=is_in_manager_group,is_for_office_admin=is_in_office_admin_group)
 
 class ProjectFilter(django_filters.FilterSet):
     company = filters.ModelChoiceFilter(queryset = company_for_project_by_role, field_name='company',

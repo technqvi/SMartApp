@@ -93,15 +93,14 @@
                 <th scope="col">Name</th>
                 <th scope="col">Start</th>
                 <th scope="col">End</th>
-
+                <th scope="col">Total Inventories</th>
                 <th scope="col"> Delete</th>
-                <th scope="col">Copy Inventory<br><u style="background-color: #5cb85c">EveryItem</u></th>
-                <th scope="col">Copy Inventory<br><u style="background-color:#46b8da">FirstItem</u></th>
                 <th scope="col">Update & View Project</th>
                 <th scope="col">Add & View Inventory</th>
+                <th scope="col">Copy Inventory<br><u style="background-color: #5cb85c">EveryItem</u></th>
+                <th scope="col">Copy Inventory<br><u style="background-color:#46b8da">FirstItem</u></th>
                 <th scope="col">Is PM</th>
-                <!-- <th scope="col">Total Inventories</th>
-                <th scope="col">Total PM</th> -->
+                <th scope="col">Total PM</th>
                 <th scope="col">Operate PM</th>
             </tr>
 
@@ -114,51 +113,46 @@
                     <td>{{ project.project_name }}</td>
                     <td>{{ project.project_start | date:"d M Y" }}</td>
                     <td>{{ project.project_end | date:"d M Y" }}</td>
-
+                    <td>{{ project.total_inventories }}</td>
                     {% if not project.is_dummy %}
-                    {% if request.user|has_group:"site-manager" %}
+
                         <td>
-                           
+                            {% if request.user|has_group:"site-manager" %}
                                 <a href="{% url 'delete_project' project.id %}" class="alert-danger"
                                    onclick="return confirm('Do you carefully review project info before deleting?')">Click</a>
 
-                           
+                            {% endif %}
                         </td>
-                        <td>
-                       
 
-                            <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=0"
-                               class="btn btn-link" target="_blank">Click</a>
-
-                      
-                    </td>
-
-                    <td>
-                         
-
-                        <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=1"
-                           class="btn btn-link" target="_blank">Click</a>
-
-              
-                </td>
-                        {% endif %}
-                        
-                 
-                  
-                      
                         <td><a href="{% url 'manage_project' project.id %}" class="btn btn-link">Click</a></td>
                         <td>
+
                             <a href="{% url 'add_inventory' project.id %}" class="btn btn-link"
                                target="_blank">Click</a>
 
                         </td>
                         <td>
+                            {% if request.user|has_group:"site-manager" %}
+
+                                <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=0"
+                                   class="btn btn-link" target="_blank">Click</a>
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.user|has_group:"site-manager" %}
+
+                                <a href="{% url 'copy_inventory' project.id %}?onetime_warranty_date=1"
+                                   class="btn btn-link" target="_blank">Click</a>
+
+                            {% endif %}
+                        </td>
+                        <td>
                             {{ project.has_pm }}
                         </td>
-                        <!-- <td>{{ project.total_inventories }}</td>
                         <td>
                             {{ project.total_pm_plans }}
-                        </td> -->
+                        </td>
                         <td>
 
                             <a href="{% url 'manage_pm' project.id 0 %}"
