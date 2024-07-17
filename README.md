@@ -1,6 +1,12 @@
 # About
-Centralized IT service management system  to handle incident management and preventive maintenance operation process.
-### SMartApp System  consists of 2 sub systems.
+Centralized IT service management system  to handle incident management and preventive maintenance operation process , there are serveral sub system as belows.
+* [IT Service Management System)](https://github.com/technqvi/SMartApp)
+* [Incident Knowledge Base & Agent Powered By Amazone Bedrock](https://github.com/technqvi/aws-bedrock-gen-ai-project?tab=readme-ov-file#incident-knownledge-base)
+* [Incident Enterprise Search and Incident Summarization Powered By Google Search Vertex AI](https://github.com/technqvi/SMartSearch-Summarization)
+* [Smart Analytics Data Warehouse on BigQuery](https://github.com/technqvi/SMartDataHub-DBToBigQuery)
+* [Severity Level Prediction (Critical/Normal)](https://github.com/technqvi/SMart-AI/tree/main/Model-TF_DF)
+
+### SMartApp System  consists of 2 core functions.
 <img width="750" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a7c06417-2e6a-489b-be2f-574b852c967c">
 <img width="725" alt="image" src="https://github.com/technqvi/SMartApp/assets/38780060/a5875f1a-040a-4947-9546-4b028eba543b">
 
@@ -39,10 +45,5 @@ Centralized IT service management system  to handle incident management and prev
    - Site Grade Report (Excel)
    - SMartDashboard-Report For Site-Manager (PowerBI)
    - SMartBI For Customer (PowerBI)
- - Data Analystics & ML/AI on Google PlatForm (Preview)
-   - [Severity Level Prediction (Critical/Normal)](https://github.com/technqvi/SMart-AI/tree/main/Model-TF_DF)
-   - [Daily Incident Forecast Over the next 5 days](https://github.com/technqvi/SMart-AI/tree/main/DailyIncidentForecast)
-   - [Knowlege-Base Incident and Incident Summarization Powered By Google Search Vertex AI](https://github.com/technqvi/SMartSearch-Summarization)
-   - [Smart Analytics Data Warehouse on BigQuery](https://github.com/technqvi/SMartDataHub-DBToBigQuery)
  - [SMartApp_ScriptDev](https://github.com/technqvi/SMartApp_ScriptDev)
    
