@@ -1,6 +1,6 @@
 # About
 Centralized IT service management system  to handle incident management and preventive maintenance operation process , there are serveral sub systems as belows.
-* [SMArtApp For IT Service Management System](https://github.com/technqvi/SMartApp)
+* [SMartApp For IT Service Management System](https://github.com/technqvi/SMartApp)
 * [Incident Knowledge Base & Agent Powered By Amazone Bedrock](https://github.com/technqvi/aws-bedrock-gen-ai-project?tab=readme-ov-file#incident-knownledge-base)
 * [Incident Enterprise Search and Incident Summarization Powered By Google Search Vertex AI](https://github.com/technqvi/SMartSearch-Summarization)
 * [Smart Analytics Data Warehouse on BigQuery](https://github.com/technqvi/SMartDataHub-DBToBigQuery)
